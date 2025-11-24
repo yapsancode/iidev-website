@@ -2,28 +2,27 @@
 import CTA from '@/components/sections/CTA';
 import Footer from '@/components/sections/Footer';
 import { Hero } from '@/components/sections/Hero';
+import { Navbar } from '@/components/sections/Navbar';
 import Portfolio from '@/components/sections/Portfolio';
 import Problems from '@/components/sections/Problems';
 import Services from '@/components/sections/Services';
 import Team from '@/components/sections/Team';
-import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
+import WhyChooseUs from '@/components/sections/WhyChooseUs';
 import React from 'react';
 
+// App.tsx
 const App: React.FC = () => {
-  
-  const { scrollYProgress } = useScroll();
-  const y = useTransform(scrollYProgress, [0, 1], [0, -100]);
-  const opacity = useTransform(scrollYProgress, [0, 0.2], [1, 0]);
-
   return (
     <div className="min-h-screen flex flex-col font-sans overflow-x-hidden">
-      <main className="flex-grow">
-        <Hero />
-        <Problems />
-        <Portfolio />
-        <Team />
-        <Services />
-        <CTA />
+      <Navbar />
+      <main className="grow">
+        <section id="home"><Hero /></section>
+        <section id="problems"><Problems /></section>
+        <section id="why-us"><WhyChooseUs /></section>
+        <section id="portfolio"><Portfolio /></section>
+        <section id="team"><Team /></section>
+        <section id="services"><Services /></section>
+        <section id="demo"><CTA /></section>
       </main>
       <Footer />
     </div>
