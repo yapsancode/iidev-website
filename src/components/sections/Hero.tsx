@@ -2,11 +2,17 @@
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { WaveCanvas } from '../ui/wave-canvas';
 import { TypewriterText } from '../ui/TypewriterText';
+import { useMediaQuery } from '@/hooks/use-media-query';
 
 export function Hero() {
   const { scrollY } = useScroll();
+  const isMobile = useMediaQuery("(max-width: 768px)");
+
   const y = useTransform(scrollY, [0, 500], [0, 200]);
   const opacity = useTransform(scrollY, [0, 300], [1, 0]);
+
+  // Use conditional values for style prop
+  const motionStyle = isMobile ? {} : { y, opacity };
 
   return (
     // Use standard 'bg-background' so it swaps between white/black automatically.
@@ -25,7 +31,7 @@ export function Hero() {
 
       <div className="relative z-10 flex min-h-svh flex-col items-center justify-center px-4 pt-20">
         <motion.div
-          style={{ y, opacity }}
+          style={motionStyle}
           className="flex w-full max-w-5xl flex-col items-center text-center"
         >
           {/* Status Badge */}
