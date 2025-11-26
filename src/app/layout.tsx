@@ -5,7 +5,6 @@ import "./globals.css";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
-import WhatsAppButton from "@/components/buttons/WhatsAppButton";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 
@@ -35,18 +34,6 @@ export default function RootLayout({
         )}
       >
         {children}
-        <WhatsAppButton
-          phoneNumber="60167093543"
-          // #1 — Warm & super local (my favourite)
-          message="Hi! Nak tanya pasal buat website baru. Boleh tak nak borak dalam 1-5 minit?"
-
-          // #2 — Slightly more professional but still friendly
-          // message="Hello! Saya tengah cari developer yang boleh siap cepat & harga okay. Free tak nak borak 5 minit?"
-
-          // #3 — Straight to business (works great if your portfolio is strong)
-          // message="Hi bro, website saya slow & tak mobile-friendly langsung. Boleh tolong tengok & quote tak?"
-          position="bottom-right"
-        />
       </body>
     </html>
   );

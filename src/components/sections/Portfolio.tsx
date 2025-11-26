@@ -2,45 +2,7 @@
 import React from 'react';
 import { ExternalLink, Github } from 'lucide-react';
 import { motion } from 'framer-motion';
-
-interface Project {
-  title: string;
-  category: string;
-  image: string;
-  result: string;
-  tags: string[];
-}
-
-const projects: Project[] = [
-  {
-    title: "FinFlow SaaS",
-    category: "Fintech Platform",
-    image: "https://picsum.photos/id/1/800/600",
-    result: "+240% User Signups",
-    tags: ["Next.js", "Tailwind", "Stripe"]
-  },
-  {
-    title: "Lumina Interiors",
-    category: "E-Commerce",
-    image: "https://picsum.photos/id/180/800/600",
-    result: "0.8s Load Time",
-    tags: ["Shopify Headless", "Framer Motion"]
-  },
-  {
-    title: "Apex Logistics",
-    category: "Corporate Site",
-    image: "https://picsum.photos/id/20/800/600",
-    result: "2x Lead Generation",
-    tags: ["React", "TypeScript", "GSAP"]
-  },
-  {
-    title: "HealthCore",
-    category: "Medical App",
-    image: "https://picsum.photos/id/48/800/600",
-    result: "HIPAA Compliant",
-    tags: ["Next.js", "Postgres", "Tailwind"]
-  }
-];
+import { projects } from '@/lib/data';
 
 const Portfolio: React.FC = () => {
   return (
@@ -55,9 +17,6 @@ const Portfolio: React.FC = () => {
               Hand-picked work that drove real business results.
             </p>
           </div>
-          <a href="#" className="hidden md:flex items-center gap-2 text-emerald-500 font-medium hover:gap-3 transition-all">
-            View all projects <ExternalLink size={18} />
-          </a>
         </div>
 
         <div className="grid md:grid-cols-2 gap-8">
@@ -77,13 +36,15 @@ const Portfolio: React.FC = () => {
                   className="object-cover w-full h-full transform transition-transform duration-700 group-hover:scale-105"
                 />
                 <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300" />
-                <div className="absolute top-4 left-4">
-                  <span className="bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-bold text-neutral-900 shadow-sm">
-                    {project.result}
-                  </span>
-                </div>
+                {project.result && (
+                  <div className="absolute top-4 left-4">
+                    <span className="bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-bold text-neutral-900 shadow-sm">
+                      {project.result}
+                    </span>
+                  </div>
+                )}
               </div>
-              
+
               <div className="flex justify-between items-start mb-3">
                 <div>
                   <h3 className="text-2xl font-bold text-neutral-900 group-hover:text-emerald-500 transition-colors">
@@ -91,11 +52,17 @@ const Portfolio: React.FC = () => {
                   </h3>
                   <p className="text-neutral-500">{project.category}</p>
                 </div>
-                <div className="p-2 rounded-full border border-neutral-200 text-neutral-400 group-hover:border-emerald-500 group-hover:text-emerald-500 transition-colors">
+                <a
+                  href={project.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="p-2 rounded-full border border-neutral-200 text-neutral-400 hover:border-emerald-500 hover:text-emerald-500 transition-colors"
+                  onClick={(e) => e.stopPropagation()}
+                >
                   <ExternalLink size={20} />
-                </div>
+                </a>
               </div>
-              
+
               <div className="flex flex-wrap gap-2">
                 {project.tags.map(tag => (
                   <span key={tag} className="text-xs font-medium text-neutral-500 bg-neutral-100 px-2 py-1 rounded-md">
@@ -105,12 +72,6 @@ const Portfolio: React.FC = () => {
               </div>
             </motion.div>
           ))}
-        </div>
-        
-        <div className="mt-12 text-center md:hidden">
-          <a href="#" className="inline-flex items-center gap-2 text-emerald-500 font-medium">
-            View all projects <ExternalLink size={18} />
-          </a>
         </div>
       </div>
     </section>

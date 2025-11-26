@@ -1,7 +1,6 @@
 // components/WhyChooseMe.tsx
 import { motion } from "framer-motion";
 import { Check, Clock, MessageSquare, Smartphone, TrendingUp, Wallet } from "lucide-react";
-import WhatsAppButton from "../buttons/WhatsAppButton";
 
 export default function WhyChooseUs() {
     const reasons = [

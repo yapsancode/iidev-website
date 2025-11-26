@@ -4,7 +4,11 @@ import { WaveCanvas } from '../ui/wave-canvas';
 import { TypewriterText } from '../ui/TypewriterText';
 import { useMediaQuery } from '@/hooks/use-media-query';
 
-export function Hero() {
+interface HeroProps {
+  onBookingClick: () => void;
+}
+
+export function Hero({ onBookingClick }: HeroProps) {
   const { scrollY } = useScroll();
   const isMobile = useMediaQuery("(max-width: 768px)");
 
@@ -14,10 +18,15 @@ export function Hero() {
   // Use conditional values for style prop
   const motionStyle = isMobile ? {} : { y, opacity };
 
-  return (
-    // Use standard 'bg-background' so it swaps between white/black automatically.
-    <section id="home" className="relative min-h-svh w-full overflow-hidden bg-background">
+  const handleViewServices = () => {
+    const servicesSection = document.getElementById('services');
+    if (servicesSection) {
+      servicesSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  };
 
+  return (
+    <section id="home" className="relative min-h-svh w-full overflow-hidden bg-background">
       {/* Canvas: Ensure it sits behind content (z-0) */}
       <div className="absolute inset-0 z-0">
         <WaveCanvas className="opacity-60" />
@@ -27,7 +36,6 @@ export function Hero() {
         <div className="absolute h-full w-full bg-size-[50px_50px] mask-[radial-gradient(ellipse_80%_50%_at_50%_0%,#000_70%,transparent_110%)] bg-[linear-gradient(to_right,rgba(128,128,128,0.1)_1px,transparent_1px),linear-gradient(to_bottom,rgba(128,128,128,0.1)_1px,transparent_1px)] dark:bg-[linear-gradient(to_right,rgba(255,255,255,0.05)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.05)_1px,transparent_1px)]"
         />
       </div>
-
 
       <div className="relative z-10 flex min-h-svh flex-col items-center justify-center px-4 pt-20">
         <motion.div
@@ -41,14 +49,12 @@ export function Hero() {
             transition={{ duration: 0.8, ease: "easeOut" }}
             className="mb-8"
           >
-            {/* Badge Styling: Dark text/border for light mode, Light text/border for dark mode */}
             <div className="relative inline-flex items-center gap-2 rounded-full 
               border border-black/10 bg-black/5 
               dark:border-white/10 dark:bg-white/5 
               px-4 py-1.5 text-xs font-medium uppercase tracking-widest 
               text-emerald-700 dark:text-emerald-300 
               backdrop-blur-md transition-colors hover:bg-black/10 dark:hover:bg-white/10">
-
               <span className="relative flex h-2 w-2">
                 <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75"></span>
                 <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500"></span>
@@ -59,7 +65,6 @@ export function Hero() {
 
           {/* Main Typography */}
           <div className="relative z-10 mb-6 flex w-full flex-col items-center justify-center">
-            {/* Glow Effect - Adjusted to be subtle in light mode, stronger in dark */}
             <motion.div
               className="absolute -z-10 h-[150px] w-[300px] rounded-full pointer-events-none
                 bg-blue-500/10 dark:bg-blue-500/20 blur-[100px]"
@@ -116,18 +121,23 @@ export function Hero() {
             transition={{ delay: 0.8, duration: 0.8 }}
             className="flex flex-col gap-6 sm:flex-row items-center"
           >
-            <button className="bg-emerald-500 hover:bg-emerald-200 text-gray-900 hover:text-black font-bold py-3 px-8 rounded-none border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all font-mono text-sm uppercase">
+            <button
+              onClick={onBookingClick}
+              className="bg-emerald-500 hover:bg-emerald-200 text-gray-900 hover:text-black font-bold py-3 px-8 rounded-none border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all font-mono text-sm uppercase"
+            >
               Book Consultation
             </button>
 
-            <button className="group relative h-12 w-48 overflow-hidden rounded-full border border-neutral-300 dark:border-neutral-700 bg-transparent transition-all active:scale-95">
-              {/* Hover Fill Background */}
+            <button
+              onClick={handleViewServices}
+              className="group relative h-12 w-48 overflow-hidden rounded-full border border-neutral-300 dark:border-neutral-700 bg-transparent transition-all active:scale-95"
+            >
               <div className="absolute inset-0 translate-y-full bg-neutral-900 dark:bg-white transition-transform duration-300 ease-out group-hover:translate-y-0" />
 
               <span className="relative z-10 flex items-center justify-center text-sm font-semibold tracking-wide 
                 text-neutral-900 dark:text-white 
                 transition-colors duration-300 group-hover:text-white dark:group-hover:text-black">
-                View Portfolio
+                View Services
               </span>
             </button>
           </motion.div>

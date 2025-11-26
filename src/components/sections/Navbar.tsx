@@ -25,8 +25,6 @@ export const Navbar = () => {
     const [isLogoHovered, setIsLogoHovered] = useState(false);
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-    const logoText = isLogoHovered ? 'II Dev Studio' : 'II';
-
     // Prevent body scroll when menu is open
     useEffect(() => {
         if (mobileMenuOpen) {
@@ -74,11 +72,11 @@ export const Navbar = () => {
 
     // Animation Variants
     const menuVariants: Variants = {
-        closed: { 
+        closed: {
             opacity: 0,
             transition: { duration: 0.3, delay: 0.2 }
         },
-        open: { 
+        open: {
             opacity: 1,
             transition: { duration: 0.3 }
         }
@@ -111,13 +109,28 @@ export const Navbar = () => {
                 className={`fixed top-0 left-0 right-0 z-40 flex items-center justify-between px-6 py-6 md:px-12 pointer-events-none`}
             >
                 {/* Logo - visible on desktop, or mobile when menu closed */}
-                <motion.div
+                <motion.button
+                    layout
+                    onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
                     onMouseEnter={() => setIsLogoHovered(true)}
                     onMouseLeave={() => setIsLogoHovered(false)}
-                    className={`pointer-events-auto bg-black text-white dark:bg-white dark:text-black px-4 py-3 text-xs font-bold tracking-widest uppercase cursor-pointer select-none transition-opacity duration-300 ${mobileMenuOpen ? 'opacity-0' : 'opacity-100'}`}
+                    className={`pointer-events-auto flex items-center gap-1 bg-black text-white dark:bg-white dark:text-black px-4 py-3 text-xs font-bold tracking-widest uppercase cursor-pointer select-none transition-opacity duration-300 ${mobileMenuOpen ? 'opacity-0' : 'opacity-100'}`}
                 >
-                    {logoText}
-                </motion.div>
+                    <motion.span layout>iidev</motion.span>
+                    <AnimatePresence>
+                        {isLogoHovered && (
+                            <motion.span
+                                initial={{ opacity: 0, width: 0 }}
+                                animate={{ opacity: 1, width: "auto" }}
+                                exit={{ opacity: 0, width: 0 }}
+                                transition={{ duration: 0.3, ease: "easeInOut" }}
+                                className="overflow-hidden whitespace-nowrap"
+                            >
+                                Studio
+                            </motion.span>
+                        )}
+                    </AnimatePresence>
+                </motion.button>
 
                 {/* Desktop Menu - Center Pills */}
                 <div className="pointer-events-auto hidden md:flex items-center gap-1 bg-[#F0F0F0]/90 backdrop-blur-md p-1.5 rounded-full border border-neutral-200 shadow-sm">
@@ -145,7 +158,7 @@ export const Navbar = () => {
 
                 {/* Mobile Toggle Button - Only visible when menu is CLOSED */}
                 <div className="pointer-events-auto md:hidden">
-                     <AnimatePresence>
+                    <AnimatePresence>
                         {!mobileMenuOpen && (
                             <motion.button
                                 initial={{ opacity: 0 }}
@@ -176,8 +189,8 @@ export const Navbar = () => {
                     >
                         {/* Top Header Row inside Menu */}
                         <div className="flex justify-between items-start p-6">
-                             {/* Brand Button (Top Left) */}
-                             <motion.button 
+                            {/* Brand Button (Top Left) */}
+                            <motion.button
                                 initial={{ opacity: 0, y: -10 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ delay: 0.2 }}
@@ -187,7 +200,7 @@ export const Navbar = () => {
                                 }}
                                 className="bg-[#EFEEE9] px-4 py-3 text-[10px] font-bold tracking-[0.2em] uppercase rounded-sm shadow-sm hover:bg-white transition-colors"
                             >
-                                II Dev Studio
+                                iidev Studio
                             </motion.button>
 
                             {/* Close Button (Top Right) */}
@@ -203,7 +216,7 @@ export const Navbar = () => {
                         </div>
 
                         {/* Centered Navigation Links */}
-                        <motion.div 
+                        <motion.div
                             variants={linkContainerVariants}
                             className="flex-1 flex flex-col justify-center items-center gap-5 w-full min-h-[400px]"
                         >
@@ -226,7 +239,7 @@ export const Navbar = () => {
                         </motion.div>
 
                         {/* Footer Info Area */}
-                        <motion.div 
+                        <motion.div
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: 0.4, duration: 0.5 }}
@@ -240,7 +253,7 @@ export const Navbar = () => {
                                     <a href="#" className="hover:text-neutral-500 transition-colors">Instagram</a>
                                 </div>
                             </div>
-                            
+
                             {/* Contact */}
                             <div className="flex flex-col items-center gap-3">
                                 <div className="flex gap-2">
@@ -254,7 +267,7 @@ export const Navbar = () => {
 
                             {/* Copyright */}
                             <div className="mt-4 text-[10px] text-neutral-500 font-normal normal-case tracking-normal">
-                                © 2025 II Dev Studio® All Rights Reserved
+                                © 2025 iidev Studio® All Rights Reserved
                             </div>
                         </motion.div>
                     </motion.div>

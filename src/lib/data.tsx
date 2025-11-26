@@ -1,6 +1,15 @@
 // 📁 lib/data.ts
 import { Zap, Palette, Clock } from 'lucide-react';
 
+export interface Project {
+  title: string;
+  category: string;
+  image: string;
+  result?: string;
+  tags: string[];
+  link?: string;
+}
+
 export const problems = [
   {
     problem: "Slow loading times",
@@ -19,31 +28,15 @@ export const problems = [
   }
 ];
 
-export const projects = [
+export const projects: Project[] = [
   {
-    name: "TechFlow SaaS",
-    result: "+240% conversions",
-    image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&h=600&fit=crop",
-    tags: ["Next.js", "Tailwind", "Framer Motion"]
+    title: "Klinik Mekar Website",
+    category: "Healthcare Platform",
+    image: "images/klinik-mekar-landingpage.png",
+    // result: "+240% User Signups",
+    tags: ["Next.js", "Tailwind", "Spring Boot"],
+    link: "https://klinikmekar.com"
   },
-  {
-    name: "Luxe Real Estate",
-    result: "50% faster load time",
-    image: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=800&h=600&fit=crop",
-    tags: ["React", "TypeScript", "Sanity CMS"]
-  },
-  {
-    name: "FitCore App",
-    result: "+180% mobile engagement",
-    image: "https://images.unsplash.com/photo-1551434678-e076c223a692?w=800&h=600&fit=crop",
-    tags: ["Next.js", "Supabase", "Stripe"]
-  },
-  {
-    name: "Artisan Marketplace",
-    result: "$2M+ in sales",
-    image: "https://images.unsplash.com/photo-1472851294608-062f824d29cc?w=800&h=600&fit=crop",
-    tags: ["Shopify", "React", "Tailwind"]
-  }
 ];
 
 export const teamMembers = [
