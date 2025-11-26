@@ -8,7 +8,7 @@ export const Navbar = () => {
         { label: 'PORTFOLIO', href: '#portfolio' },
         { label: 'TEAM', href: '#team' },
         { label: 'SERVICES', href: '#services' },
-        { label: 'SEE A DEMO', href: '#demo' },
+        // { label: 'SEE A DEMO', href: '#demo' },
     ];
 
     // Added separate desktop items to match the user's original more extensive desktop list
@@ -18,7 +18,7 @@ export const Navbar = () => {
         { label: 'PORTFOLIO', href: '#portfolio' },
         { label: 'TEAM', href: '#team' },
         { label: 'SERVICES', href: '#services' },
-        { label: 'SEE A DEMO', href: '#demo' },
+        // { label: 'SEE A DEMO', href: '#demo' },
     ];
 
     const [activeSection, setActiveSection] = useState('home');
@@ -249,8 +249,7 @@ export const Navbar = () => {
                             <div className="flex flex-col items-center gap-3">
                                 <span className="bg-[#EFEEE9] px-2 py-1 rounded-[2px]">Follow</span>
                                 <div className="flex gap-6 mt-1">
-                                    <a href="#" className="hover:text-neutral-500 transition-colors">LinkedIn</a>
-                                    <a href="#" className="hover:text-neutral-500 transition-colors">Instagram</a>
+                                    <a href="https://www.linkedin.com/in/iidev-studio" target="_blank" className="hover:text-neutral-500 transition-colors">LinkedIn</a>
                                 </div>
                             </div>
 
