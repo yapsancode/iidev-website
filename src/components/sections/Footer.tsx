@@ -27,7 +27,7 @@ const Footer: React.FC = () => {
             <Mail size={22} />
           </a>
           <a
-            href="https://www.linkedin.com/in/iidev-studio"
+            href="https://www.linkedin.com/company/iidevstudio"
             target="_blank"
             rel="noopener noreferrer"
             className="text-neutral-400 hover:text-emerald-500 transition-colors"

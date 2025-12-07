@@ -255,7 +255,7 @@ export const Navbar = () => {
                             <div className="flex flex-col items-center gap-3">
                                 <span className="bg-[#EFEEE9] px-2 py-1 rounded-[2px]">Follow</span>
                                 <div className="flex gap-6 mt-1">
-                                    <a href="https://www.linkedin.com/in/iidev-studio" target="_blank" className="hover:text-neutral-500 transition-colors">LinkedIn</a>
+                                    <a href="https://www.linkedin.com/company/iidevstudio" target="_blank" className="hover:text-neutral-500 transition-colors">LinkedIn</a>
                                 </div>
                             </div>
 
