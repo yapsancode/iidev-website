@@ -4,15 +4,15 @@ import { Mail, Linkedin } from "lucide-react";
 
 const Footer: React.FC = () => {
   return (
-    <footer className="py-12 bg-white border-t border-neutral-100">
+    <footer className="py-12 bg-[#FAFAFA] dark:bg-neutral-900 border-t border-neutral-100 dark:border-neutral-800">
       <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-8">
 
         {/* Left – Brand & copyright */}
         <div className="text-center md:text-left">
-          <span className="text-lg font-bold text-neutral-900">
+          <span className="text-lg font-bold text-neutral-900 dark:text-white">
             iidev<span className="text-emerald-500">.</span>
           </span>
-          <p className="text-neutral-400 text-sm mt-1">
+          <p className="text-neutral-400 dark:text-neutral-500 text-sm mt-1">
             © {new Date().getFullYear()} iidev studio. All rights reserved.
           </p>
         </div>

@@ -31,8 +31,8 @@ const PricingCard: React.FC<PricingCardProps> = ({
 }) => (
     <div
         className={`relative flex flex-col p-8 rounded-3xl border transition-all duration-500 group ${isPopular
-                ? 'bg-neutral-900 border-emerald-500/50 shadow-2xl shadow-emerald-900/20 scale-105 z-10'
-                : 'bg-neutral-900 border-neutral-800 hover:border-emerald-500/30 hover:shadow-xl hover:shadow-emerald-900/10'
+            ? 'bg-neutral-900 dark:bg-neutral-900 border-emerald-500/50 shadow-2xl shadow-emerald-900/20 scale-105 z-10'
+            : 'bg-white dark:bg-neutral-900 border-neutral-200 dark:border-neutral-800 hover:border-emerald-500/30 hover:shadow-xl hover:shadow-emerald-900/10'
             }`}
         style={{ animationDelay: `${delay}ms` }}
     >
@@ -53,14 +53,14 @@ const PricingCard: React.FC<PricingCardProps> = ({
         )}
 
         <div className="mb-6 mt-2">
-            <h3 className="text-xl font-bold text-white mb-2">{title}</h3>
-            <p className="text-neutral-400 text-sm h-[40px] leading-relaxed">{description}</p>
+            <h3 className={`text-xl font-bold mb-2 ${isPopular ? 'text-white' : 'text-neutral-900 dark:text-white'}`}>{title}</h3>
+            <p className={`text-sm h-[40px] leading-relaxed ${isPopular ? 'text-neutral-400' : 'text-neutral-600 dark:text-neutral-400'}`}>{description}</p>
         </div>
 
         <div className="mb-8">
             <div className="flex items-baseline gap-2">
-                <span className="text-4xl font-bold text-white">RM {price}</span>
-                <span className="text-neutral-600 text-lg line-through decoration-red-500/50">RM {regularPrice}</span>
+                <span className={`text-4xl font-bold ${isPopular ? 'text-white' : 'text-neutral-900 dark:text-white'}`}>RM {price}</span>
+                <span className="text-neutral-400 dark:text-neutral-600 text-lg line-through decoration-red-500/50">RM {regularPrice}</span>
             </div>
             <div className="text-[#00ff99] text-xs font-bold uppercase tracking-wider mt-2 flex items-center gap-1">
                 <Clock size={12} /> {timeline} Delivery
@@ -73,7 +73,7 @@ const PricingCard: React.FC<PricingCardProps> = ({
                     <div className="mt-0.5 rounded-full bg-[#00ff99]/10 p-0.5 flex-shrink-0 text-[#00ff99]">
                         <Check size={14} strokeWidth={3} />
                     </div>
-                    <span className="text-sm text-neutral-300">{feature}</span>
+                    <span className={`text-sm ${isPopular ? 'text-neutral-300' : 'text-neutral-600 dark:text-neutral-300'}`}>{feature}</span>
                 </div>
             ))}
         </div>
@@ -81,8 +81,8 @@ const PricingCard: React.FC<PricingCardProps> = ({
         <button
             onClick={onSelect}
             className={`w-full py-4 rounded-xl font-bold transition-all flex items-center justify-center gap-2 ${isPopular
-                    ? 'bg-[#00ff99] text-neutral-900 hover:bg-[#00cc7a] shadow-[0_0_20px_rgba(0,255,153,0.3)] hover:shadow-[0_0_30px_rgba(0,255,153,0.5)]'
-                    : 'bg-white text-neutral-900 hover:bg-neutral-200'
+                ? 'bg-[#00ff99] text-neutral-900 hover:bg-[#00cc7a] shadow-[0_0_20px_rgba(0,255,153,0.3)] hover:shadow-[0_0_30px_rgba(0,255,153,0.5)]'
+                : 'bg-neutral-900 text-white hover:bg-neutral-800 dark:bg-white dark:text-neutral-900 dark:hover:bg-neutral-200'
                 } active:scale-95`}
         >
             {isBeta ? 'Claim Beta Spot' : 'Book Fit Call'}

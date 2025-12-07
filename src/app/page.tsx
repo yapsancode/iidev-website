@@ -9,6 +9,7 @@ import Problems from '@/components/sections/Problems';
 import Services from '@/components/sections/Services';
 import Team from '@/components/sections/Team';
 import WhyChooseUs from '@/components/sections/WhyChooseUs';
+import ProcessTimeline from '@/components/sections/ProcessTimeline';
 import { BookingModal } from '@/components/modal/BookingModal';
 
 const App: React.FC = () => {
@@ -29,6 +30,7 @@ const App: React.FC = () => {
         <section id="home"><Hero onBookingClick={handleOpenBooking} /></section>
         <section id="problems"><Problems /></section>
         <section id="why-us"><WhyChooseUs /></section>
+        <section id="process"><ProcessTimeline /></section>
         <section id="portfolio"><Portfolio /></section>
         <section id="team"><Team /></section>
         <section id="services"><Services onBookingClick={handleOpenBooking} /></section>

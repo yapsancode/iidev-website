@@ -26,7 +26,7 @@ export function Hero({ onBookingClick }: HeroProps) {
   };
 
   return (
-    <section id="home" className="relative min-h-svh w-full overflow-hidden bg-background">
+    <section id="home" className="relative min-h-svh w-full overflow-hidden bg-[#FAFAFA] dark:bg-neutral-900">
       {/* Canvas: Ensure it sits behind content (z-0) */}
       <div className="absolute inset-0 z-0">
         <WaveCanvas className="opacity-60" />
@@ -53,11 +53,11 @@ export function Hero({ onBookingClick }: HeroProps) {
               border border-black/10 bg-black/5 
               dark:border-white/10 dark:bg-white/5 
               px-4 py-1.5 text-xs font-medium uppercase tracking-widest 
-              text-emerald-700 dark:text-emerald-300 
+              text-indigo-700 dark:text-indigo-300 
               backdrop-blur-md transition-colors hover:bg-black/10 dark:hover:bg-white/10">
               <span className="relative flex h-2 w-2">
-                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75"></span>
-                <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500"></span>
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-indigo-400 opacity-75"></span>
+                <span className="relative inline-flex h-2 w-2 rounded-full bg-indigo-500"></span>
               </span>
               Accepting New Projects
             </div>
@@ -123,7 +123,7 @@ export function Hero({ onBookingClick }: HeroProps) {
           >
             <button
               onClick={onBookingClick}
-              className="bg-emerald-500 hover:bg-emerald-200 text-gray-900 hover:text-black font-bold py-3 px-8 rounded-none border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all font-mono text-sm uppercase"
+              className="bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-3 px-8 rounded-none border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all font-mono text-sm uppercase"
             >
               Book Consultation
             </button>

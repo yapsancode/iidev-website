@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence, Variants } from 'framer-motion';
+import { ThemeToggle } from '../ui/ThemeToggle';
 
 export const Navbar = () => {
     const navItems = [
@@ -133,7 +134,7 @@ export const Navbar = () => {
                 </motion.button>
 
                 {/* Desktop Menu - Center Pills */}
-                <div className="pointer-events-auto hidden md:flex items-center gap-1 bg-[#F0F0F0]/90 backdrop-blur-md p-1.5 rounded-full border border-neutral-200 shadow-sm">
+                <div className="pointer-events-auto hidden md:flex items-center gap-2 bg-[#F0F0F0]/90 dark:bg-neutral-900/90 backdrop-blur-md p-1.5 rounded-full border border-neutral-200 dark:border-neutral-800 shadow-sm">
                     {desktopNavItems.map((item) => {
                         const isActive = activeSection === item.href.slice(1);
                         return (
@@ -141,19 +142,21 @@ export const Navbar = () => {
                                 key={item.label}
                                 onClick={(e) => handleNavClick(e, item.href)}
                                 className={`relative px-5 py-2 rounded-full text-[11px] font-bold tracking-widest transition-colors duration-300
-                                    ${isActive ? 'text-black' : 'text-neutral-500 hover:text-black hover:bg-white/50'}`}
+                                    ${isActive ? 'text-black dark:text-black' : 'text-neutral-500 hover:text-black dark:text-neutral-400 dark:hover:text-white hover:bg-white/50 dark:hover:bg-neutral-800/50'}`}
                             >
                                 {item.label}
                                 {isActive && (
                                     <motion.div
                                         layoutId="activePill"
-                                        className="absolute inset-0 bg-white rounded-full -z-10 shadow-md border border-black/5"
+                                        className="absolute inset-0 bg-white shadow-md border border-black/5 rounded-full -z-10"
                                         transition={{ type: "spring", stiffness: 400, damping: 30 }}
                                     />
                                 )}
                             </button>
                         );
                     })}
+                    <div className="mx-1 h-4 w-px bg-neutral-300 dark:bg-neutral-700" />
+                    <ThemeToggle />
                 </div>
 
                 {/* Mobile Toggle Button - Only visible when menu is CLOSED */}
@@ -198,21 +201,24 @@ export const Navbar = () => {
                                     setMobileMenuOpen(false);
                                     window.scrollTo({ top: 0, behavior: 'smooth' });
                                 }}
-                                className="bg-[#EFEEE9] px-4 py-3 text-[10px] font-bold tracking-[0.2em] uppercase rounded-sm shadow-sm hover:bg-white transition-colors"
+                                className="bg-[#EFEEE9] dark:bg-neutral-800 px-4 py-3 text-[10px] font-bold tracking-[0.2em] uppercase rounded-sm shadow-sm hover:bg-white dark:hover:bg-neutral-700 transition-colors text-black dark:text-white"
                             >
                                 iidev Studio
                             </motion.button>
 
-                            {/* Close Button (Top Right) */}
-                            <motion.button
-                                initial={{ opacity: 0, scale: 0.9 }}
-                                animate={{ opacity: 1, scale: 1 }}
-                                transition={{ delay: 0.2 }}
-                                onClick={() => setMobileMenuOpen(false)}
-                                className="bg-[#111] text-white px-8 py-3.5 rounded-full text-[10px] font-bold tracking-[0.2em] hover:bg-black transition-colors"
-                            >
-                                CLOSE
-                            </motion.button>
+                            <div className="flex items-center gap-4">
+                                <ThemeToggle />
+                                {/* Close Button (Top Right) */}
+                                <motion.button
+                                    initial={{ opacity: 0, scale: 0.9 }}
+                                    animate={{ opacity: 1, scale: 1 }}
+                                    transition={{ delay: 0.2 }}
+                                    onClick={() => setMobileMenuOpen(false)}
+                                    className="bg-[#111] dark:bg-white text-white dark:text-black px-8 py-3.5 rounded-full text-[10px] font-bold tracking-[0.2em] hover:bg-black dark:hover:bg-gray-200 transition-colors"
+                                >
+                                    CLOSE
+                                </motion.button>
+                            </div>
                         </div>
 
                         {/* Centered Navigation Links */}
@@ -271,7 +277,7 @@ export const Navbar = () => {
                         </motion.div>
                     </motion.div>
                 )}
-            </AnimatePresence>
+            </AnimatePresence >
         </>
     );
 };

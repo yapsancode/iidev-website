@@ -6,14 +6,14 @@ import { projects } from '@/lib/data';
 
 const Portfolio: React.FC = () => {
   return (
-    <section id="work" className="py-24 bg-white">
+    <section id="work" className="py-24 bg-[#FAFAFA] dark:bg-neutral-900">
       <div className="max-w-7xl mx-auto px-6">
         <div className="flex justify-between items-end mb-16">
           <div>
-            <h2 className="text-4xl md:text-5xl font-bold tracking-tight text-neutral-900 mb-4">
+            <h2 className="text-4xl md:text-5xl font-bold tracking-tight text-neutral-900 dark:text-white mb-4">
               Recent projects
             </h2>
-            <p className="text-neutral-500 text-lg">
+            <p className="text-neutral-500 dark:text-neutral-400 text-lg">
               Hand-picked work that drove real business results.
             </p>
           </div>
@@ -29,7 +29,7 @@ const Portfolio: React.FC = () => {
               transition={{ delay: index * 0.1 }}
               className="group cursor-pointer"
             >
-              <div className="relative overflow-hidden rounded-2xl mb-6 bg-neutral-100 aspect-[4/3]">
+              <div className="relative overflow-hidden rounded-2xl mb-6 bg-neutral-100 dark:bg-neutral-800 aspect-[4/3]">
                 <img
                   src={project.image}
                   alt={project.title}
@@ -47,16 +47,16 @@ const Portfolio: React.FC = () => {
 
               <div className="flex justify-between items-start mb-3">
                 <div>
-                  <h3 className="text-2xl font-bold text-neutral-900 group-hover:text-emerald-500 transition-colors">
+                  <h3 className="text-2xl font-bold text-neutral-900 dark:text-white group-hover:text-emerald-500 transition-colors">
                     {project.title}
                   </h3>
-                  <p className="text-neutral-500">{project.category}</p>
+                  <p className="text-neutral-500 dark:text-neutral-400">{project.category}</p>
                 </div>
                 <a
                   href={project.link}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="p-2 rounded-full border border-neutral-200 text-neutral-400 hover:border-emerald-500 hover:text-emerald-500 transition-colors"
+                  className="p-2 rounded-full border border-neutral-200 dark:border-neutral-700 text-neutral-400 hover:border-emerald-500 hover:text-emerald-500 transition-colors"
                   onClick={(e) => e.stopPropagation()}
                 >
                   <ExternalLink size={20} />
@@ -65,7 +65,7 @@ const Portfolio: React.FC = () => {
 
               <div className="flex flex-wrap gap-2">
                 {project.tags.map(tag => (
-                  <span key={tag} className="text-xs font-medium text-neutral-500 bg-neutral-100 px-2 py-1 rounded-md">
+                  <span key={tag} className="text-xs font-medium text-neutral-500 dark:text-neutral-300 bg-neutral-100 dark:bg-neutral-800 px-2 py-1 rounded-md">
                     {tag}
                   </span>
                 ))}

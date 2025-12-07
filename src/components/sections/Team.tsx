@@ -32,17 +32,17 @@ const members: TeamMember[] = [
 
 const Team: React.FC = () => {
   return (
-    <section id="team" className="py-24 bg-[#FAFAFA] border-y border-neutral-100 overflow-hidden">
+    <section id="team" className="py-24 bg-[#FAFAFA] dark:bg-neutral-900 border-y border-neutral-100 dark:border-neutral-800 overflow-hidden">
       <div className="max-w-6xl mx-auto px-6">
         <div className="text-center mb-16">
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-3xl md:text-5xl font-bold text-neutral-900 mb-6 tracking-tight"
+            className="text-3xl md:text-5xl font-bold text-neutral-900 dark:text-white mb-6 tracking-tight"
           >
             Just two dedicated developers.<br />
-            <span className="text-neutral-400">No middlemen. No surprises.</span>
+            <span className="text-neutral-400 dark:text-neutral-500">No middlemen. No surprises.</span>
           </motion.h2>
 
           <motion.p
@@ -50,7 +50,7 @@ const Team: React.FC = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.1 }}
-            className="text-lg text-neutral-500 max-w-2xl mx-auto"
+            className="text-lg text-neutral-500 dark:text-neutral-400 max-w-2xl mx-auto"
           >
             Direct access to the founders shipping your code.
             Hover over the cards to learn a bit more about the humans behind the screen.
@@ -89,7 +89,7 @@ const TeamCard: React.FC<TeamCardProps> = ({ member, index }) => {
       <div className="relative h-full w-full transition-all duration-700 [transform-style:preserve-3d] group-hover:[transform:rotateY(180deg)] shadow-xl rounded-2xl">
 
         {/* Front Face */}
-        <div className="absolute inset-0 h-full w-full rounded-2xl bg-white [backface-visibility:hidden] overflow-hidden border border-neutral-200">
+        <div className="absolute inset-0 h-full w-full rounded-2xl bg-white dark:bg-neutral-800 [backface-visibility:hidden] overflow-hidden border border-neutral-200 dark:border-neutral-700">
           <div className="h-full w-full relative">
             <img
               src={member.image}

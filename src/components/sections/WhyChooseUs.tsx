@@ -25,7 +25,7 @@ const ChatVisual = () => (
             initial={{ opacity: 0, x: -10 }}
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.2 }}
-            className="self-start bg-white p-3 rounded-2xl rounded-tl-none shadow-sm border border-slate-100 text-slate-600 relative"
+            className="self-start bg-white dark:bg-neutral-800 p-3 rounded-2xl rounded-tl-none shadow-sm border border-slate-100 dark:border-neutral-700 text-slate-600 dark:text-slate-300 relative"
         >
             Need to change the hero image?
             <span className="absolute -bottom-5 left-1 text-[10px] text-slate-400">10:42 AM</span>
@@ -43,12 +43,12 @@ const ChatVisual = () => (
 );
 
 const MobileVisual = () => (
-    <div className="relative w-32 h-48 mx-auto bg-slate-900 rounded-[2rem] ring-4 ring-slate-100 shadow-xl overflow-hidden mt-4">
+    <div className="relative w-32 h-48 mx-auto bg-slate-900 rounded-[2rem] ring-4 ring-slate-100 dark:ring-neutral-800 shadow-xl overflow-hidden mt-4">
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-16 h-4 bg-slate-900 rounded-b-lg z-10"></div>
-        <div className="w-full h-full bg-white flex flex-col pt-6 px-2 gap-2">
-            <div className="w-full h-24 bg-blue-50 rounded-lg animate-pulse"></div>
-            <div className="w-2/3 h-4 bg-slate-100 rounded animate-pulse"></div>
-            <div className="w-full h-4 bg-slate-100 rounded animate-pulse"></div>
+        <div className="w-full h-full bg-white dark:bg-neutral-900 flex flex-col pt-6 px-2 gap-2">
+            <div className="w-full h-24 bg-blue-50 dark:bg-blue-900/20 rounded-lg animate-pulse"></div>
+            <div className="w-2/3 h-4 bg-slate-100 dark:bg-neutral-800 rounded animate-pulse"></div>
+            <div className="w-full h-4 bg-slate-100 dark:bg-neutral-800 rounded animate-pulse"></div>
             <div className="mt-auto w-full h-8 bg-blue-600 rounded-lg mb-2 opacity-90 flex items-center justify-center text-white text-[10px] font-bold">
                 Load Time: 0.8s
             </div>
@@ -73,9 +73,9 @@ const SpeedVisual = () => (
 
 const PriceVisual = () => (
     <div className="flex flex-col gap-2 w-full">
-        <div className="flex justify-between items-center text-sm text-slate-600">
+        <div className="flex justify-between items-center text-sm text-slate-600 dark:text-slate-400">
             <span>Development</span>
-            <span className="font-bold text-slate-900">Fixed</span>
+            <span className="font-bold text-slate-900 dark:text-white">Fixed</span>
         </div>
         <div className="flex justify-between items-center text-sm text-slate-600">
             <span>Hosting Setup</span>
@@ -83,7 +83,7 @@ const PriceVisual = () => (
         </div>
         <div className="h-px w-full bg-slate-200 my-1"></div>
         <div className="flex justify-between items-center text-sm">
-            <span className="font-semibold text-slate-900">Final Cost</span>
+            <span className="font-semibold text-slate-900 dark:text-white">Final Cost</span>
             <span className="font-bold text-blue-600 text-lg">RM X,XXX</span>
         </div>
     </div>
@@ -94,7 +94,7 @@ const OwnershipVisual = () => (
         <div className="absolute -right-4 -bottom-4 md:-right-8 opacity-20 group-hover:opacity-100 transition-opacity duration-500">
             <MousePointer2 className="w-24 h-24 text-slate-800 fill-slate-800/20 rotate-12" />
         </div>
-        <div className="bg-white border border-slate-200 rounded-lg p-3 shadow-sm max-w-[200px] transform group-hover:-translate-y-1 transition-transform duration-300">
+        <div className="bg-white dark:bg-neutral-800 border border-slate-200 dark:border-neutral-700 rounded-lg p-3 shadow-sm max-w-[200px] transform group-hover:-translate-y-1 transition-transform duration-300">
             <div className="flex items-center gap-2 mb-2">
                 <div className="w-3 h-3 rounded-full bg-red-400"></div>
                 <div className="w-3 h-3 rounded-full bg-yellow-400"></div>
@@ -130,7 +130,7 @@ interface BentoItemProps {
 const BentoItem: React.FC<BentoItemProps> = ({ title, desc, visual, className, icon, gradient, badge }) => (
     <motion.div
         whileHover={{ y: -4 }}
-        className={`relative overflow-hidden rounded-3xl p-6 md:p-8 flex flex-col justify-between group border border-slate-100 bg-white shadow-sm hover:shadow-xl hover:border-blue-100 transition-all duration-300 ${className}`}
+        className={`relative overflow-hidden rounded-3xl p-6 md:p-8 flex flex-col justify-between group border border-slate-100 dark:border-neutral-700 bg-white dark:bg-neutral-800 shadow-sm hover:shadow-xl hover:border-blue-100 hover:dark:border-blue-900 transition-all duration-300 ${className}`}
     >
         {/* Optional Gradient Background */}
         {gradient && (
@@ -140,7 +140,7 @@ const BentoItem: React.FC<BentoItemProps> = ({ title, desc, visual, className, i
         {/* Header Section */}
         <div className="relative z-10 flex flex-col items-start gap-4 mb-6">
             <div className="flex justify-between w-full items-start">
-                <div className="p-3 bg-slate-50 rounded-2xl text-blue-600 group-hover:scale-110 transition-transform duration-300 ring-1 ring-slate-100">
+                <div className="p-3 bg-slate-50 dark:bg-neutral-700 rounded-2xl text-blue-600 dark:text-blue-400 group-hover:scale-110 transition-transform duration-300 ring-1 ring-slate-100 dark:ring-neutral-600">
                     {icon}
                 </div>
                 {badge && (
@@ -150,10 +150,10 @@ const BentoItem: React.FC<BentoItemProps> = ({ title, desc, visual, className, i
                 )}
             </div>
             <div>
-                <h3 className="text-xl md:text-2xl font-bold text-slate-900 mb-2 leading-tight">
+                <h3 className="text-xl md:text-2xl font-bold text-slate-900 dark:text-white mb-2 leading-tight">
                     {title}
                 </h3>
-                <p className="text-slate-500 text-sm md:text-base leading-relaxed">
+                <p className="text-slate-500 dark:text-neutral-400 text-sm md:text-base leading-relaxed">
                     {desc}
                 </p>
             </div>
@@ -168,19 +168,19 @@ const BentoItem: React.FC<BentoItemProps> = ({ title, desc, visual, className, i
 
 export default function WhyChooseUs() {
     return (
-        <section className="py-24 px-4 md:px-6 bg-white overflow-hidden">
+        <section className="py-24 px-4 md:px-6 bg-[#FAFAFA] dark:bg-neutral-900 overflow-hidden">
             <div className="max-w-6xl mx-auto">
 
                 {/* Section Header */}
                 <div className="text-center mb-16 max-w-2xl mx-auto">
-                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 text-blue-700 text-xs font-semibold uppercase tracking-wider mb-4 border border-blue-100">
+                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 text-xs font-semibold uppercase tracking-wider mb-4 border border-blue-100 dark:border-blue-800">
                         The Freelance Advantage
                     </div>
-                    <h2 className="text-4xl md:text-5xl font-bold text-slate-900 mb-6 tracking-tight">
-                        Why work with me?
+                    <h2 className="text-4xl md:text-5xl font-bold text-slate-900 dark:text-white mb-6 tracking-tight">
+                        Why work with us?
                     </h2>
-                    <p className="text-lg text-slate-600">
-                        I strip away the agency bloat. You get a direct line to the developer, faster turnaround, and a website built to perform.
+                    <p className="text-lg text-slate-600 dark:text-neutral-400">
+                        We strip away the agency bloat. You get a direct line to the developer, faster turnaround, and a website built to perform.
                     </p>
                 </div>
 
@@ -189,30 +189,30 @@ export default function WhyChooseUs() {
 
                     {/* 1. WhatsApp / Direct Access (Large - Spans 2 cols) */}
                     <BentoItem
-                        className="md:col-span-2 bg-slate-50"
+                        className="md:col-span-2 bg-slate-50 dark:bg-neutral-800/50"
                         icon={<MessageCircle className="w-6 h-6" />}
                         title="Direct WhatsApp Access"
-                        desc="No ticketing systems or account managers. You get my personal WhatsApp. I reply in minutes, not days, even on weekends."
+                        desc="No ticketing systems or account managers. You get our personal WhatsApp. We reply in minutes, not days, even on weekends."
                         visual={<div className="flex items-center justify-center h-full pt-4"><ChatVisual /></div>}
                         gradient="from-green-400 to-emerald-600"
                     />
 
                     {/* 2. Speed (Square) */}
                     <BentoItem
-                        className="md:col-span-1 bg-white"
+                        className="md:col-span-1 bg-white dark:bg-neutral-800"
                         icon={<Clock className="w-6 h-6" />}
                         title="Done in 14 Days"
-                        desc="Agencies take months. I work lean. Your standard 5-page site is live in 2 weeks from kickoff. Guaranteed."
+                        desc="Agencies take months. We work lean. Your standard 5-page site is live in 2 weeks from kickoff. Guaranteed."
                         visual={<div className="mt-8"><SpeedVisual /></div>}
                         gradient="from-blue-400 to-indigo-600"
                     />
 
                     {/* 3. Mobile First (Tall - Spans 2 rows vertically) */}
                     <BentoItem
-                        className="md:col-span-1 md:row-span-2 bg-slate-50"
+                        className="md:col-span-1 md:row-span-2 bg-slate-50 dark:bg-neutral-800/50"
                         icon={<Smartphone className="w-6 h-6" />}
                         title="Tested on 15+ Devices"
-                        desc="Your customers are on phones. I build mobile-first, ensuring your site loads under 2s on 4G networks (Maxis/Digi tested)."
+                        desc="Your customers are on phones. We build mobile-first, ensuring your site loads under 2s on 4G networks (Maxis/Digi tested)."
                         visual={<MobileVisual />}
                         gradient="from-purple-400 to-pink-600"
                         badge="Mobile First"
@@ -220,7 +220,7 @@ export default function WhyChooseUs() {
 
                     {/* 4. Fixed Price (Square) */}
                     <BentoItem
-                        className="md:col-span-1 bg-white"
+                        className="md:col-span-1 bg-white dark:bg-neutral-800"
                         icon={<Lock className="w-6 h-6" />}
                         title="One Fixed Price"
                         desc="One price. No hourly billing. No scope creep charges. No surprise 'maintenance fees' in month 3. You know the exact cost upfront."
@@ -230,10 +230,10 @@ export default function WhyChooseUs() {
 
                     {/* 5. SEO / Calls (Square) */}
                     <BentoItem
-                        className="md:col-span-1 bg-white"
+                        className="md:col-span-1 bg-white dark:bg-neutral-800"
                         icon={<TrendingUp className="w-6 h-6" />}
                         title="Built for Sales"
-                        desc="Not just a pretty picture. I structure pages with clear CTAs and Google-friendly semantics to drive calls."
+                        desc="Not just a pretty picture. We structure pages with clear CTAs and Google-friendly semantics to drive calls."
                         visual={
                             <div className="flex items-end justify-center gap-2 h-24 mt-4 opacity-80">
                                 <div className="w-4 bg-blue-100 rounded-t-lg h-[40%]"></div>
@@ -248,10 +248,10 @@ export default function WhyChooseUs() {
 
                     {/* 6. Ownership (Large - Spans 2 cols) */}
                     <BentoItem
-                        className="md:col-span-2 bg-white"
+                        className="md:col-span-2 bg-white dark:bg-neutral-800"
                         icon={<Check className="w-6 h-6" />}
                         title="Full Control From Day One"
-                        desc="I don't hold your site hostage. Once paid, you get full admin access, all source files, and a 20-minute training video to make updates yourself."
+                        desc="We don't hold your site hostage. Once paid, you get full admin access, all source files, and a 20-minute training video to make updates yourself."
                         visual={
                             <div className="flex items-center justify-center md:justify-end md:pr-12 h-full min-h-[120px]">
                                 <OwnershipVisual />

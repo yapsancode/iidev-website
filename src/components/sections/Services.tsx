@@ -20,7 +20,10 @@ const Services: React.FC<ServicesProps> = ({ onBookingClick }) => {
   };
 
   return (
-    <section id="services" className="py-24 bg-black overflow-hidden relative">
+    <section
+      id="services"
+      className="py-24 bg-[#FAFAFA] dark:bg-neutral-900 overflow-hidden relative"
+    >
       {/* Background Gradients */}
       <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
         <div className="absolute top-[-10%] right-[-5%] w-[500px] h-[500px] bg-[#00ff99]/5 rounded-full blur-[120px]" />
@@ -30,15 +33,11 @@ const Services: React.FC<ServicesProps> = ({ onBookingClick }) => {
       <div className="max-w-7xl mx-auto px-6 relative z-10">
         {/* Hero Section */}
         <div className="text-center mb-20 max-w-3xl mx-auto">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-neutral-900 border border-neutral-800 text-[#00ff99] text-sm font-medium mb-6">
-            <Sparkles size={14} />
-            <span>2026 Premium Agency Positioning</span>
-          </div>
-          <h2 className="text-5xl md:text-6xl font-bold tracking-tight text-white mb-6 leading-tight">
+          <h2 className="text-5xl md:text-6xl font-bold tracking-tight text-neutral-900 dark:text-white mb-6 leading-tight">
             Stop Losing Customers to <br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#00ff99] to-emerald-600">Ugly Websites.</span>
           </h2>
-          <p className="text-neutral-400 text-lg leading-relaxed mb-8">
+          <p className="text-neutral-600 dark:text-neutral-400 text-lg leading-relaxed mb-8">
             We build high-performance digital platforms that turn Malaysian traffic into revenue.
             Premium design, strategic copy, and real business results.
           </p>
@@ -89,7 +88,7 @@ const Services: React.FC<ServicesProps> = ({ onBookingClick }) => {
 
         {/* Detailed Care Plans */}
         <div className="mb-24">
-          <h3 className="text-2xl font-bold text-white text-center mb-10">Recurring Care Plans</h3>
+          <h3 className="text-2xl font-bold text-neutral-900 dark:text-white text-center mb-10">Recurring Care Plans</h3>
           <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
             {carePlans.map((plan) => (
               <CarePlanCard key={plan.title} {...plan} onSelect={onBookingClick} />

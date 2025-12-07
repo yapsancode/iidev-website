@@ -12,17 +12,17 @@ const config: Config = {
     extend: {
       colors: {
         // This makes ring-emerald-500, bg-emerald-500, etc. work immediately
-        emerald: {
-          50: "oklch(98% 0.05 160)",
-          100: "oklch(95% 0.08 160)",
-          200: "oklch(90% 0.12 160)",
-          300: "oklch(82% 0.15 160)",
-          400: "oklch(72% 0.18 160)",
-          500: "oklch(65% 0.25 160)",   // ← this is your main emerald
-          600: "oklch(55% 0.28 160)",
-          700: "oklch(45% 0.28 160)",
-          800: "oklch(35% 0.25 160)",
-          900: "oklch(25% 0.20 160)",
+        indigo: {
+          50: "oklch(97% 0.02 270)",
+          100: "oklch(94% 0.05 270)",
+          200: "oklch(89% 0.1 270)",
+          300: "oklch(80% 0.15 270)",
+          400: "oklch(71% 0.2 270)",
+          500: "oklch(62% 0.25 270)",
+          600: "oklch(53% 0.27 270)",
+          700: "oklch(44% 0.26 270)",
+          800: "oklch(35% 0.2 270)",
+          900: "oklch(25% 0.15 270)",
         },
       },
       fontFamily: {
