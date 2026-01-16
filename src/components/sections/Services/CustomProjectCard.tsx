@@ -13,9 +13,9 @@ const CustomProjectCard: React.FC<CustomProjectCardProps> = ({ onCustomProject }
             <div className="inline-block bg-neutral-900 text-white dark:bg-white dark:text-black px-3 py-1 rounded-md text-xs font-bold uppercase mb-4">
                 Enterprise
             </div>
-            <h3 className="text-3xl font-bold text-neutral-900 dark:text-white mb-4">Need a Custom Solution?</h3>
+            <h3 className="text-3xl font-bold text-neutral-900 dark:text-white mb-4">Need a Custom Software Solution?</h3>
             <p className="text-neutral-600 dark:text-neutral-400 mb-6">
-                For platforms, web apps (Next.js/React), SaaS MVP, or large corporate sites requiring complex API integrations and dedicated project management.
+                For web platforms, SaaS MVPs, internal tools, or systems requiring complex integrations and long-term scalability.
             </p>
             <div className="flex flex-wrap gap-3 mb-8">
                 {['Custom Web Apps', 'SaaS Development', 'Complex APIs', 'Multi-language'].map((tag, i) => (
@@ -28,13 +28,13 @@ const CustomProjectCard: React.FC<CustomProjectCardProps> = ({ onCustomProject }
                 onClick={onCustomProject}
                 className="bg-neutral-900 text-white dark:bg-white dark:text-black px-8 py-3 rounded-xl font-bold hover:bg-neutral-800 dark:hover:bg-neutral-200 transition-colors"
             >
-                Discuss Your Project
+                Discuss Your Project (No Commitment)
             </button>
         </div>
         <div className="w-full md:w-1/3 border-l border-neutral-200 dark:border-neutral-700/50 pl-0 md:pl-10 flex flex-col justify-center">
-            <div className="text-neutral-500 text-sm font-medium mb-1">Starting from</div>
+            <div className="text-neutral-500 text-sm font-medium mb-1">Typically</div>
             <div className="text-4xl font-bold text-neutral-900 dark:text-white mb-2">RM 35k+</div>
-            <div className="text-neutral-600 dark:text-neutral-400 text-sm">Timeline: 2-3 Months+</div>
+            <div className="text-neutral-600 dark:text-neutral-400 text-sm">Final scope depends on complexity and timeline.</div>
         </div>
     </div>
 );

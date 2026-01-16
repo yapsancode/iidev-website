@@ -5,9 +5,9 @@ import React from 'react';
 import { Shield, Star, Zap } from 'lucide-react';
 
 export const trustBadges = [
-    { icon: React.createElement(Shield, { size: 16, className: 'text-emerald-500' }), text: '100% Satisfaction Guarantee' },
-    { icon: React.createElement(Star, { size: 16, className: 'text-yellow-500' }), text: '50+ Malaysian Businesses' },
-    { icon: React.createElement(Zap, { size: 16, className: 'text-blue-500' }), text: 'SSM Registered Partner' }
+    { icon: React.createElement(Shield, { size: 16, className: 'text-emerald-500' }), text: 'Founder-Led Projects (No Outsourcing)' },
+    { icon: React.createElement(Star, { size: 16, className: 'text-yellow-500' }), text: 'Clear Scope, Timeline & Deliverables' },
+    { icon: React.createElement(Zap, { size: 16, className: 'text-blue-500' }), text: 'Modern Stack: Next.js, SEO-First Build' }
 ];
 
 export const pricingTiers = [
@@ -15,7 +15,7 @@ export const pricingTiers = [
         title: 'The Launchpad',
         price: '2,888',
         regularPrice: '3,888',
-        description: 'Perfect for new businesses needing a credible, high-converting start.',
+        description: 'For new or growing businesses that need a professional online presence they can confidently send customers to.',
         timeline: '2 Weeks',
         isBeta: true,
         features: [
@@ -25,15 +25,16 @@ export const pricingTiers = [
             'WhatsApp & Lead Form Integration',
             'CMS for Easy Content Updates',
             'Hosting & Domain Included (1st Year)'
-        ]
+        ],
+        ctaButton: 'See If This Fits Your Business',
     },
     {
         title: 'Growth Engine',
         price: '4,388',
         regularPrice: '7,888',
-        description: 'The standard for businesses ready to scale and dominate their local market.',
+        description: 'Designed for businesses ready to generate consistent leads and compete seriously in their local market. Most suitable for service-based businesses looking to scale.',
         timeline: '3-4 Weeks',
-        isPopular: true,
+        isPopular: false,
         isBeta: true,
         features: [
             'Everything in Launchpad +',
@@ -43,7 +44,8 @@ export const pricingTiers = [
             'Blog / News Section',
             'Speed Optimization (< 2s load)',
             'Google Analytics 4 Dashboard'
-        ]
+        ],
+        ctaButton: 'Book a Free Strategy Call',
     },
     {
         title: 'The Authority',
@@ -60,7 +62,8 @@ export const pricingTiers = [
             'CRM Integration (HubSpot/Zoho)',
             'Automated Email Sequence Setup',
             'Priority Support (1 Month)'
-        ]
+        ],
+        ctaButton: 'Discuss Your Goals',
     },
     {
         title: 'E-Commerce Pro',
@@ -77,7 +80,8 @@ export const pricingTiers = [
             'Customer Account Portal',
             'Inventory Management Setup',
             'Sales Dashboard & Reporting'
-        ]
+        ],
+        ctaButton: 'Explore This Option',
     }
 ];
 
@@ -103,7 +107,7 @@ export const carePlans = [
 export const faqs = [
     {
         question: "Why are you more expensive than the RM 500 freelancers?",
-        answer: "We don't just 'build a website'. We build a digital asset designed to generate revenue. Our pricing reflects the strategic planning, premium design, SEO foundation, and reliability that cheap freelancers simply cannot provide. You're paying for business outcomes, not just code."
+        answer: "We don't just 'build a website'. We build a digital asset designed to generate revenue. Our pricing reflects the strategic planning, premium design, SEO foundation, and reliability that cheap freelancers simply cannot provide. You’re paying for a solution that supports your business — not something you’ll need to rebuild in six months."
     },
     {
         question: "How long does it take to launch?",

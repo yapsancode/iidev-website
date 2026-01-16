@@ -104,17 +104,36 @@ export const metadata: Metadata = {
 
 const jsonLd = {
   "@context": "https://schema.org",
-  "@type": "ProfessionalService",
-  name: "iidev Studio",
-  url: "https://iidevstudio.com",
-  address: {
-    "@type": "PostalAddress",
-    addressLocality: "Malaysia",
-    addressCountry: "MY",
-  },
-  priceRange: "$$",
-  description:
-    "Helping Malaysian businesses grow with digitalisation. We build high-performance websites, e-commerce platforms, and digital solutions.",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://iidevstudio.com/#organization",
+      name: "iidev Studio",
+      url: "https://iidevstudio.com",
+      logo: {
+        "@type": "ImageObject",
+        url: "https://iidevstudio.com/logo-512.png",
+        width: 512,
+        height: 512
+      }
+    },
+    {
+      "@type": "ProfessionalService",
+      "@id": "https://iidevstudio.com/#service",
+      name: "iidev Studio",
+      url: "https://iidevstudio.com",
+      priceRange: "$$",
+      description:
+        "Helping Malaysian businesses grow with digitalisation. We build high-performance websites, e-commerce platforms, and digital solutions.",
+      address: {
+        "@type": "PostalAddress",
+        addressCountry: "MY"
+      },
+      provider: {
+        "@id": "https://iidevstudio.com/#organization"
+      }
+    }
+  ]
 };
 
 export default function RootLayout({
@@ -124,17 +143,22 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={`${pixelify.variable} scroll-smooth`}>
-      <head />
+      <head>
+        {/* Organization / Brand schema */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(jsonLd),
+          }}
+        />
+      </head>
+
       <body
         className={cn(
           "font-pixel min-h-screen bg-white font-sans antialiased",
           inter.variable
         )}
       >
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-        />
         <ThemeProvider
           attribute="class"
           defaultTheme="light"
@@ -143,6 +167,7 @@ export default function RootLayout({
         >
           {children}
         </ThemeProvider>
+
         <Analytics />
       </body>
     </html>

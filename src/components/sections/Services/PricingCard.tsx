@@ -13,6 +13,7 @@ interface PricingCardProps {
     timeline: string;
     isPopular?: boolean;
     isBeta?: boolean;
+    ctaButton?: string;
     delay?: number;
     onSelect: () => void;
 }
@@ -26,6 +27,7 @@ const PricingCard: React.FC<PricingCardProps> = ({
     timeline,
     isPopular,
     isBeta,
+    ctaButton,
     delay,
     onSelect
 }) => (
@@ -48,21 +50,20 @@ const PricingCard: React.FC<PricingCardProps> = ({
                     <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
                     <span className="relative inline-flex rounded-full h-2 w-2 bg-red-500"></span>
                 </span>
-                Beta Pricing
+                Founding Client Offer
             </div>
         )}
 
-        <div className="mb-6 mt-2">
-            <h3 className={`text-xl font-bold mb-2 ${isPopular ? 'text-white' : 'text-neutral-900 dark:text-white'}`}>{title}</h3>
-            <p className={`text-sm h-[40px] leading-relaxed ${isPopular ? 'text-neutral-400' : 'text-neutral-600 dark:text-neutral-400'}`}>{description}</p>
+        <div className="mb-8 mt-5">
+            <h3 className={`text-xl font-bold mb-3 ${isPopular ? 'text-white' : 'text-neutral-900 dark:text-white'}`}>{title}</h3>
+            <p className={`text-sm min-h-[60px] leading-relaxed ${isPopular ? 'text-neutral-400' : 'text-neutral-600 dark:text-neutral-400'}`}>{description}</p>
         </div>
 
         <div className="mb-8">
-            <div className="flex items-baseline gap-2">
-                <span className={`text-4xl font-bold ${isPopular ? 'text-white' : 'text-neutral-900 dark:text-white'}`}>RM {price}</span>
-                <span className="text-neutral-400 dark:text-neutral-600 text-lg line-through decoration-red-500/50">RM {regularPrice}</span>
+            <div className="flex items-baseline gap-2 mb-3">
+                <span className={`text-4xl font-bold ${isPopular ? 'text-white' : 'text-neutral-900 dark:text-white'}`}>Starting from RM {price}</span>
             </div>
-            <div className="text-[#00ff99] text-xs font-bold uppercase tracking-wider mt-2 flex items-center gap-1">
+            <div className="text-[#00ff99] text-xs font-bold uppercase tracking-wider flex items-center gap-1">
                 <Clock size={12} /> {timeline} Delivery
             </div>
         </div>
@@ -80,12 +81,12 @@ const PricingCard: React.FC<PricingCardProps> = ({
 
         <button
             onClick={onSelect}
-            className={`w-full py-4 rounded-xl font-bold transition-all flex items-center justify-center gap-2 ${isPopular
+            className={`w-full py-4 px-4 rounded-xl font-bold transition-all flex items-center justify-center gap-2 ${isPopular
                 ? 'bg-[#00ff99] text-neutral-900 hover:bg-[#00cc7a] shadow-[0_0_20px_rgba(0,255,153,0.3)] hover:shadow-[0_0_30px_rgba(0,255,153,0.5)]'
                 : 'bg-neutral-900 text-white hover:bg-neutral-800 dark:bg-white dark:text-neutral-900 dark:hover:bg-neutral-200'
                 } active:scale-95`}
         >
-            {isBeta ? 'Claim Beta Spot' : 'Book Fit Call'}
+            {ctaButton || (isBeta ? 'See If This Fits Your Business' : 'Book Fit Call')}
             <ArrowRight size={16} />
         </button>
     </div>
