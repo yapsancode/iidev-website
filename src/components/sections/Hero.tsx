@@ -100,8 +100,7 @@ export function Hero({ onBookingClick }: HeroProps) {
             className="mb-10 max-w-xl px-4 text-base font-light leading-relaxed md:text-xl
             text-slate-600 dark:text-slate-400"
           >
-            Crafting immersive digital experiences where <span className="font-medium text-black dark:text-white">design</span> meets <span className="font-medium text-black dark:text-white">functionality</span>.
-            Software tailored to your needs.
+            Problem-solving B2B websites that support leads, sales, and long-term growth.
           </motion.p>
 
           <motion.div
@@ -117,7 +116,7 @@ export function Hero({ onBookingClick }: HeroProps) {
               Book Consultation
             </button>
 
-            <button
+            {/* <button
               onClick={handleViewServices}
               className="group relative h-12 w-48 overflow-hidden rounded-full border border-neutral-300 dark:border-neutral-700 bg-transparent transition-all active:scale-95"
             >
@@ -128,7 +127,7 @@ export function Hero({ onBookingClick }: HeroProps) {
                 transition-colors duration-300 group-hover:text-white dark:group-hover:text-black">
                 View Services
               </span>
-            </button>
+            </button> */}
           </motion.div>
         </div>
       </div>

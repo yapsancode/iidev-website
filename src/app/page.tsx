@@ -28,12 +28,12 @@ const App: React.FC = () => {
       <Navbar />
       <main className="grow">
         <section id="home"><Hero onBookingClick={handleOpenBooking} /></section>
-        <section id="problems"><Problems /></section>
+        {/* <section id="problems"><Problems /></section> */}
         <section id="why-us"><WhyChooseUs /></section>
         <section id="process"><ProcessTimeline /></section>
         <section id="portfolio"><Portfolio /></section>
         <section id="team"><Team /></section>
-        <section id="services"><Services onBookingClick={handleOpenBooking} /></section>
+        {/* <section id="services"><Services onBookingClick={handleOpenBooking} /></section> */}
         <section id="demo"><CTA onBookingClick={handleOpenBooking} /></section>
       </main>
       <Footer />

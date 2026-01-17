@@ -4,21 +4,21 @@ import { ThemeToggle } from '../ui/ThemeToggle';
 
 export const Navbar = () => {
     const navItems = [
-        { label: 'PROBLEMS', href: '#problems' },
+        // { label: 'PROBLEMS', href: '#problems' },
         { label: 'WHY US', href: '#why-us' },
         { label: 'PORTFOLIO', href: '#portfolio' },
         { label: 'TEAM', href: '#team' },
-        { label: 'SERVICES', href: '#services' },
+        // { label: 'SERVICES', href: '#services' },
         // { label: 'SEE A DEMO', href: '#demo' },
     ];
 
     // Added separate desktop items to match the user's original more extensive desktop list
     const desktopNavItems = [
-        { label: 'PROBLEMS', href: '#problems' },
+        // { label: 'PROBLEMS', href: '#problems' },
         { label: 'WHY US', href: '#why-us' },
         { label: 'PORTFOLIO', href: '#portfolio' },
         { label: 'TEAM', href: '#team' },
-        { label: 'SERVICES', href: '#services' },
+        // { label: 'SERVICES', href: '#services' },
         // { label: 'SEE A DEMO', href: '#demo' },
     ];
 
