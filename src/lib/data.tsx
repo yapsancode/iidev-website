@@ -30,6 +30,13 @@ export const problems = [
 
 export const projects: Project[] = [
   {
+    title: "Locum Connect",
+    category: "Mobile App",
+    image: "images/locum-connect.png",
+    tags: ["Expo", "React", "Spring Boot"],
+    link: "https://locum-connect.com/"
+  },
+  {
     title: "Klinik Mekar Website",
     category: "Healthcare Platform",
     image: "images/klinik-mekar-landingpage.png",
