@@ -10,7 +10,7 @@ This is the public-facing website for iidev Studio Sdn Bhd, a Malaysian web deve
 
 **iidev Studio** is a search-first web studio. Not a generic freelancer. Not a bloated agency. We build high-performance, conversion-focused websites for Malaysian service-based businesses.
 
-- Solo-operated, founder-led (no outsourcing)
+- Two-founder team, founder-led (no outsourcing)
 - Based in Malaysia, serving the local market
 - Stack: Next.js, Tailwind, TypeScript
 - Pricing is always in **RM**
