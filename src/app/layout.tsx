@@ -3,7 +3,8 @@ import { Inter, Pixelify_Sans } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 import { Analytics } from '@vercel/analytics/next';
-import { ThemeProvider } from "@/components/theme-provider";
+// import { ThemeProvider } from "@/components/theme-provider";
+import { ThemeProvider } from "@wrksz/themes/next"
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 
@@ -142,7 +143,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${pixelify.variable} scroll-smooth`}>
+    <html lang="en" suppressHydrationWarning className={`${pixelify.variable} scroll-smooth`}>
       <head>
         {/* Organization / Brand schema */}
         <script
