@@ -11,9 +11,9 @@ const TypewriterText = dynamic(
   {
     ssr: false,
     loading: () => (
-      <span className="text-6xl md:text-8xl font-extrabold text-black dark:text-white tracking-tight leading-[1.1]">
+      <h1 className="text-center text-6xl md:text-8xl font-extrabold text-black dark:text-white tracking-tight leading-[1.1]">
         We Don&apos;t Just Build Websites, We Help Business Thrive.
-      </span>
+      </h1>
     ),
   },
 );
@@ -75,14 +75,6 @@ export function Hero({ onBookingClick }: HeroProps) {
               transition={{ duration: 8, repeat: Infinity }}
             />
 
-            <motion.h1
-              className="sr-only"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-            >
-              iidev
-            </motion.h1>
-
             <motion.div
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
@@ -118,8 +110,8 @@ export function Hero({ onBookingClick }: HeroProps) {
               "text-slate-600 dark:text-slate-400",
             )}
           >
-            Problem-solving B2B websites that support leads, sales, and
-            long-term growth.
+            Web design and SEO for Malaysian service businesses — built to
+            bring in more calls, bookings, and leads.
           </motion.p>
 
           <motion.div

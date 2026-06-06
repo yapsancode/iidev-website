@@ -93,9 +93,14 @@ export const TypewriterText: React.FC<TypewriterTextProps> = ({
   let pauseApplied = false;
 
   return (
-    <h1 className={`flex flex-wrap justify-center gap-[0.25em] ${className}`}>
+    <h1
+      className={`flex flex-wrap justify-center gap-[0.25em] ${className}`}
+      aria-label={text}
+    >
+      {/* Real, crawlable heading text — the animated glyphs below are decorative */}
+      <span className="sr-only">{text}</span>
       {words.map((word, wIndex) => (
-        <span key={wIndex} className="inline-flex whitespace-nowrap">
+        <span key={wIndex} aria-hidden="true" className="inline-flex whitespace-nowrap">
           {word.split("").map((char, cIndex) => {
             const currentDelayIndex = charCount;
             charCount++;

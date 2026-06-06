@@ -1,6 +1,7 @@
 "use client"
 import React from 'react';
-import { ExternalLink, Github } from 'lucide-react';
+import Image from 'next/image';
+import { ExternalLink } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { projects } from '@/lib/data';
 
@@ -30,10 +31,12 @@ const Portfolio: React.FC = () => {
               className="group cursor-pointer"
             >
               <div className="relative overflow-hidden rounded-2xl mb-6 bg-neutral-100 dark:bg-neutral-800 aspect-[4/3]">
-                <img
+                <Image
                   src={project.image}
-                  alt={project.title}
-                  className="object-cover w-full h-full transform transition-transform duration-700 group-hover:scale-105"
+                  alt={`${project.title} — ${project.category} built by iidev Studio`}
+                  fill
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                  className="object-cover transform transition-transform duration-700 group-hover:scale-105"
                 />
                 <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300" />
                 {project.result && (

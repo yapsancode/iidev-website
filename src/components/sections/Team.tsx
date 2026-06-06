@@ -1,5 +1,6 @@
 "use client"
 import React from 'react';
+import Image from 'next/image';
 import { motion } from 'framer-motion';
 
 export interface TeamMember {
@@ -14,21 +15,28 @@ const members: TeamMember[] = [
   {
     name: "Imran Ariff",
     role: "Co-Founder & Tech Lead",
-    // Using placeholder since local image won't load in this environment, 
-    // but in a real app, this would be "/images/imran-ariff.jpg"
-    image: "https://picsum.photos/400/500?random=1",
+    // TODO: add a real photo at /images/imran-ariff.jpg — falls back to an
+    // initials avatar while empty (never ship a random stock face for a founder)
+    image: "",
     alt: "Imran Ariff",
     funFact: "Can debug complex race conditions while sleepwalking. Fueled entirely by iced americanos."
   },
   {
     name: "Isyraf Afifi",
     role: "Co-Founder & Product",
-    // Using placeholder since local image won't load in this environment
     image: "/images/isyraf-afifi.jpg",
     alt: "Isyraf Afifi",
     funFact: "Collects vintage mechanical keyboards and claims he can hear the difference between 62g and 67g switches."
   },
 ];
+
+const getInitials = (name: string) =>
+  name
+    .split(" ")
+    .map((part) => part[0])
+    .join("")
+    .slice(0, 2)
+    .toUpperCase();
 
 const Team: React.FC = () => {
   return (
@@ -91,11 +99,21 @@ const TeamCard: React.FC<TeamCardProps> = ({ member, index }) => {
         {/* Front Face */}
         <div className="absolute inset-0 h-full w-full rounded-2xl bg-white dark:bg-neutral-800 [backface-visibility:hidden] overflow-hidden border border-neutral-200 dark:border-neutral-700">
           <div className="h-full w-full relative">
-            <img
-              src={member.image}
-              alt={member.alt}
-              className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
-            />
+            {member.image ? (
+              <Image
+                src={member.image}
+                alt={`${member.name}, ${member.role} at iidev Studio`}
+                fill
+                sizes="(max-width: 768px) 100vw, 320px"
+                className="object-cover transition-transform duration-700 group-hover:scale-110"
+              />
+            ) : (
+              <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-neutral-700 to-neutral-900 transition-transform duration-700 group-hover:scale-110">
+                <span className="select-none text-7xl font-bold tracking-wide text-white/90">
+                  {getInitials(member.name)}
+                </span>
+              </div>
+            )}
             {/* Gradient Overlay */}
             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
 

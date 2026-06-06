@@ -1,10 +1,25 @@
-"use client";
-import React, { useState } from "react";
+import React from "react";
+import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowLeft, Check } from "lucide-react";
 import { Navbar } from "@/components/sections/Navbar";
 import Footer from "@/components/sections/Footer";
-import { BookingModal } from "@/components/modal/BookingModal";
+import { BookingButton } from "@/components/modal/BookingButton";
+
+export const metadata: Metadata = {
+  title: "Growth Retainer — Monthly SEO That Compounds (RM 1k–2k/mo)",
+  description:
+    "Ongoing SEO for Malaysian businesses ready to grow consistently. Monthly content, technical fixes, rank tracking, and a plain-language report — with direct access to the person doing the work. From RM 1,000/month.",
+  alternates: { canonical: "/services/growth-retainer" },
+  openGraph: {
+    title: "Growth Retainer | iidev Studio",
+    description:
+      "Ongoing SEO for Malaysian businesses ready to grow consistently. Monthly content, technical fixes, rank tracking, and clear reporting.",
+    url: "https://iidevstudio.com/services/growth-retainer",
+    type: "website",
+    images: ["/opengraph-image"],
+  },
+};
 
 const outcomes = [
   "Monthly SEO work — new content, technical fixes, and improvements that compound over time",
@@ -14,11 +29,42 @@ const outcomes = [
   "Direct access to the person doing the work, not a project manager relaying messages",
 ];
 
-export default function GrowthRetainerPage() {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Service",
+      name: "Growth Retainer",
+      serviceType: "Monthly SEO and content retainer",
+      description:
+        "Ongoing SEO for Malaysian businesses ready to grow consistently. Monthly content, technical fixes, rank tracking, and clear reporting.",
+      provider: { "@id": "https://iidevstudio.com/#organization" },
+      areaServed: { "@type": "Country", name: "Malaysia" },
+      offers: {
+        "@type": "Offer",
+        priceCurrency: "MYR",
+        price: "1000",
+        url: "https://iidevstudio.com/services/growth-retainer",
+      },
+    },
+    {
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "Home", item: "https://iidevstudio.com" },
+        { "@type": "ListItem", position: 2, name: "Services", item: "https://iidevstudio.com/services" },
+        { "@type": "ListItem", position: 3, name: "Growth Retainer", item: "https://iidevstudio.com/services/growth-retainer" },
+      ],
+    },
+  ],
+};
 
+export default function GrowthRetainerPage() {
   return (
     <div className="min-h-screen flex flex-col font-sans overflow-x-hidden">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <Navbar />
       <main className="grow bg-[#FAFAFA] dark:bg-neutral-900">
         <div className="max-w-3xl mx-auto px-6 pt-36 pb-24">
@@ -78,12 +124,9 @@ export default function GrowthRetainerPage() {
 
           {/* CTA */}
           <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
-            <button
-              onClick={() => setIsModalOpen(true)}
-              className="bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-3 px-8 rounded-none border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all font-mono text-sm uppercase"
-            >
+            <BookingButton className="bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-3 px-8 rounded-none border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all font-mono text-sm uppercase">
               Book a Free Call
-            </button>
+            </BookingButton>
             <p className="text-sm text-neutral-400">
               We'll audit your current situation and map out what consistent
               growth actually looks like for your business.
@@ -92,7 +135,6 @@ export default function GrowthRetainerPage() {
         </div>
       </main>
       <Footer />
-      <BookingModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
     </div>
   );
 }

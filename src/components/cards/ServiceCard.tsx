@@ -1,7 +1,8 @@
 "use client";
 import * as React from "react";
+import Image from "next/image";
 import { cva, type VariantProps } from "class-variance-authority";
-import { motion } from "framer-motion";
+import { motion, type Variants } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -23,7 +24,10 @@ const cardVariants = cva(
 );
 
 export interface ServiceCardProps
-  extends React.HTMLAttributes<HTMLDivElement>,
+  extends Omit<
+      React.HTMLAttributes<HTMLDivElement>,
+      "onAnimationStart" | "onDrag" | "onDragStart" | "onDragEnd"
+    >,
     VariantProps<typeof cardVariants> {
   title: string;
   href: string;
@@ -35,11 +39,11 @@ export interface ServiceCardProps
   imgClassName?: string;
 }
 
-const cardAnimation = {
+const cardAnimation: Variants = {
   hover: { scale: 1.02, transition: { duration: 0.3 } },
 };
 
-const imageAnimation = {
+const imageAnimation: Variants = {
   hover: {
     scale: 1.1,
     rotate: 3,
@@ -48,7 +52,7 @@ const imageAnimation = {
   },
 };
 
-const arrowAnimation = {
+const arrowAnimation: Variants = {
   hover: {
     x: 5,
     transition: {
@@ -106,15 +110,21 @@ const ServiceCard = React.forwardRef<HTMLDivElement, ServiceCardProps>(
         </div>
 
         {imgSrc && (
-          <motion.img
-            src={imgSrc}
-            alt={imgAlt ?? title}
+          <motion.div
             className={cn(
-              "absolute object-contain opacity-90 group-hover:opacity-100",
+              "absolute",
               imgClassName ?? "-right-8 -bottom-8 w-40 h-40"
             )}
             variants={imageAnimation}
-          />
+          >
+            <Image
+              src={imgSrc}
+              alt={imgAlt ?? title}
+              fill
+              sizes="160px"
+              className="object-contain opacity-90 group-hover:opacity-100"
+            />
+          </motion.div>
         )}
       </motion.div>
     );

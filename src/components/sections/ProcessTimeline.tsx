@@ -60,8 +60,14 @@ const steps = [
 const ProcessTimeline = () => {
     return (
         <section className="relative py-24 overflow-hidden bg-[#FAFAFA] dark:bg-neutral-900 transition-colors duration-300">
-            {/* Subtle Grain Texture */}
-            <div className="absolute inset-0 opacity-[0.03] pointer-events-none bg-[url('https://grainy-gradients.vercel.app/noise.svg')] mix-blend-multiply"></div>
+            {/* Subtle Grain Texture (inline SVG — no external request) */}
+            <div
+                className="absolute inset-0 opacity-[0.03] pointer-events-none mix-blend-multiply"
+                style={{
+                    backgroundImage:
+                        "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E\")",
+                }}
+            ></div>
 
             <div className="container mx-auto px-4 relative z-10">
                 <div className="text-center mb-20">

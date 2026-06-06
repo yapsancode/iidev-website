@@ -1,3 +1,4 @@
+"use client";
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence, Variants } from 'framer-motion';
 import { usePathname, useRouter } from 'next/navigation';
@@ -136,7 +137,7 @@ export const Navbar = () => {
 
                 {/* Desktop Menu - Center Pills */}
                 <div className="pointer-events-auto hidden md:flex items-center gap-2 bg-[#F0F0F0]/90 dark:bg-neutral-900/90 backdrop-blur-md p-1.5 rounded-full border border-neutral-200 dark:border-neutral-800 shadow-sm">
-                    {desktopNavItems.map((item) => {
+                    {pathname === '/' && desktopNavItems.map((item) => {
                         const isActive = activeSection === item.href.slice(1);
                         return (
                             <button
@@ -156,7 +157,7 @@ export const Navbar = () => {
                             </button>
                         );
                     })}
-                    <div className="mx-1 h-4 w-px bg-neutral-300 dark:bg-neutral-700" />
+                    {pathname === '/' && <div className="mx-1 h-4 w-px bg-neutral-300 dark:bg-neutral-700" />}
                     <ThemeToggle />
                 </div>
 
@@ -227,7 +228,7 @@ export const Navbar = () => {
                             variants={linkContainerVariants}
                             className="flex-1 flex flex-col justify-center items-center gap-5 w-full min-h-[400px]"
                         >
-                            {navItems.map((item) => (
+                            {pathname === '/' && navItems.map((item) => (
                                 <motion.div
                                     key={item.label}
                                     variants={linkVariants}
@@ -273,7 +274,7 @@ export const Navbar = () => {
 
                             {/* Copyright */}
                             <div className="mt-4 text-[10px] text-neutral-500 font-normal normal-case tracking-normal">
-                                © 2025 iidev Studio® All Rights Reserved
+                                © {new Date().getFullYear()} iidev Studio® All Rights Reserved
                             </div>
                         </motion.div>
                     </motion.div>

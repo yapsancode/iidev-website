@@ -17,77 +17,40 @@ const pixelify = Pixelify_Sans({
 export const metadata: Metadata = {
   metadataBase: new URL("https://iidevstudio.com"),
   title: {
-    default: "iidev Studio | Web Development & Digital Solutions Malaysia",
+    default: "iidev Studio | Web Design & SEO for Malaysian Businesses",
     template: "%s | iidev Studio",
   },
   description:
-    "Helping Malaysian businesses grow with digitalisation. We build high-performance websites, e-commerce platforms, and digital solutions. Direct communication, fast delivery, and affordable pricing.",
+    "High-performance websites and SEO for Malaysian service businesses. Built to load fast, rank on Google, and turn visitors into calls and bookings.",
   keywords: [
-    "Web Development",
-    "Malaysia",
-    "Digital Solutions",
-    "E-commerce",
-    "Website Design",
-    "Software Engineering",
-    "iidev Studio",
-    "iidevstudio",
-    "iidevstudio.com",
-    "idevstudio",
-    "upah buat website malaysia",
-    "buat website murah malaysia",
-    "hire website developer malaysia",
     "web design malaysia",
     "website developer malaysia",
-    "website premium malaysia",
-    "kembangkan business dengan website",
-    "cara buat website",
-    "cara buat website murah",
-    "cara buat website mudah",
-    "cara buat website malaysia",
-    "cara buat website sendiri",
-    "how to do a website",
-    "how to do a website step by step",
-    "how to do a website malaysia",
-    "how to make a website",
-    "how to make a website step by step",
-    "companies that build websites",
-    "companies that build websites malaysia",
-    "companies that build websites malaysia for small business",
-    "best company to build a website",
-    "best company to build a website malaysia",
-    "best company to build a website malaysia for small business",
-    "best company to build a website malaysia for small business affordable",
-    "affordable company to build a website malaysia for small business",
-    "consultation",
-    "business consultation",
-    "digital marketing",
-    "digital marketing malaysia",
-    "seo",
     "seo malaysia",
-    "search engine optimization",
-    "search engine optimization malaysia",
-    "search engine optimization malaysia for small business",
-    "buat duit dengan website",
-    "buat duit dengan website malaysia",
-    "make money with website",
+    "web development malaysia",
+    "buat website malaysia",
+    "small business website malaysia",
+    "iidev studio",
   ],
   authors: [{ name: "iidev Studio" }],
   creator: "iidev Studio",
   publisher: "iidev Studio",
+  alternates: {
+    canonical: "/",
+  },
   openGraph: {
-    title: "iidev Studio | Web Development & Digital Solutions Malaysia",
+    title: "iidev Studio | Web Design & SEO for Malaysian Businesses",
     description:
-      "Helping Malaysian businesses grow with digitalisation. We build high-performance websites, e-commerce platforms, and digital solutions.",
+      "High-performance websites and SEO for Malaysian service businesses. Built to load fast, rank on Google, and turn visitors into customers.",
     url: "https://iidevstudio.com",
     siteName: "iidev Studio",
-    locale: "en_US",
+    locale: "en_MY",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "iidev Studio | Web Development & Digital Solutions Malaysia",
+    title: "iidev Studio | Web Design & SEO for Malaysian Businesses",
     description:
-      "Helping Malaysian businesses grow with digitalisation. We build high-performance websites, e-commerce platforms, and digital solutions.",
+      "High-performance websites and SEO for Malaysian service businesses. Built to load fast, rank on Google, and turn visitors into customers.",
     creator: "@iidevstudio",
   },
   robots: {
@@ -111,28 +74,38 @@ const jsonLd = {
       "@id": "https://iidevstudio.com/#organization",
       name: "iidev Studio",
       url: "https://iidevstudio.com",
+      email: "team.iidevstudio@gmail.com",
       logo: {
         "@type": "ImageObject",
         url: "https://iidevstudio.com/logo-512.png",
         width: 512,
         height: 512
-      }
+      },
+      sameAs: ["https://www.linkedin.com/company/iidevstudio"]
     },
     {
       "@type": "ProfessionalService",
       "@id": "https://iidevstudio.com/#service",
       name: "iidev Studio",
       url: "https://iidevstudio.com",
-      priceRange: "$$",
+      image: "https://iidevstudio.com/logo-512.png",
+      priceRange: "RM 1,000 – RM 15,000",
+      telephone: "+60 16-709 3543",
+      email: "team.iidevstudio@gmail.com",
       description:
-        "Helping Malaysian businesses grow with digitalisation. We build high-performance websites, e-commerce platforms, and digital solutions.",
+        "Web design and SEO for Malaysian service businesses. High-performance websites built to load fast, rank on Google, and turn visitors into customers.",
       address: {
         "@type": "PostalAddress",
         addressCountry: "MY"
       },
+      areaServed: {
+        "@type": "Country",
+        name: "Malaysia"
+      },
       provider: {
         "@id": "https://iidevstudio.com/#organization"
-      }
+      },
+      sameAs: ["https://www.linkedin.com/company/iidevstudio"]
     }
   ]
 };
@@ -143,7 +116,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" suppressHydrationWarning className={`${pixelify.variable} scroll-smooth`}>
+    <html lang="en-MY" suppressHydrationWarning className={`${pixelify.variable} scroll-smooth`}>
       <head>
         {/* Organization / Brand schema */}
         <script

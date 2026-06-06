@@ -1,9 +1,24 @@
-"use client";
-import React, { useState } from "react";
+import React from "react";
+import type { Metadata } from "next";
 import { Navbar } from "@/components/sections/Navbar";
 import Footer from "@/components/sections/Footer";
-import { BookingModal } from "@/components/modal/BookingModal";
+import { BookingButton } from "@/components/modal/BookingButton";
 import { ServiceCard } from "@/components/cards/ServiceCard";
+
+export const metadata: Metadata = {
+  title: "Services & Pricing — Web Design & SEO for Malaysian Businesses",
+  description:
+    "Three clear packages for Malaysian businesses: get online (RM 1k–3k), get found on Google (RM 3k–6k), or grow every month with an SEO retainer. Pick your stage.",
+  alternates: { canonical: "/services" },
+  openGraph: {
+    title: "Services & Pricing | iidev Studio",
+    description:
+      "Three clear packages for Malaysian businesses: get online, get found on Google, or grow every month with an SEO retainer.",
+    url: "https://iidevstudio.com/services",
+    type: "website",
+    images: ["/opengraph-image"],
+  },
+};
 
 const tiers = [
   {
@@ -43,11 +58,32 @@ const tiers = [
   },
 ];
 
-export default function ServicesPage() {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+const breadcrumbJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    {
+      "@type": "ListItem",
+      position: 1,
+      name: "Home",
+      item: "https://iidevstudio.com",
+    },
+    {
+      "@type": "ListItem",
+      position: 2,
+      name: "Services",
+      item: "https://iidevstudio.com/services",
+    },
+  ],
+};
 
+export default function ServicesPage() {
   return (
     <div className="min-h-screen flex flex-col font-sans overflow-x-hidden">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
       <Navbar />
       <main className="grow bg-[#FAFAFA] dark:bg-neutral-900">
         <div className="max-w-5xl mx-auto px-6 pt-36 pb-24">
@@ -78,17 +114,13 @@ export default function ServicesPage() {
               Not sure which one fits? Book a free 30-minute call — no pitch,
               just clarity.
             </p>
-            <button
-              onClick={() => setIsModalOpen(true)}
-              className="bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-3 px-8 rounded-none border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all font-mono text-sm uppercase whitespace-nowrap"
-            >
+            <BookingButton className="bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-3 px-8 rounded-none border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all font-mono text-sm uppercase whitespace-nowrap">
               Book a Free Call
-            </button>
+            </BookingButton>
           </div>
         </div>
       </main>
       <Footer />
-      <BookingModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
     </div>
   );
 }
