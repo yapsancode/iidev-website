@@ -6,7 +6,7 @@ import { Hero } from '@/components/sections/Hero';
 import { Navbar } from '@/components/sections/Navbar';
 import Portfolio from '@/components/sections/Portfolio';
 import Problems from '@/components/sections/Problems';
-import Services from '@/components/sections/Services';
+// import Services from '@/components/sections/Services';
 import Team from '@/components/sections/Team';
 import WhyChooseUs from '@/components/sections/WhyChooseUs';
 import ProcessTimeline from '@/components/sections/ProcessTimeline';
