@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence, Variants } from 'framer-motion';
+import { usePathname, useRouter } from 'next/navigation';
 import { ThemeToggle } from '../ui/ThemeToggle';
 
 export const Navbar = () => {
+    const pathname = usePathname();
+    const router = useRouter();
     const navItems = [
         // { label: 'PROBLEMS', href: '#problems' },
         { label: 'WHY US', href: '#why-us' },
@@ -110,7 +113,7 @@ export const Navbar = () => {
                 {/* Logo - visible on desktop, or mobile when menu closed */}
                 <motion.button
                     layout
-                    onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+                    onClick={() => pathname === '/' ? window.scrollTo({ top: 0, behavior: 'smooth' }) : router.push('/')}
                     onMouseEnter={() => setIsLogoHovered(true)}
                     onMouseLeave={() => setIsLogoHovered(false)}
                     className={`pointer-events-auto flex items-center gap-1 bg-black text-white dark:bg-white dark:text-black px-4 py-3 text-xs font-bold tracking-widest uppercase cursor-pointer select-none transition-opacity duration-300 ${mobileMenuOpen ? 'opacity-0' : 'opacity-100'}`}
