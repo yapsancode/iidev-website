@@ -1,6 +1,7 @@
 "use client";
 import { motion } from "framer-motion";
 import { WaveCanvas } from "../ui/wave-canvas";
+import Link from "next/link";
 // import { TypewriterText } from '../ui/TypewriterText';
 import dynamic from "next/dynamic";
 import { cn } from "@/lib/utils";
@@ -22,13 +23,6 @@ interface HeroProps {
 }
 
 export function Hero({ onBookingClick }: HeroProps) {
-  const handleViewServices = () => {
-    const servicesSection = document.getElementById("services");
-    if (servicesSection) {
-      servicesSection.scrollIntoView({ behavior: "smooth", block: "start" });
-    }
-  };
-
   return (
     <section
       id="home"
@@ -141,18 +135,15 @@ export function Hero({ onBookingClick }: HeroProps) {
               Book Consultation
             </button>
 
-            {/* <button
-              onClick={handleViewServices}
-              className="group relative h-12 w-48 overflow-hidden rounded-full border border-neutral-300 dark:border-neutral-700 bg-transparent transition-all active:scale-95"
+            <Link
+              href="/services"
+              className="group relative h-12 w-48 overflow-hidden rounded-full border border-neutral-300 dark:border-neutral-700 bg-transparent transition-all active:scale-95 flex items-center justify-center"
             >
               <div className="absolute inset-0 translate-y-full bg-neutral-900 dark:bg-white transition-transform duration-300 ease-out group-hover:translate-y-0" />
-
-              <span className="relative z-10 flex items-center justify-center text-sm font-semibold tracking-wide 
-                text-neutral-900 dark:text-white 
-                transition-colors duration-300 group-hover:text-white dark:group-hover:text-black">
+              <span className="relative z-10 text-sm font-semibold tracking-wide text-neutral-900 dark:text-white transition-colors duration-300 group-hover:text-white dark:group-hover:text-black">
                 View Services
               </span>
-            </button> */}
+            </Link>
           </motion.div>
         </div>
       </div>

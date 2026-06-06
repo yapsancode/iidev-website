@@ -8,7 +8,6 @@ export const Navbar = () => {
         { label: 'WHY US', href: '#why-us' },
         { label: 'PORTFOLIO', href: '#portfolio' },
         { label: 'TEAM', href: '#team' },
-        // { label: 'SERVICES', href: '#services' },
         // { label: 'SEE A DEMO', href: '#demo' },
     ];
 
@@ -18,7 +17,6 @@ export const Navbar = () => {
         { label: 'WHY US', href: '#why-us' },
         { label: 'PORTFOLIO', href: '#portfolio' },
         { label: 'TEAM', href: '#team' },
-        // { label: 'SERVICES', href: '#services' },
         // { label: 'SEE A DEMO', href: '#demo' },
     ];
 
