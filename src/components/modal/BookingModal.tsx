@@ -1,225 +1,186 @@
-import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { X, Send, User, Mail, Phone, Briefcase, DollarSign, MessageSquare } from 'lucide-react';
+import React, { useEffect, useRef, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { X, MessageCircle } from "lucide-react";
 
 interface BookingModalProps {
-    isOpen: boolean;
-    onClose: () => void;
+  isOpen: boolean;
+  onClose: () => void;
+  /** Optional context (e.g. the service page the user came from). Attached to the WhatsApp message. */
+  service?: string;
 }
 
-export const BookingModal: React.FC<BookingModalProps> = ({ isOpen, onClose }) => {
-    const [formData, setFormData] = useState({
-        name: '',
-        email: '',
-        phone: '',
-        projectType: 'Website Development',
-        budget: '< RM 5,000',
-        message: '',
-    });
+const WHATSAPP_NUMBER = "60167093543";
 
-    const handleSubmit = (e: React.FormEvent) => {
-        e.preventDefault();
-        // Basic Validation
-        if (!formData.name || !formData.phone) {
-            alert('Please fill in your name and phone number to continue.');
-            return;
-        }
+const FOCUSABLE =
+  'a[href], button:not([disabled]), textarea, input, select, [tabindex]:not([tabindex="-1"])';
 
-        const whatsappMessage = `
-*New Consultation Request* 🚀
+export const BookingModal: React.FC<BookingModalProps> = ({
+  isOpen,
+  onClose,
+  service,
+}) => {
+  const [message, setMessage] = useState("");
+  const dialogRef = useRef<HTMLDivElement>(null);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const previouslyFocused = useRef<HTMLElement | null>(null);
 
-*Name:* ${formData.name}
-*Email:* ${formData.email}
-*Phone:* ${formData.phone}
-*Type:* ${formData.projectType}
-*Budget:* ${formData.budget}
+  // Lock body scroll, manage focus, and wire up keyboard handlers while open.
+  useEffect(() => {
+    if (!isOpen) return;
 
-*Details:*
-${formData.message || 'No additional details provided'}
-    `.trim();
+    previouslyFocused.current = document.activeElement as HTMLElement | null;
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
 
-        const whatsappUrl = `https://wa.me/60167093543?text=${encodeURIComponent(whatsappMessage)}`;
-        window.open(whatsappUrl, '_blank');
+    const focusTimer = window.setTimeout(() => textareaRef.current?.focus(), 60);
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
         onClose();
+        return;
+      }
+      if (e.key !== "Tab") return;
+
+      const focusables = dialogRef.current?.querySelectorAll<HTMLElement>(FOCUSABLE);
+      if (!focusables || focusables.length === 0) return;
+
+      const first = focusables[0];
+      const last = focusables[focusables.length - 1];
+
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
     };
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-        setFormData({ ...formData, [e.target.name]: e.target.value });
+    document.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      window.clearTimeout(focusTimer);
+      document.removeEventListener("keydown", handleKeyDown);
+      document.body.style.overflow = prevOverflow;
+      previouslyFocused.current?.focus?.();
     };
+  }, [isOpen, onClose]);
 
-    return (
-        <AnimatePresence>
-            {isOpen && (
-                <>
-                    <motion.div
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        onClick={onClose}
-                        className="fixed inset-0 bg-neutral-900/60 backdrop-blur-md z-50 transition-all"
-                    />
-                    <motion.div
-                        initial={{ opacity: 0, scale: 0.95, y: 20 }}
-                        animate={{ opacity: 1, scale: 1, y: 0 }}
-                        exit={{ opacity: 0, scale: 0.95, y: 20 }}
-                        transition={{ type: "spring", damping: 25, stiffness: 300 }}
-                        className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-xl z-50 px-4"
-                    >
-                        <div className="bg-white rounded-[2rem] shadow-2xl overflow-hidden relative border border-neutral-100">
-                            {/* Header Decoration */}
-                            <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-emerald-400 to-emerald-600" />
+  const handleSend = (e: React.FormEvent) => {
+    e.preventDefault();
 
-                            <div className="p-8 md:p-10 max-h-[85vh] overflow-y-auto custom-scrollbar">
-
-                                {/* Header */}
-                                <div className="flex items-start justify-between mb-8">
-                                    <div>
-                                        <div className="flex items-center gap-2 mb-3">
-                                            <span className="bg-emerald-100 text-emerald-700 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider">
-                                                Free Consultation
-                                            </span>
-                                        </div>
-                                        <h2 className="text-3xl font-bold text-neutral-900 tracking-tight">Let's build it.</h2>
-                                        <p className="text-neutral-500 mt-2 font-medium">Tell us about your project and we'll reply instantly.</p>
-                                    </div>
-                                    <button
-                                        onClick={onClose}
-                                        className="p-2 rounded-full hover:bg-neutral-100 text-neutral-400 hover:text-neutral-900 transition-colors"
-                                    >
-                                        <X size={24} />
-                                    </button>
-                                </div>
-
-                                {/* Form */}
-                                <form onSubmit={handleSubmit} className="space-y-5">
-
-                                    {/* Name & Phone Group */}
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                                        <div className="space-y-2">
-                                            <label className="text-xs font-bold text-neutral-900 uppercase tracking-wide ml-1">Name</label>
-                                            <div className="relative group">
-                                                <User className="absolute left-4 top-1/2 -translate-y-1/2 text-neutral-400 group-focus-within:text-emerald-600 transition-colors" size={18} />
-                                                <input
-                                                    name="name"
-                                                    value={formData.name}
-                                                    onChange={handleChange}
-                                                    placeholder="Your Name"
-                                                    className="w-full bg-neutral-50 border border-transparent hover:bg-neutral-100 focus:bg-white focus:border-neutral-200 rounded-xl py-3.5 pl-11 pr-4 text-neutral-900 placeholder-neutral-400 focus:outline-none focus:ring-4 focus:ring-neutral-100 transition-all font-medium"
-                                                />
-                                            </div>
-                                        </div>
-                                        <div className="space-y-2">
-                                            <label className="text-xs font-bold text-neutral-900 uppercase tracking-wide ml-1">Phone</label>
-                                            <div className="relative group">
-                                                <Phone className="absolute left-4 top-1/2 -translate-y-1/2 text-neutral-400 group-focus-within:text-emerald-600 transition-colors" size={18} />
-                                                <input
-                                                    name="phone"
-                                                    value={formData.phone}
-                                                    onChange={handleChange}
-                                                    placeholder="+60 12-345 6789"
-                                                    className="w-full bg-neutral-50 border border-transparent hover:bg-neutral-100 focus:bg-white focus:border-neutral-200 rounded-xl py-3.5 pl-11 pr-4 text-neutral-900 placeholder-neutral-400 focus:outline-none focus:ring-4 focus:ring-neutral-100 transition-all font-medium"
-                                                />
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div className="space-y-2">
-                                        <label className="text-xs font-bold text-neutral-900 uppercase tracking-wide ml-1">Email</label>
-                                        <div className="relative group">
-                                            <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-neutral-400 group-focus-within:text-emerald-600 transition-colors" size={18} />
-                                            <input
-                                                name="email"
-                                                type="email"
-                                                value={formData.email}
-                                                onChange={handleChange}
-                                                placeholder="hello@company.com"
-                                                className="w-full bg-neutral-50 border border-transparent hover:bg-neutral-100 focus:bg-white focus:border-neutral-200 rounded-xl py-3.5 pl-11 pr-4 text-neutral-900 placeholder-neutral-400 focus:outline-none focus:ring-4 focus:ring-neutral-100 transition-all font-medium"
-                                            />
-                                        </div>
-                                    </div>
-
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                                        <div className="space-y-2">
-                                            <label className="text-xs font-bold text-neutral-900 uppercase tracking-wide ml-1">Project Type</label>
-                                            <div className="relative group">
-                                                <div className="absolute left-4 top-1/2 -translate-y-1/2 text-neutral-400 group-focus-within:text-emerald-600 transition-colors pointer-events-none">
-                                                    <Briefcase size={18} />
-                                                </div>
-                                                <select
-                                                    name="projectType"
-                                                    value={formData.projectType}
-                                                    onChange={handleChange}
-                                                    className="w-full bg-neutral-50 border border-transparent hover:bg-neutral-100 focus:bg-white focus:border-neutral-200 rounded-xl py-3.5 pl-11 pr-8 text-neutral-900 appearance-none focus:outline-none focus:ring-4 focus:ring-neutral-100 transition-all font-medium cursor-pointer"
-                                                >
-                                                    <option>Website Development</option>
-                                                    <option>Web Application</option>
-                                                    <option>E-commerce Store</option>
-                                                    <option>UI/UX Design</option>
-                                                    <option>Custom System</option>
-                                                </select>
-                                                <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-neutral-500">
-                                                    <svg width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1L5 5L9 1" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div className="space-y-2">
-                                            <label className="text-xs font-bold text-neutral-900 uppercase tracking-wide ml-1">Budget</label>
-                                            <div className="relative group">
-                                                <div className="absolute left-4 top-1/2 -translate-y-1/2 text-neutral-400 group-focus-within:text-emerald-600 transition-colors pointer-events-none">
-                                                    <DollarSign size={18} />
-                                                </div>
-                                                <select
-                                                    name="budget"
-                                                    value={formData.budget}
-                                                    onChange={handleChange}
-                                                    className="w-full bg-neutral-50 border border-transparent hover:bg-neutral-100 focus:bg-white focus:border-neutral-200 rounded-xl py-3.5 pl-11 pr-8 text-neutral-900 appearance-none focus:outline-none focus:ring-4 focus:ring-neutral-100 transition-all font-medium cursor-pointer"
-                                                >
-                                                    <option>{'< RM 5,000'}</option>
-                                                    <option>{'RM 5k - 10k'}</option>
-                                                    <option>{'RM 10k - 25k'}</option>
-                                                    <option>{'RM 25k+'}</option>
-                                                </select>
-                                                <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-neutral-500">
-                                                    <svg width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1L5 5L9 1" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div className="space-y-2">
-                                        <label className="text-xs font-bold text-neutral-900 uppercase tracking-wide ml-1">Anything else?</label>
-                                        <div className="relative group">
-                                            <MessageSquare className="absolute left-4 top-5 text-neutral-400 group-focus-within:text-emerald-600 transition-colors" size={18} />
-                                            <textarea
-                                                name="message"
-                                                value={formData.message}
-                                                onChange={handleChange}
-                                                rows={3}
-                                                placeholder="Tell us a bit about your goals, timeline, or current challenges..."
-                                                className="w-full bg-neutral-50 border border-transparent hover:bg-neutral-100 focus:bg-white focus:border-neutral-200 rounded-xl py-3.5 pl-11 pr-4 text-neutral-900 placeholder-neutral-400 focus:outline-none focus:ring-4 focus:ring-neutral-100 transition-all font-medium resize-none"
-                                            />
-                                        </div>
-                                    </div>
-
-                                    <div className="pt-2">
-                                        <button
-                                            type="submit"
-                                            className="w-full bg-neutral-900 text-white font-bold text-lg py-4 rounded-xl hover:bg-black hover:shadow-xl hover:scale-[1.01] active:scale-[0.98] transition-all flex items-center justify-center gap-3 shadow-lg shadow-neutral-900/10"
-                                        >
-                                            <span>Start WhatsApp Discussion</span>
-                                            <Send size={20} />
-                                        </button>
-                                        <p className="text-center text-xs text-neutral-400 mt-4">
-                                            We respect your privacy. No spam, ever.
-                                        </p>
-                                    </div>
-
-                                </form>
-                            </div>
-                        </div>
-                    </motion.div>
-                </>
-            )}
-        </AnimatePresence>
+    const lines = ["Hi iidev Studio 👋", ""];
+    if (service) lines.push(`I'm interested in: ${service}`, "");
+    lines.push(
+      message.trim() ||
+        "I'd like to chat about a website for my business."
     );
+
+    const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(
+      lines.join("\n")
+    )}`;
+    window.open(url, "_blank", "noopener,noreferrer");
+
+    setMessage("");
+    onClose();
+  };
+
+  return (
+    <AnimatePresence>
+      {isOpen && (
+        <>
+          {/* Overlay */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={onClose}
+            className="fixed inset-0 z-50 bg-neutral-900/60 backdrop-blur-md"
+            aria-hidden="true"
+          />
+
+          {/* Dialog */}
+          <motion.div
+            ref={dialogRef}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="booking-title"
+            aria-describedby="booking-desc"
+            initial={{ opacity: 0, scale: 0.96, y: 16 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.96, y: 16 }}
+            transition={{ type: "spring", damping: 26, stiffness: 320 }}
+            className="fixed left-1/2 top-1/2 z-50 w-full max-w-md -translate-x-1/2 -translate-y-1/2 px-4"
+          >
+            <div className="relative overflow-hidden rounded-3xl border border-neutral-200 bg-white shadow-2xl dark:border-neutral-800 dark:bg-neutral-900">
+
+              <div className="p-7 md:p-8">
+                {/* Header */}
+                <div className="mb-6 flex items-start justify-between">
+                  <div>
+                    <h2
+                      id="booking-title"
+                      className="text-2xl font-bold tracking-tight text-neutral-900 dark:text-white"
+                    >
+                      Let's talk.
+                    </h2>
+                    <p
+                      id="booking-desc"
+                      className="mt-2 text-sm leading-relaxed text-neutral-500 dark:text-neutral-400"
+                    >
+                      Tell us what you need and we'll pick it up on WhatsApp —
+                      usually within minutes. Happy to hop on a quick call if
+                      that's easier.
+                    </p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={onClose}
+                    aria-label="Close"
+                    className="-mr-2 -mt-1 rounded-full p-2 text-neutral-400 transition-colors hover:bg-neutral-100 hover:text-neutral-900 dark:hover:bg-neutral-800 dark:hover:text-white"
+                  >
+                    <X size={22} />
+                  </button>
+                </div>
+
+                {/* Context chip (only when opened from a service page) */}
+                {service && (
+                  <div className="mb-4 inline-flex items-center gap-2 rounded-lg bg-neutral-100 px-3 py-1.5 text-xs font-medium text-neutral-600 dark:bg-neutral-800 dark:text-neutral-300">
+                    About: <span className="font-semibold">{service}</span>
+                  </div>
+                )}
+
+                {/* Single field + action */}
+                <form onSubmit={handleSend}>
+                  <label
+                    htmlFor="booking-message"
+                    className="mb-2 block text-xs font-bold uppercase tracking-wide text-neutral-900 dark:text-white"
+                  >
+                    What does your business need?
+                  </label>
+                  <textarea
+                    id="booking-message"
+                    ref={textareaRef}
+                    value={message}
+                    onChange={(e) => setMessage(e.target.value)}
+                    rows={3}
+                    placeholder="e.g. I run a dental clinic in PJ and need a website that brings in bookings."
+                    className="w-full resize-none rounded-xl border border-transparent bg-neutral-50 px-4 py-3 font-medium text-neutral-900 placeholder-neutral-400 transition-all hover:bg-neutral-100 focus:border-neutral-200 focus:bg-white focus:outline-none focus:ring-4 focus:ring-neutral-100 dark:bg-neutral-800 dark:text-white dark:placeholder-neutral-500 dark:hover:bg-neutral-700/60 dark:focus:border-neutral-700 dark:focus:bg-neutral-800 dark:focus:ring-neutral-800"
+                  />
+
+                  <button
+                    type="submit"
+                    className="mt-4 flex w-full items-center justify-center gap-2.5 rounded-xl bg-emerald-600 py-4 text-base font-bold text-white shadow-lg shadow-emerald-900/10 transition-all hover:scale-[1.01] hover:bg-emerald-500 active:scale-[0.98]"
+                  >
+                    <MessageCircle size={20} />
+                    <span>Continue on WhatsApp</span>
+                  </button>
+                </form>
+              </div>
+            </div>
+          </motion.div>
+        </>
+      )}
+    </AnimatePresence>
+  );
 };

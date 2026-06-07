@@ -5,6 +5,8 @@ import { BookingModal } from "./BookingModal";
 interface BookingButtonProps {
   className?: string;
   children: React.ReactNode;
+  /** Optional context passed to the modal (e.g. the service the user is viewing). */
+  service?: string;
 }
 
 /**
@@ -12,7 +14,7 @@ interface BookingButtonProps {
  * Lets pages stay Server Components (so they can export per-page metadata)
  * while still offering the interactive booking flow.
  */
-export function BookingButton({ className, children }: BookingButtonProps) {
+export function BookingButton({ className, children, service }: BookingButtonProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   return (
@@ -20,7 +22,11 @@ export function BookingButton({ className, children }: BookingButtonProps) {
       <button onClick={() => setIsModalOpen(true)} className={className}>
         {children}
       </button>
-      <BookingModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+      <BookingModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        service={service}
+      />
     </>
   );
 }
