@@ -106,7 +106,7 @@ export function Hero({ onBookingClick }: HeroProps) {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.6, duration: 0.8 }}
             className={cn(
-              "mb-10 max-w-xl px-4 text-base font-light leading-relaxed md:text-xl",
+              "mb-10 max-w-xl px-4 text-base font-medium leading-relaxed md:text-xl",
               "text-slate-600 dark:text-slate-400",
             )}
           >
