@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { X, MessageCircle } from "lucide-react";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
+import { X } from "lucide-react";
+import { WhatsAppIcon } from "@/components/ui/WhatsAppIcon";
 
 interface BookingModalProps {
   isOpen: boolean;
@@ -23,6 +24,7 @@ export const BookingModal: React.FC<BookingModalProps> = ({
   const dialogRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const previouslyFocused = useRef<HTMLElement | null>(null);
+  const reduceMotion = useReducedMotion();
 
   // Lock body scroll, manage focus, and wire up keyboard handlers while open.
   useEffect(() => {
@@ -71,10 +73,7 @@ export const BookingModal: React.FC<BookingModalProps> = ({
 
     const lines = ["Hi iidev Studio 👋", ""];
     if (service) lines.push(`I'm interested in: ${service}`, "");
-    lines.push(
-      message.trim() ||
-        "I'd like to chat about a website for my business."
-    );
+    lines.push(message.trim() || "I'd like to chat about a website for my business.");
 
     const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(
       lines.join("\n")
@@ -89,13 +88,13 @@ export const BookingModal: React.FC<BookingModalProps> = ({
     <AnimatePresence>
       {isOpen && (
         <>
-          {/* Overlay */}
+          {/* Scrim */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={onClose}
-            className="fixed inset-0 z-50 bg-neutral-900/60 backdrop-blur-md"
+            className="fixed inset-0 z-50 bg-neutral-950/70 backdrop-blur-sm"
             aria-hidden="true"
           />
 
@@ -106,47 +105,54 @@ export const BookingModal: React.FC<BookingModalProps> = ({
             aria-modal="true"
             aria-labelledby="booking-title"
             aria-describedby="booking-desc"
-            initial={{ opacity: 0, scale: 0.96, y: 16 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.96, y: 16 }}
-            transition={{ type: "spring", damping: 26, stiffness: 320 }}
-            className="fixed left-1/2 top-1/2 z-50 w-full max-w-md -translate-x-1/2 -translate-y-1/2 px-4"
+            initial={reduceMotion ? { opacity: 0 } : { opacity: 0, y: 18, scale: 0.98 }}
+            animate={reduceMotion ? { opacity: 1 } : { opacity: 1, y: 0, scale: 1 }}
+            exit={reduceMotion ? { opacity: 0 } : { opacity: 0, y: 12, scale: 0.98 }}
+            transition={
+              reduceMotion
+                ? { duration: 0.15 }
+                : { type: "spring", damping: 24, stiffness: 360 }
+            }
+            className="fixed left-1/2 top-1/2 z-50 w-full max-w-md -translate-x-1/2 -translate-y-1/2 px-5"
           >
-            <div className="relative overflow-hidden rounded-3xl border border-neutral-200 bg-white shadow-2xl dark:border-neutral-800 dark:bg-neutral-900">
-
-              <div className="p-7 md:p-8">
+            <div className="relative rounded-none border-2 border-black bg-white shadow-[8px_8px_0px_0px_#10b981] dark:border-white dark:bg-neutral-900">
+              <div className="p-6 sm:p-8">
                 {/* Header */}
-                <div className="mb-6 flex items-start justify-between">
+                <div className="mb-6 flex items-start justify-between gap-4">
                   <div>
+                    <span className="mb-3 inline-block -rotate-1 bg-black px-2 py-1 font-mono text-[10px] font-bold uppercase tracking-widest text-white dark:bg-white dark:text-black">
+                      Free consult
+                    </span>
                     <h2
                       id="booking-title"
-                      className="text-2xl font-bold tracking-tight text-neutral-900 dark:text-white"
+                      className="text-3xl font-extrabold tracking-tight text-neutral-900 dark:text-white"
                     >
-                      Let's talk.
+                      Let&apos;s talk.
                     </h2>
                     <p
                       id="booking-desc"
-                      className="mt-2 text-sm leading-relaxed text-neutral-500 dark:text-neutral-400"
+                      className="mt-2 text-sm leading-relaxed text-neutral-600 dark:text-neutral-400"
                     >
-                      Tell us what you need and we'll pick it up on WhatsApp —
-                      usually within minutes. Happy to hop on a quick call if
-                      that's easier.
+                      Tell us what you need — we pick it up on WhatsApp, usually
+                      within minutes. Happy to hop on a quick call if that&apos;s
+                      easier.
                     </p>
                   </div>
                   <button
                     type="button"
                     onClick={onClose}
                     aria-label="Close"
-                    className="-mr-2 -mt-1 rounded-full p-2 text-neutral-400 transition-colors hover:bg-neutral-100 hover:text-neutral-900 dark:hover:bg-neutral-800 dark:hover:text-white"
+                    className="flex h-9 w-9 shrink-0 cursor-pointer items-center justify-center rounded-none border-2 border-black bg-white text-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-none dark:border-white dark:bg-neutral-900 dark:text-white dark:shadow-[2px_2px_0px_0px_rgba(255,255,255,1)] dark:hover:shadow-none"
                   >
-                    <X size={22} />
+                    <X size={18} strokeWidth={2.5} />
                   </button>
                 </div>
 
-                {/* Context chip (only when opened from a service page) */}
+                {/* Context tag (only when opened from a service page) */}
                 {service && (
-                  <div className="mb-4 inline-flex items-center gap-2 rounded-lg bg-neutral-100 px-3 py-1.5 text-xs font-medium text-neutral-600 dark:bg-neutral-800 dark:text-neutral-300">
-                    About: <span className="font-semibold">{service}</span>
+                  <div className="mb-5 inline-flex rotate-1 items-center gap-1.5 border-2 border-black bg-emerald-300 px-3 py-1.5 font-mono text-[11px] font-bold uppercase tracking-wide text-black dark:border-white">
+                    <span className="opacity-60">About:</span>
+                    <span>{service}</span>
                   </div>
                 )}
 
@@ -154,7 +160,7 @@ export const BookingModal: React.FC<BookingModalProps> = ({
                 <form onSubmit={handleSend}>
                   <label
                     htmlFor="booking-message"
-                    className="mb-2 block text-xs font-bold uppercase tracking-wide text-neutral-900 dark:text-white"
+                    className="mb-2 block font-mono text-xs font-bold uppercase tracking-widest text-neutral-900 dark:text-white"
                   >
                     What does your business need?
                   </label>
@@ -165,14 +171,14 @@ export const BookingModal: React.FC<BookingModalProps> = ({
                     onChange={(e) => setMessage(e.target.value)}
                     rows={3}
                     placeholder="e.g. I run a dental clinic in PJ and need a website that brings in bookings."
-                    className="w-full resize-none rounded-xl border border-transparent bg-neutral-50 px-4 py-3 font-medium text-neutral-900 placeholder-neutral-400 transition-all hover:bg-neutral-100 focus:border-neutral-200 focus:bg-white focus:outline-none focus:ring-4 focus:ring-neutral-100 dark:bg-neutral-800 dark:text-white dark:placeholder-neutral-500 dark:hover:bg-neutral-700/60 dark:focus:border-neutral-700 dark:focus:bg-neutral-800 dark:focus:ring-neutral-800"
+                    className="w-full resize-none rounded-none border-2 border-black bg-white px-4 py-3 text-[15px] font-medium text-neutral-900 placeholder-neutral-400 transition-all focus:border-emerald-500 focus:shadow-[4px_4px_0px_0px_#10b981] focus:outline-none dark:border-white dark:bg-neutral-950 dark:text-white dark:placeholder-neutral-500 dark:focus:border-emerald-400"
                   />
 
                   <button
                     type="submit"
-                    className="mt-4 flex w-full items-center justify-center gap-2.5 rounded-xl bg-emerald-600 py-4 text-base font-bold text-white shadow-lg shadow-emerald-900/10 transition-all hover:scale-[1.01] hover:bg-emerald-500 active:scale-[0.98]"
+                    className="mt-5 flex w-full cursor-pointer items-center justify-center gap-2.5 rounded-none border-2 border-black bg-emerald-500 px-6 py-4 font-mono text-sm font-bold uppercase tracking-wide text-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all hover:translate-x-0.5 hover:translate-y-0.5 hover:bg-emerald-400 hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] active:translate-x-1 active:translate-y-1 active:shadow-none dark:shadow-[4px_4px_0px_0px_rgba(255,255,255,1)] dark:hover:shadow-[2px_2px_0px_0px_rgba(255,255,255,1)] dark:active:shadow-none"
                   >
-                    <MessageCircle size={20} />
+                    <WhatsAppIcon size={20} />
                     <span>Continue on WhatsApp</span>
                   </button>
                 </form>
