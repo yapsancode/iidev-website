@@ -87,13 +87,15 @@ const ProcessTimeline = () => {
                         transition={{ duration: 0.6, delay: 0.1 }}
                         className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto"
                     >
-                        A seamless journey from concept to launch, designed to deliver excellence.
+                        From the first call to launch — and the growth after. You
+                        work with the founders at every step. No hand-offs, no
+                        black boxes.
                     </motion.p>
                 </div>
 
                 <div className="relative">
                     {/* Connecting Line (Desktop) */}
-                    <div className="hidden md:block absolute top-12 left-0 w-full h-[1px] bg-gray-200 dark:bg-gray-800 -z-10" />
+                    <div className="hidden md:block absolute top-12 left-0 w-full h-0.5 bg-black dark:bg-white -z-10" />
 
                     <div className="grid grid-cols-1 md:grid-cols-7 gap-8 md:gap-4">
                         {steps.map((step, index) => (
@@ -105,19 +107,19 @@ const ProcessTimeline = () => {
                                 transition={{ duration: 0.5, delay: index * 0.1 }}
                                 className="flex flex-col items-center text-center group"
                             >
-                                {/* Numbered Circle with Icon */}
+                                {/* Numbered Tile with Icon */}
                                 <div className="relative mb-6">
-                                    <div className="w-24 h-24 rounded-full bg-white dark:bg-neutral-800 border border-gray-100 dark:border-gray-700 shadow-[0_8px_30px_rgb(0,0,0,0.04)] flex items-center justify-center relative z-10 transition-transform duration-300 group-hover:-translate-y-2">
-                                        <span className="absolute top-2 right-4 text-xs font-bold text-gray-300 dark:text-gray-600">
+                                    <div className="w-24 h-24 rounded-none bg-white dark:bg-neutral-900 border-2 border-black dark:border-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] dark:shadow-[4px_4px_0px_0px_rgba(255,255,255,1)] flex items-center justify-center relative z-10 transition-transform duration-300 group-hover:-translate-y-1">
+                                        <span className="absolute top-2 right-3 font-mono text-xs font-bold text-neutral-400 dark:text-neutral-500">
                                             0{step.id}
                                         </span>
-                                        <div className="w-12 h-12 rounded-full bg-indigo-50 dark:bg-indigo-900/20 flex items-center justify-center text-indigo-600 dark:text-indigo-400">
-                                            <step.icon size={24} strokeWidth={1.5} />
+                                        <div className="w-12 h-12 rounded-none border-2 border-black dark:border-white bg-emerald-300 flex items-center justify-center text-black">
+                                            <step.icon size={24} strokeWidth={2} />
                                         </div>
                                     </div>
                                     {/* Mobile Connecting Line (Vertical) */}
                                     {index !== steps.length - 1 && (
-                                        <div className="md:hidden absolute top-24 left-1/2 w-[1px] h-16 bg-gray-200 dark:bg-gray-800 -translate-x-1/2" />
+                                        <div className="md:hidden absolute top-24 left-1/2 w-0.5 h-16 bg-black dark:bg-white -translate-x-1/2" />
                                     )}
                                 </div>
 
