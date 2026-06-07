@@ -5,7 +5,8 @@ import {
     MessageCircle,
     TrendingUp,
     Lock,
-    Smartphone,
+    Sparkles,
+    Check,
     LifeBuoy
 } from "lucide-react";
 
@@ -39,16 +40,38 @@ const ChatVisual = () => (
     </div>
 );
 
-const MobileVisual = () => (
-    <div className="relative w-32 h-48 mx-auto bg-slate-900 rounded-[2rem] ring-4 ring-slate-100 dark:ring-neutral-800 shadow-xl overflow-hidden mt-4">
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-16 h-4 bg-slate-900 rounded-b-lg z-10"></div>
-        <div className="w-full h-full bg-white dark:bg-neutral-900 flex flex-col pt-6 px-2 gap-2">
-            <div className="w-full h-24 bg-blue-50 dark:bg-blue-900/20 rounded-lg animate-pulse"></div>
-            <div className="w-2/3 h-4 bg-slate-100 dark:bg-neutral-800 rounded animate-pulse"></div>
-            <div className="w-full h-4 bg-slate-100 dark:bg-neutral-800 rounded animate-pulse"></div>
-            <div className="mt-auto w-full h-8 bg-blue-600 rounded-lg mb-2 opacity-90 flex items-center justify-center text-white text-[10px] font-bold">
-                Load Time: 0.8s
+const AIRecommendVisual = () => (
+    <div className="flex flex-col gap-3 w-full max-w-[280px]">
+        {/* The question */}
+        <div className="self-end rounded-2xl rounded-tr-none bg-slate-100 dark:bg-neutral-700/60 px-3 py-2 text-[11px] text-slate-500 dark:text-slate-400">
+            "Best web studio for my clinic in KL?"
+        </div>
+        {/* The AI answer */}
+        <div className="rounded-2xl rounded-tl-none border border-slate-100 bg-white p-3.5 shadow-sm dark:border-neutral-700 dark:bg-neutral-800">
+            <div className="mb-2 flex items-center gap-1.5">
+                <Sparkles className="h-3.5 w-3.5 text-emerald-500" />
+                <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                    AI answer
+                </span>
             </div>
+            <p className="text-xs leading-relaxed text-slate-600 dark:text-slate-300">
+                You should look at{" "}
+                <span className="font-bold text-emerald-600 dark:text-emerald-400">
+                    iidev Studio
+                </span>{" "}
+                — they build fast, SEO-ready sites for Malaysian businesses.
+            </p>
+        </div>
+        {/* Where it shows up */}
+        <div className="flex flex-wrap gap-1.5 pt-1">
+            {["ChatGPT", "Claude", "Perplexity"].map((tool) => (
+                <span
+                    key={tool}
+                    className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2 py-1 text-[10px] font-semibold text-emerald-700 dark:bg-emerald-900/20 dark:text-emerald-300"
+                >
+                    <Check className="h-2.5 w-2.5" /> {tool}
+                </span>
+            ))}
         </div>
     </div>
 );
@@ -205,15 +228,15 @@ export default function WhyChooseUs() {
                         gradient="from-blue-400 to-indigo-600"
                     />
 
-                    {/* 3. Mobile First (Tall - Spans 2 rows vertically) */}
+                    {/* 3. GEO / AEO (Tall - Spans 2 rows vertically) */}
                     <BentoItem
                         className="md:col-span-1 md:row-span-2 bg-slate-50 dark:bg-neutral-800/50"
-                        icon={<Smartphone className="w-6 h-6" />}
-                        title="Tested on 15+ Devices"
-                        desc="Your customers are on phones. We build mobile-first, ensuring your site loads under 2s on 4G networks (Maxis/Digi tested)."
-                        visual={<MobileVisual />}
-                        gradient="from-purple-400 to-pink-600"
-                        badge="Mobile First"
+                        icon={<Sparkles className="w-6 h-6" />}
+                        title="Recommended by AI"
+                        desc="Search is moving to AI. We structure your content so tools like ChatGPT, Claude, and Perplexity recommend your business by name."
+                        visual={<AIRecommendVisual />}
+                        gradient="from-violet-400 to-indigo-600"
+                        badge="GEO / AEO"
                     />
 
                     {/* 4. Fixed Price (Square) */}
