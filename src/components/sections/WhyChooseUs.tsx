@@ -173,8 +173,8 @@ export default function WhyChooseUs() {
 
                 {/* Section Header */}
                 <div className="text-center mb-16 max-w-2xl mx-auto">
-                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 text-xs font-semibold uppercase tracking-wider mb-4 border border-blue-100 dark:border-blue-800">
-                        The Freelance Advantage
+                    <div className="inline-flex -rotate-1 items-center gap-2 mb-4 rounded-none border-2 border-black bg-white px-3.5 py-1.5 font-mono text-[11px] font-bold uppercase tracking-widest text-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] dark:border-white dark:bg-neutral-900 dark:text-white dark:shadow-[3px_3px_0px_0px_rgba(255,255,255,1)]">
+                        The Studio Advantage
                     </div>
                     <h2 className="text-4xl md:text-5xl font-bold text-slate-900 dark:text-white mb-6 tracking-tight">
                         Why work with us?

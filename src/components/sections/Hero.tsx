@@ -48,17 +48,17 @@ export function Hero({ onBookingClick }: HeroProps) {
           >
             <div
               className={cn(
-                "relative inline-flex items-center gap-2 rounded-full",
-                "border border-black/10 bg-black/5",
-                "dark:border-white/10 dark:bg-white/5",
-                "px-4 py-1.5 text-xs font-medium uppercase tracking-widest",
-                "text-indigo-700 dark:text-indigo-300",
-                "backdrop-blur-md transition-colors hover:bg-black/10 dark:hover:bg-white/10",
+                "relative inline-flex -rotate-1 items-center gap-2 rounded-none",
+                "border-2 border-black bg-white",
+                "dark:border-white dark:bg-neutral-900",
+                "px-3.5 py-1.5 font-mono text-[11px] font-bold uppercase tracking-widest",
+                "text-black dark:text-white",
+                "shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] dark:shadow-[3px_3px_0px_0px_rgba(255,255,255,1)]",
               )}
             >
               <span className="relative flex h-2 w-2">
-                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-indigo-400 opacity-75"></span>
-                <span className="relative inline-flex h-2 w-2 rounded-full bg-indigo-500"></span>
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-500 opacity-75 motion-reduce:hidden"></span>
+                <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500"></span>
               </span>
               Accepting New Projects
             </div>
