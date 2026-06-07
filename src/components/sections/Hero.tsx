@@ -131,7 +131,7 @@ export function Hero({ onBookingClick }: HeroProps) {
               href="/services"
               className="group relative h-12 w-48 overflow-hidden rounded-full border border-neutral-300 dark:border-neutral-700 bg-transparent transition-all active:scale-95 flex items-center justify-center"
             >
-              <div className="absolute inset-0 translate-y-full bg-neutral-900 dark:bg-white transition-transform duration-300 ease-out group-hover:translate-y-0" />
+              <div className="absolute inset-0 translate-y-full bg-emerald-600 dark:bg-white transition-transform duration-300 ease-out group-hover:translate-y-0" />
               <span className="relative z-10 text-sm font-semibold tracking-wide text-neutral-900 dark:text-white transition-colors duration-300 group-hover:text-white dark:group-hover:text-black">
                 View Services
               </span>
