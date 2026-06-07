@@ -37,9 +37,17 @@ export interface ServiceCardProps
   imgSrc?: string;
   imgAlt?: string;
   imgClassName?: string;
+  /** Position in the grid, used to stagger the entrance animation. */
+  index?: number;
 }
 
 const cardAnimation: Variants = {
+  hidden: { opacity: 0, y: 24 },
+  visible: (i: number = 0) => ({
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.5, delay: i * 0.1, ease: [0.22, 1, 0.36, 1] },
+  }),
   hover: { scale: 1.02, transition: { duration: 0.3 } },
 };
 
@@ -77,6 +85,7 @@ const ServiceCard = React.forwardRef<HTMLDivElement, ServiceCardProps>(
       imgSrc,
       imgAlt,
       imgClassName,
+      index = 0,
       ...props
     },
     ref
@@ -86,7 +95,11 @@ const ServiceCard = React.forwardRef<HTMLDivElement, ServiceCardProps>(
         className={cn(cardVariants({ variant, className }))}
         ref={ref}
         variants={cardAnimation}
+        custom={index}
+        initial="hidden"
+        whileInView="visible"
         whileHover="hover"
+        viewport={{ once: true, margin: "-40px" }}
         {...props}
       >
         <div className="relative z-10 flex flex-col h-full gap-3">

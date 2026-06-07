@@ -5,6 +5,7 @@ import { ArrowLeft, Check } from "lucide-react";
 import { Navbar } from "@/components/sections/Navbar";
 import Footer from "@/components/sections/Footer";
 import { BookingButton } from "@/components/modal/BookingButton";
+import { PriceReveal } from "@/components/ui/PriceReveal";
 
 export const metadata: Metadata = {
   title: "Growth Retainer — Monthly SEO That Compounds (RM 1k–2k/mo)",
@@ -78,9 +79,9 @@ export default function GrowthRetainerPage() {
           </Link>
 
           {/* Header */}
-          <p className="text-xs font-bold uppercase tracking-widest text-neutral-400 mb-4">
+          <PriceReveal className="text-xs font-bold uppercase tracking-widest text-neutral-400 mb-4">
             Monthly · RM 1,000 – 2,000 / month
-          </p>
+          </PriceReveal>
           <h1 className="text-5xl md:text-6xl font-bold tracking-tight text-neutral-900 dark:text-white mb-6">
             Growth Retainer
           </h1>

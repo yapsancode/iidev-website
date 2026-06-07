@@ -1,15 +1,12 @@
 import React from "react";
 import { motion } from "framer-motion";
 import {
-    Check,
     Clock,
     MessageCircle,
     TrendingUp,
-    MousePointer2,
     Lock,
     Smartphone,
-    ArrowRight,
-    Star
+    LifeBuoy
 } from "lucide-react";
 
 // --- Visual Helpers (Mock UIs) ---
@@ -89,27 +86,28 @@ const PriceVisual = () => (
     </div>
 );
 
-const OwnershipVisual = () => (
-    <div className="relative group cursor-default">
-        <div className="absolute -right-4 -bottom-4 md:-right-8 opacity-20 group-hover:opacity-100 transition-opacity duration-500">
-            <MousePointer2 className="w-24 h-24 text-slate-800 fill-slate-800/20 rotate-12" />
+const SupportVisual = () => (
+    <div className="w-full max-w-[280px]">
+        {/* Continuity timeline — we stay around long after launch */}
+        <div className="relative flex items-center justify-between">
+            <div className="absolute left-0 right-0 top-[6px] h-1 rounded-full bg-slate-200 dark:bg-neutral-700" />
+            <div className="absolute left-0 top-[6px] h-1 w-full rounded-full bg-emerald-500" />
+            {["Launch", "Mo 3", "Mo 6", "Mo 12+"].map((label) => (
+                <div key={label} className="relative z-10 flex flex-col items-center gap-2">
+                    <div className="h-3 w-3 rounded-full bg-emerald-500 ring-4 ring-white dark:ring-neutral-800" />
+                    <span className="text-[10px] font-semibold text-slate-500 dark:text-slate-400">
+                        {label}
+                    </span>
+                </div>
+            ))}
         </div>
-        <div className="bg-white dark:bg-neutral-800 border border-slate-200 dark:border-neutral-700 rounded-lg p-3 shadow-sm max-w-[200px] transform group-hover:-translate-y-1 transition-transform duration-300">
-            <div className="flex items-center gap-2 mb-2">
-                <div className="w-3 h-3 rounded-full bg-red-400"></div>
-                <div className="w-3 h-3 rounded-full bg-yellow-400"></div>
-                <div className="w-3 h-3 rounded-full bg-green-400"></div>
-            </div>
-            <div className="space-y-2">
-                <div className="flex items-center gap-2">
-                    <div className="w-4 h-4 rounded-full bg-slate-100 flex items-center justify-center text-[8px]">👤</div>
-                    <div className="text-[10px] font-semibold text-slate-700">Role: Admin</div>
-                </div>
-                <div className="h-px bg-slate-100 w-full"></div>
-                <div className="flex justify-end mt-1">
-                    <div className="px-2 py-1 bg-blue-600 rounded text-[10px] text-white flex items-center justify-center">Edit Content</div>
-                </div>
-            </div>
+        {/* Still here pill */}
+        <div className="mt-5 inline-flex items-center gap-2 rounded-full bg-emerald-50 px-3 py-1.5 text-xs font-semibold text-emerald-700 dark:bg-emerald-900/20 dark:text-emerald-300">
+            <span className="relative flex h-2 w-2">
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75 motion-reduce:hidden"></span>
+                <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500"></span>
+            </span>
+            Still one message away
         </div>
     </div>
 )
@@ -246,57 +244,21 @@ export default function WhyChooseUs() {
                         gradient="from-cyan-400 to-blue-600"
                     />
 
-                    {/* 6. Ownership (Large - Spans 2 cols) */}
+                    {/* 6. Post-launch Support (Large - Spans 2 cols) */}
                     <BentoItem
                         className="md:col-span-2 bg-white dark:bg-neutral-800"
-                        icon={<Check className="w-6 h-6" />}
-                        title="Full Control From Day One"
-                        desc="We don't hold your site hostage. Once paid, you get full admin access, all source files, and a 20-minute training video to make updates yourself."
+                        icon={<LifeBuoy className="w-6 h-6" />}
+                        title="We Don't Vanish After Launch"
+                        desc="Plenty of people build a site and ghost you. We stay reachable — small fixes, tweaks, and someone who already knows your project when you need help months later."
                         visual={
                             <div className="flex items-center justify-center md:justify-end md:pr-12 h-full min-h-[120px]">
-                                <OwnershipVisual />
+                                <SupportVisual />
                             </div>
                         }
-                        gradient="from-rose-400 to-red-600"
+                        gradient="from-emerald-400 to-teal-600"
                     />
 
                 </div>
-
-                {/* New CTA Section */}
-                {/* <div className="mt-16 text-center">
-                    <div className="inline-block p-1 bg-slate-50 rounded-full border border-slate-100 mb-8">
-                        <div className="flex items-center gap-2 px-4 py-2">
-                            <div className="flex -space-x-2">
-                                {[1, 2, 3].map(i => (
-                                    <div key={i} className="w-8 h-8 rounded-full bg-slate-200 border-2 border-white flex items-center justify-center text-[10px] font-bold text-slate-500">
-                                        {String.fromCharCode(64 + i)}
-                                    </div>
-                                ))}
-                            </div>
-                            <span className="text-sm text-slate-600 font-medium">Trusted by 20+ small businesses</span>
-                            <div className="flex text-yellow-400">
-                                <Star className="w-4 h-4 fill-current" />
-                                <Star className="w-4 h-4 fill-current" />
-                                <Star className="w-4 h-4 fill-current" />
-                                <Star className="w-4 h-4 fill-current" />
-                                <Star className="w-4 h-4 fill-current" />
-                            </div>
-                        </div>
-                    </div>
-
-                    <h3 className="text-2xl md:text-3xl font-bold text-slate-900 mb-6">
-                        Ready to skip the agency markup?
-                    </h3>
-                    <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-                        <button className="px-8 py-4 bg-blue-600 text-white font-semibold rounded-xl hover:bg-blue-700 transition-colors flex items-center gap-2 shadow-lg shadow-blue-200">
-                            Get a Free Quote
-                            <ArrowRight className="w-4 h-4" />
-                        </button>
-                        <button className="px-8 py-4 bg-white text-slate-700 font-medium rounded-xl border border-slate-200 hover:bg-slate-50 transition-colors">
-                            View Portfolio
-                        </button>
-                    </div>
-                </div> */}
 
             </div>
         </section>

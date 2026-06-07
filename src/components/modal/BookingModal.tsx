@@ -71,7 +71,7 @@ export const BookingModal: React.FC<BookingModalProps> = ({
   const handleSend = (e: React.FormEvent) => {
     e.preventDefault();
 
-    const lines = ["Hi iidev Studio 👋", ""];
+    const lines = ["Hi iidev Studio", ""];
     if (service) lines.push(`I'm interested in: ${service}`, "");
     lines.push(message.trim() || "I'd like to chat about a website for my business.");
 

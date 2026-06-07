@@ -103,8 +103,8 @@ export default function ServicesPage() {
 
           {/* Cards */}
           <div className="grid md:grid-cols-3 gap-5">
-            {tiers.map((tier) => (
-              <ServiceCard key={tier.title} {...tier} />
+            {tiers.map((tier, i) => (
+              <ServiceCard key={tier.title} index={i} {...tier} />
             ))}
           </div>
 

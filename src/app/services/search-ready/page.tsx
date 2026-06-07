@@ -5,6 +5,7 @@ import { ArrowLeft, Check } from "lucide-react";
 import { Navbar } from "@/components/sections/Navbar";
 import Footer from "@/components/sections/Footer";
 import { BookingButton } from "@/components/modal/BookingButton";
+import { PriceReveal } from "@/components/ui/PriceReveal";
 
 export const metadata: Metadata = {
   title: "Search-Ready Website — Get Found on Google (RM 3k–6k)",
@@ -78,9 +79,9 @@ export default function SearchReadyPage() {
           </Link>
 
           {/* Header */}
-          <p className="text-xs font-bold uppercase tracking-widest text-neutral-400 mb-4">
+          <PriceReveal className="text-xs font-bold uppercase tracking-widest text-neutral-400 mb-4">
             One-time · RM 3,000 – 6,000
-          </p>
+          </PriceReveal>
           <h1 className="text-5xl md:text-6xl font-bold tracking-tight text-neutral-900 dark:text-white mb-6">
             Search-Ready <br />Website
           </h1>
