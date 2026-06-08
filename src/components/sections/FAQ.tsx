@@ -34,7 +34,7 @@ const faqs = [
   },
   {
     q: "Do you only work with businesses in Malaysia?",
-    a: "We focus on Malaysian service businesses — clinics, F&B, consultants, coaches, and retailers — because we understand the local market and customers. We work with clients across Malaysia remotely, handling everything over WhatsApp and calls.",
+    a: "We primarily focus on Malaysian businesses because we understand the local market, audience, and business needs best. However, we're also open to working with international clients depending on the project scope and requirements.",
   },
   {
     q: "What are GEO and AEO, and why do they matter for my business?",
@@ -78,7 +78,8 @@ export default function FAQ() {
             Frequently asked questions
           </h2>
           <p className="text-lg text-slate-600 dark:text-neutral-400">
-            The things business owners ask us most — answered straight, no jargon.
+            The things business owners ask us most — answered straight, no
+            jargon.
           </p>
         </div>
 
