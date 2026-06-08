@@ -11,7 +11,7 @@ const BRAND_LINE = "We Don't Just Build Websites, We Help Businesses Thrive.";
 // Decorative taglines that rotate after the intro. EN + Malay on purpose.
 const HEADLINE_PHRASES = [
   "Letsgo digital!!",
-  "Built for the internet era.",
+  "Built for the AI era.",
   "Your business, but louder online.",
   "Make your business impossible to ignore.",
   "Offline bagus. Online lagi bagus.",
@@ -27,6 +27,15 @@ const HEADLINE_PHRASES = [
   "Make your business feel alive online.",
   "Modern business starts online.",
   "Your business deserves internet presence.",
+  "Optimized for Google, AI answers, and beyond.",
+  "Where SEO meets modern AI search (AEO & GEO).",
+  "Designed to rank, built to be answered.",
+  "Get found on search engines and AI platforms.",
+  "From SEO to AEO — built for how people search today.",
+  "Visibility across Google, AI, and future search.",
+  "Search-optimized. AI-ready. Business-focused.",
+  "Built for rankings, answers, and conversions.",
+  "Future-ready websites for SEO + AI search.",
 ];
 
 const AnimatedHeadline = dynamic(() => import("../ui/AnimatedHeadline"), {
