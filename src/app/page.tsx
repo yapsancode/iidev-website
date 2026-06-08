@@ -8,6 +8,7 @@ import Portfolio from '@/components/sections/Portfolio';
 import Problems from '@/components/sections/Problems';
 // import Services from '@/components/sections/Services';
 import Team from '@/components/sections/Team';
+import FAQ from '@/components/sections/FAQ';
 import WhyChooseUs from '@/components/sections/WhyChooseUs';
 import ProcessTimeline from '@/components/sections/ProcessTimeline';
 import { BookingModal } from '@/components/modal/BookingModal';
@@ -34,6 +35,7 @@ const App: React.FC = () => {
         <section id="portfolio"><Portfolio /></section>
         <section id="team"><Team /></section>
         {/* <section id="services"><Services onBookingClick={handleOpenBooking} /></section> */}
+        <section id="faq"><FAQ /></section>
         <section id="demo"><CTA onBookingClick={handleOpenBooking} /></section>
       </main>
       <Footer />
