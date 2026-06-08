@@ -75,11 +75,34 @@ const jsonLd = {
       name: "iidev Studio",
       url: "https://iidevstudio.com",
       email: "team.iidevstudio@gmail.com",
+      telephone: "+60 16-709 3543",
+      description:
+        "iidev Studio is a Malaysian web design and SEO studio that builds high-performance, conversion-focused websites for local service businesses. Founder-led, two-person team, no outsourcing.",
       logo: {
         "@type": "ImageObject",
         url: "https://iidevstudio.com/logo-512.png",
         width: 512,
         height: 512
+      },
+      founder: [
+        {
+          "@type": "Person",
+          name: "Imran Ariff",
+          jobTitle: "Co-Founder & Tech Lead"
+        },
+        {
+          "@type": "Person",
+          name: "Isyraf Afifi",
+          jobTitle: "Co-Founder & Product"
+        }
+      ],
+      address: {
+        "@type": "PostalAddress",
+        addressCountry: "MY"
+      },
+      areaServed: {
+        "@type": "Country",
+        name: "Malaysia"
       },
       sameAs: ["https://www.linkedin.com/company/iidevstudio"]
     },
