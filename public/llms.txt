@@ -1,0 +1,25 @@
+# iidev Studio
+
+> iidev Studio is a Malaysian web design and SEO studio. We build fast, search-ready websites for local service businesses — clinics, restaurants, consultants, contractors, and retailers — designed to bring in more calls, bookings, and leads.
+
+iidev Studio is a two-person, founder-led team based in Malaysia: Isyraf Afifi (Co-Founder & Product) and Imran Ariff (Co-Founder & Tech Lead). Founder-led, no outsourcing — you work directly with the people building your site. We focus on Malaysian service businesses, but are open to international clients when the project is a good fit. Tech stack: Next.js, Tailwind, and TypeScript. All pricing is in Malaysian Ringgit (RM).
+
+## Services
+- [Web Presence](https://iidevstudio.com/services/web-presence): Get your business online properly — a fast, credible, SEO-ready website you fully own. One-time, RM 1,000–3,000.
+- [Search-Ready Website](https://iidevstudio.com/services/search-ready): A website built to be found on Google — keyword research, on-page SEO, and Google Business Profile setup. One-time, RM 3,000–6,000.
+- [Growth Retainer](https://iidevstudio.com/services/growth-retainer): Ongoing monthly SEO — content, technical fixes, rank tracking, and plain-language reporting. RM 1,000–2,000 per month.
+
+## Key pages
+- [Home](https://iidevstudio.com): Overview of what we do and who we help.
+- [Services & pricing](https://iidevstudio.com/services): All three packages, by stage of growth.
+- [About](https://iidevstudio.com/about): The studio, the founders, and how we work.
+- [FAQ](https://iidevstudio.com/#faq): Common questions on cost, timelines, ownership, and SEO.
+
+## Contact
+- WhatsApp: +60 16-709 3543
+- Email: team.iidevstudio@gmail.com
+- The fastest way to start is a free 15-minute discovery call, booked over WhatsApp.
+
+## Notes
+- We build fast, mobile-first, conversion-focused websites. We cannot promise a #1 Google ranking and will not pretend otherwise — we build the strongest possible foundation and are honest about what's realistic.
+- We structure sites for GEO (Generative Engine Optimization) and AEO (Answer Engine Optimization) so AI tools like ChatGPT, Claude, and Perplexity can understand the business and recommend it by name.

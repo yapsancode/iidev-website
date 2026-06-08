@@ -33,8 +33,6 @@ const App: React.FC = () => {
         <section id="why-us"><WhyChooseUs /></section>
         <section id="process"><ProcessTimeline /></section>
         <section id="portfolio"><Portfolio /></section>
-        <section id="team"><Team /></section>
-        {/* <section id="services"><Services onBookingClick={handleOpenBooking} /></section> */}
         <section id="faq"><FAQ /></section>
         <section id="demo"><CTA onBookingClick={handleOpenBooking} /></section>
       </main>

@@ -112,7 +112,7 @@ const jsonLd = {
       name: "iidev Studio",
       url: "https://iidevstudio.com",
       image: "https://iidevstudio.com/logo-512.png",
-      priceRange: "RM 1,000 – RM 15,000",
+      priceRange: "RM 1,000 – RM 6,000",
       telephone: "+60 16-709 3543",
       email: "team.iidevstudio@gmail.com",
       description:
