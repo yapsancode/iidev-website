@@ -12,7 +12,7 @@ const TypewriterText = dynamic(
     ssr: false,
     loading: () => (
       <h1 className="text-center text-6xl md:text-8xl font-extrabold text-black dark:text-white tracking-tight leading-[1.1]">
-        We Don&apos;t Just Build Websites, We Help Business Thrive.
+        We Don&apos;t Just Build Websites, We Help Businesses Thrive.
       </h1>
     ),
   },
@@ -81,7 +81,7 @@ export function Hero({ onBookingClick }: HeroProps) {
               transition={{ duration: 1, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
             >
               <TypewriterText
-                text="We Don't Just Build Websites, We Help Business Thrive."
+                text="We Don't Just Build Websites, We Help Businesses Thrive."
                 className="text-6xl md:text-8xl font-extrabold text-black dark:text-white tracking-tight leading-[1.1]"
                 delay={0.1}
                 pauseAfter=","
@@ -110,8 +110,9 @@ export function Hero({ onBookingClick }: HeroProps) {
               "text-slate-600 dark:text-slate-400",
             )}
           >
-            Web design and SEO for Malaysian service businesses — built to
-            bring in more calls, bookings, and leads.
+            iidev Studio designs fast, search-ready websites for Malaysian
+            service businesses — built to bring in more calls, bookings, and
+            leads.
           </motion.p>
 
           <motion.div
