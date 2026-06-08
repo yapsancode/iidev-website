@@ -10,6 +10,8 @@ export interface TypewriterProps {
   deleteSpeed?: number;
   delay?: number;
   className?: string;
+  /** Pick phrases in random order (never the same one twice in a row). */
+  random?: boolean;
 }
 
 export function Typewriter({
@@ -20,11 +22,15 @@ export function Typewriter({
   deleteSpeed = 50,
   delay = 1500,
   className,
+  random = false,
 }: TypewriterProps) {
   const [displayText, setDisplayText] = useState("");
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isDeleting, setIsDeleting] = useState(false);
-  const [textArrayIndex, setTextArrayIndex] = useState(0);
+  const [textArrayIndex, setTextArrayIndex] = useState(() => {
+    const arr = Array.isArray(text) ? text : [text];
+    return random ? Math.floor(Math.random() * arr.length) : 0;
+  });
 
   // Validate and process input text
   const textArray = Array.isArray(text) ? text : [text];
@@ -48,7 +54,13 @@ export function Typewriter({
           } else {
             setIsDeleting(false);
             setCurrentIndex(0);
-            setTextArrayIndex((prev) => (prev + 1) % textArray.length);
+            setTextArrayIndex((prev) => {
+              if (!random) return (prev + 1) % textArray.length;
+              if (textArray.length <= 1) return prev;
+              // Jump a random non-zero amount → always a different phrase.
+              const offset = 1 + Math.floor(Math.random() * (textArray.length - 1));
+              return (prev + offset) % textArray.length;
+            });
           }
         }
       },
@@ -66,6 +78,7 @@ export function Typewriter({
     delay,
     displayText,
     textArray.length,
+    random,
   ]);
 
   return (

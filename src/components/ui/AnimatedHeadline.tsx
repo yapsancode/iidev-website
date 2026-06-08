@@ -191,6 +191,7 @@ export default function AnimatedHeadline({
           <Typewriter
             text={phrases}
             loop
+            random
             speed={70}
             deleteSpeed={35}
             delay={4000}
