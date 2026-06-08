@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence, Variants } from 'framer-motion';
 import { usePathname, useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { ThemeToggle } from '../ui/ThemeToggle';
 
 export const Navbar = () => {
@@ -11,7 +12,7 @@ export const Navbar = () => {
         // { label: 'PROBLEMS', href: '#problems' },
         { label: 'WHY US', href: '#why-us' },
         { label: 'PORTFOLIO', href: '#portfolio' },
-        { label: 'TEAM', href: '#team' },
+        { label: 'FAQ', href: '#faq' },
         // { label: 'SEE A DEMO', href: '#demo' },
     ];
 
@@ -20,7 +21,7 @@ export const Navbar = () => {
         // { label: 'PROBLEMS', href: '#problems' },
         { label: 'WHY US', href: '#why-us' },
         { label: 'PORTFOLIO', href: '#portfolio' },
-        { label: 'TEAM', href: '#team' },
+        { label: 'FAQ', href: '#faq' },
         // { label: 'SEE A DEMO', href: '#demo' },
     ];
 
@@ -157,7 +158,16 @@ export const Navbar = () => {
                             </button>
                         );
                     })}
-                    {pathname === '/' && <div className="mx-1 h-4 w-px bg-neutral-300 dark:bg-neutral-700" />}
+                    <Link
+                        href="/about"
+                        className={`relative px-5 py-2 rounded-full text-[11px] font-bold tracking-widest transition-colors duration-300
+                            ${pathname === '/about'
+                                ? 'text-black dark:text-white bg-white dark:bg-neutral-800 shadow-md border border-black/5'
+                                : 'text-neutral-500 hover:text-black dark:text-neutral-400 dark:hover:text-white hover:bg-white/50 dark:hover:bg-neutral-800/50'}`}
+                    >
+                        ABOUT
+                    </Link>
+                    <div className="mx-1 h-4 w-px bg-neutral-300 dark:bg-neutral-700" />
                     <ThemeToggle />
                 </div>
 
@@ -244,6 +254,19 @@ export const Navbar = () => {
                                     <div className="absolute inset-0 bg-[#D6D6D6] rounded-[2rem] transform translate-y-1 z-0 transition-transform group-hover:translate-y-2" />
                                 </motion.div>
                             ))}
+
+                            {/* About — a real route, so always reachable */}
+                            <motion.div variants={linkVariants} className="relative group">
+                                <Link
+                                    href="/about"
+                                    onClick={() => setMobileMenuOpen(false)}
+                                    className="relative z-10 block w-40 py-4 bg-[#F1F0EB] rounded-[2rem] text-center text-xl font-normal tracking-wide shadow-sm border border-transparent transition-transform duration-200 active:scale-95 group-hover:-translate-y-1"
+                                >
+                                    ABOUT
+                                </Link>
+                                {/* Optional subtle shadow element for 3D effect */}
+                                <div className="absolute inset-0 bg-[#D6D6D6] rounded-[2rem] transform translate-y-1 z-0 transition-transform group-hover:translate-y-2" />
+                            </motion.div>
                         </motion.div>
 
                         {/* Footer Info Area */}
