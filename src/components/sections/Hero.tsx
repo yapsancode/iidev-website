@@ -2,21 +2,41 @@
 import { motion } from "framer-motion";
 import { WaveCanvas } from "../ui/wave-canvas";
 import Link from "next/link";
-// import { TypewriterText } from '../ui/TypewriterText';
 import dynamic from "next/dynamic";
 import { cn } from "@/lib/utils";
 
-const TypewriterText = dynamic(
-  () => import("../ui/TypewriterText").then((mod) => mod.TypewriterText),
-  {
-    ssr: false,
-    loading: () => (
-      <h1 className="text-center text-6xl md:text-8xl font-extrabold text-black dark:text-white tracking-tight leading-[1.1]">
-        We Don&apos;t Just Build Websites, We Help Businesses Thrive.
-      </h1>
-    ),
-  },
-);
+// Stable, crawlable <h1> — also the first line shown (slot-machine reveal).
+const BRAND_LINE = "We Don't Just Build Websites, We Help Businesses Thrive.";
+
+// Decorative taglines that rotate after the intro. EN + Malay on purpose.
+const HEADLINE_PHRASES = [
+  "Letsgo digital!!",
+  "Built for the internet era.",
+  "Your business, but louder online.",
+  "Make your business impossible to ignore.",
+  "Offline bagus. Online lagi bagus.",
+  "Internetkan bisnes anda.",
+  "Your next customer is already online.",
+  "Website dulu. Growth kemudian.",
+  "Built to click.",
+  "The internet is your new storefront.",
+  "Looks good. Loads fast. Gets found.",
+  "Not just online. Proper online.",
+  "Bring your business into the modern web.",
+  "Digital presence matters now.",
+  "Make your business feel alive online.",
+  "Modern business starts online.",
+  "Your business deserves internet presence.",
+];
+
+const AnimatedHeadline = dynamic(() => import("../ui/AnimatedHeadline"), {
+  ssr: false,
+  loading: () => (
+    <h1 className="text-center text-6xl md:text-8xl font-extrabold text-black dark:text-white tracking-tight leading-[1.1]">
+      {BRAND_LINE}
+    </h1>
+  ),
+});
 
 interface HeroProps {
   onBookingClick: () => void;
@@ -80,12 +100,10 @@ export function Hero({ onBookingClick }: HeroProps) {
               animate={{ scale: 1, opacity: 1 }}
               transition={{ duration: 1, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
             >
-              <TypewriterText
-                text="We Don't Just Build Websites, We Help Businesses Thrive."
+              <AnimatedHeadline
+                brandLine={BRAND_LINE}
+                phrases={HEADLINE_PHRASES}
                 className="text-6xl md:text-8xl font-extrabold text-black dark:text-white tracking-tight leading-[1.1]"
-                delay={0.1}
-                pauseAfter=","
-                pauseDuration={1.5}
               />
             </motion.div>
           </div>
