@@ -103,6 +103,37 @@ export default function ServicesPage() {
             </p>
           </div>
 
+          {/* Start here — Website Audit */}
+          <Link
+            href="/services/website-audit"
+            className="group mb-5 block rounded-xl border border-dashed border-indigo-300 dark:border-indigo-800/60 bg-indigo-50/50 dark:bg-indigo-950/20 p-6 hover:border-indigo-400 dark:hover:border-indigo-700 transition-colors"
+          >
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+              <div className="max-w-xl">
+                <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mb-2">
+                  <span className="text-xs font-bold uppercase tracking-widest text-indigo-500">
+                    Start here
+                  </span>
+                  <span className="text-xs font-bold uppercase tracking-widest text-neutral-400">
+                    RM 500 · credited back if you hire us
+                  </span>
+                </div>
+                <h2 className="text-xl font-bold tracking-tight text-neutral-900 dark:text-white mb-1">
+                  Not sure where you stand? Get a Website Audit.
+                </h2>
+                <p className="text-sm text-neutral-500 dark:text-neutral-400 leading-relaxed">
+                  We review your site and Google presence, then send a
+                  prioritised fix list — a straight answer on what's costing you
+                  leads, before you spend on a rebuild.
+                </p>
+              </div>
+              <div className="flex items-center text-sm font-semibold text-indigo-600 dark:text-indigo-400 whitespace-nowrap shrink-0 group-hover:underline">
+                See how it works
+                <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+              </div>
+            </div>
+          </Link>
+
           {/* Cards */}
           <div className="grid md:grid-cols-3 gap-5">
             {tiers.map((tier, i) => (

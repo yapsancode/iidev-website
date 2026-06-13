@@ -5,6 +5,7 @@
 iidev Studio is a two-person, founder-led team based in Malaysia: Isyraf Afifi (Co-Founder & Product) and Imran Ariff (Co-Founder & Tech Lead). Founder-led, no outsourcing — you work directly with the people building your site. We focus on Malaysian service businesses, but are open to international clients when the project is a good fit. Tech stack: Next.js, Tailwind, and TypeScript. All pricing is in Malaysian Ringgit (RM).
 
 ## Services
+- [Website Audit](https://iidevstudio.com/services/website-audit): A paid review of your website and Google presence with a prioritised, plain-language fix list. RM 500, credited back in full if you start a project with us within 30 days. The low-commitment way to start.
 - [Web Presence](https://iidevstudio.com/services/web-presence): Get your business online properly — a fast, credible, SEO-ready website you fully own. One-time, RM 1,000–3,000.
 - [Search-Ready Website](https://iidevstudio.com/services/search-ready): A website built to be found on Google — keyword research, on-page SEO, and Google Business Profile setup. One-time, RM 3,000–6,000.
 - [Growth Retainer](https://iidevstudio.com/services/growth-retainer): Ongoing monthly SEO — content, technical fixes, rank tracking, and plain-language reporting. RM 1,000–2,000 per month.
