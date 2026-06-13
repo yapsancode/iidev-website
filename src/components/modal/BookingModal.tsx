@@ -10,7 +10,7 @@ interface BookingModalProps {
   service?: string;
 }
 
-const WHATSAPP_NUMBER = "60167093543";
+const WHATSAPP_NUMBER = "601133506561";
 
 const FOCUSABLE =
   'a[href], button:not([disabled]), textarea, input, select, [tabindex]:not([tabindex="-1"])';

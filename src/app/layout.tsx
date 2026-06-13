@@ -75,7 +75,7 @@ const jsonLd = {
       name: "iidev Studio",
       url: "https://iidevstudio.com",
       email: "team.iidevstudio@gmail.com",
-      telephone: "+60 16-709 3543",
+      telephone: "+60 11-3350 6561",
       description:
         "iidev Studio is a Malaysian web design and SEO studio that builds high-performance, conversion-focused websites for local service businesses. Founder-led, two-person team, no outsourcing.",
       logo: {
@@ -113,7 +113,7 @@ const jsonLd = {
       url: "https://iidevstudio.com",
       image: "https://iidevstudio.com/logo-512.png",
       priceRange: "RM 500 – RM 15,000",
-      telephone: "+60 16-709 3543",
+      telephone: "+60 11-3350 6561",
       email: "team.iidevstudio@gmail.com",
       description:
         "Web design and SEO for Malaysian service businesses. High-performance websites built to load fast, rank on Google, and turn visitors into customers.",

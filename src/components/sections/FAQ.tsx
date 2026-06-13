@@ -42,7 +42,7 @@ const faqs = [
   },
   {
     q: "How do I get started?",
-    a: "Message us on WhatsApp at +60 16-709 3543, or book a free 15-minute discovery call. No sales pressure — just a straight conversation about your business and goals. We usually reply within minutes.",
+    a: "Message us on WhatsApp at +60 11-3350 6561, or book a free 15-minute discovery call. No sales pressure — just a straight conversation about your business and goals. We usually reply within minutes.",
   },
 ];
 

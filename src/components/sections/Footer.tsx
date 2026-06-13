@@ -21,12 +21,12 @@ const Footer: React.FC = () => {
         {/* Middle – Visible contact details (trust signal + answer-engine friendly) */}
         <div className="flex flex-col items-center gap-1.5 text-sm md:items-start">
           <a
-            href="https://wa.me/60167093543"
+            href="https://wa.me/601133506561"
             target="_blank"
             rel="noopener noreferrer"
             className="text-neutral-500 dark:text-neutral-400 hover:text-emerald-500 transition-colors"
           >
-            WhatsApp: +60 16-709 3543
+            WhatsApp: +60 11-3350 6561
           </a>
           <a
             href="mailto:team.iidevstudio@gmail.com"
@@ -42,7 +42,7 @@ const Footer: React.FC = () => {
         {/* Right – Social / quick-contact icons */}
         <div className="flex items-center gap-8">
           <a
-            href="https://wa.me/60167093543"
+            href="https://wa.me/601133506561"
             target="_blank"
             rel="noopener noreferrer"
             className="text-neutral-400 hover:text-emerald-500 transition-colors"
