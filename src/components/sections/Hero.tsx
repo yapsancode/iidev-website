@@ -36,6 +36,18 @@ const HEADLINE_PHRASES = [
   "Search-optimized. AI-ready. Business-focused.",
   "Built for rankings, answers, and conversions.",
   "Future-ready websites for SEO + AI search.",
+  "Run your whole business in one place.",
+  "Less spreadsheets. More system.",
+  "Custom business systems, built local.",
+  "From WhatsApp chaos to one clean system.",
+  "Buang spreadsheet. Pakai sistem.",
+  "Sistem bisnes, dibina khas untuk anda.",
+  "Invois, stok, pelanggan — semua satu tempat.",
+  "MyInvois-ready from day one.",
+  "Stop running on spreadsheets and gut feel.",
+  "Your business, finally organised.",
+  "Not sure what's broken? Let's find out.",
+  "Audit dulu. Baru fix.",
 ];
 
 const AnimatedHeadline = dynamic(() => import("../ui/AnimatedHeadline"), {
