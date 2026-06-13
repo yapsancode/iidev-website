@@ -10,7 +10,7 @@ import { ChevronDown } from "lucide-react";
 const faqs = [
   {
     q: "How much does a website cost in Malaysia?",
-    a: "Most of our one-time builds fall between RM 1,000 and RM 6,000, depending on the number of pages and whether you need SEO. Ongoing SEO retainers run RM 1,000–2,000 a month. We agree on a fixed price upfront after a short discovery call — no hourly billing, and no surprise fees later.",
+    a: "Most of our one-time builds fall between RM 1,000 and RM 6,000, depending on the number of pages and whether you need SEO. Ongoing SEO retainers run RM 1,000–2,000 a month. We agree on a fixed price upfront after a short discovery call — no hourly billing, and no surprise fees later. If you're not ready to commit, a RM 500 website audit is the low-risk way to start — and it's credited back if you go ahead with a build.",
   },
   {
     q: "How long does it take to build a website?",

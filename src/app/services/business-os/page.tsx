@@ -35,36 +35,42 @@ const modules = [
     icon: Users,
     title: "Customer & Sales (CRM)",
     desc: "Every customer, lead, and deal in one place — so nothing falls through the cracks.",
+    price: "from RM 4,000",
     tag: undefined as string | undefined,
   },
   {
     icon: Receipt,
     title: "Invoicing & Quotations",
     desc: "Send professional invoices and quotes in seconds. See what's paid, what's overdue.",
+    price: "from RM 3,000",
     tag: "Popular first step",
   },
   {
     icon: ShieldCheck,
     title: "MyInvois e-Invoicing",
     desc: "LHDN-compliant e-invoices built in — ready for Malaysia's rollout from day one.",
+    price: "from RM 2,000",
     tag: "Popular first step",
   },
   {
     icon: Boxes,
     title: "Inventory & Stock",
     desc: "Real-time stock levels and low-stock alerts. No more guessing what's on the shelf.",
+    price: "from RM 4,000",
     tag: undefined,
   },
   {
     icon: CalendarCheck,
     title: "Bookings & Appointments",
     desc: "Let customers book online and keep your schedule organised automatically.",
+    price: "from RM 3,000",
     tag: undefined,
   },
   {
     icon: LayoutDashboard,
     title: "Dashboard & Reports",
     desc: "See how the business is doing at a glance — sales, cash flow, what needs attention.",
+    price: "from RM 2,500",
     tag: undefined,
   },
 ];
@@ -156,7 +162,7 @@ export default function BusinessOSPage() {
               what you'll actually use.
             </p>
             <div className="grid sm:grid-cols-2 gap-4">
-              {modules.map(({ icon: Icon, title, desc, tag }) => (
+              {modules.map(({ icon: Icon, title, desc, price, tag }) => (
                 <div
                   key={title}
                   className="relative rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-800/50 p-5"
@@ -173,10 +179,18 @@ export default function BusinessOSPage() {
                   <p className="text-sm text-neutral-500 dark:text-neutral-400 leading-relaxed">
                     {desc}
                   </p>
+                  <p className="text-sm font-bold text-neutral-900 dark:text-white mt-3">
+                    {price}
+                  </p>
                 </div>
               ))}
             </div>
-            <p className="text-sm text-neutral-400 mt-6">
+            <p className="text-sm text-neutral-500 dark:text-neutral-400 mt-6 leading-relaxed max-w-xl">
+              Most builds combine two or three modules and start around RM
+              10,000. The prices above are starting points — final scope and cost
+              are set together on a discovery call, never before.
+            </p>
+            <p className="text-sm text-neutral-400 mt-4">
               We'd rather get one module genuinely right than rush all of them.
               Start where it hurts most — add the rest when you're ready.
             </p>

@@ -104,11 +104,13 @@ export default function AboutPage() {
             What we do
           </h2>
           <p className="text-neutral-600 dark:text-neutral-300 leading-relaxed mb-6">
-            We do three things, and we do them well: get your business online
+            At our core, we do three things well: get your business online
             properly, get it found on Google, and keep it growing month after
             month. Whether you&apos;re starting from nothing or fixing a site that
             never brought in a single lead, we build around one question — will
-            this bring you more calls, bookings, and customers?
+            this bring you more calls, bookings, and customers? And once
+            you&apos;re online and growing, we build the systems to run it day to
+            day — customers, invoicing, and inventory, all in one place.
           </p>
           <Link
             href="/services"
