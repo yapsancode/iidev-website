@@ -1,5 +1,7 @@
 import React from "react";
 import type { Metadata } from "next";
+import Link from "next/link";
+import { ArrowRight } from "lucide-react";
 import { Navbar } from "@/components/sections/Navbar";
 import Footer from "@/components/sections/Footer";
 import { BookingButton } from "@/components/modal/BookingButton";
@@ -8,12 +10,12 @@ import { ServiceCard } from "@/components/cards/ServiceCard";
 export const metadata: Metadata = {
   title: "Services & Pricing — Web Design & SEO for Malaysian Businesses",
   description:
-    "Three clear packages for Malaysian businesses: get online (RM 1k–3k), get found on Google (RM 3k–6k), or grow every month with an SEO retainer. Pick your stage.",
+    "Web design and SEO for Malaysian businesses: get online (RM 1k–3k), get found on Google (RM 3k–6k), grow every month with an SEO retainer, or run your whole business on a custom system (Business OS, RM 10k onwards).",
   alternates: { canonical: "/services" },
   openGraph: {
     title: "Services & Pricing | iidev Studio",
     description:
-      "Three clear packages for Malaysian businesses: get online, get found on Google, or grow every month with an SEO retainer.",
+      "Web design and SEO for Malaysian businesses: get online, get found on Google, grow monthly with an SEO retainer, or run your business on a custom system.",
     url: "https://iidevstudio.com/services",
     type: "website",
     images: ["/opengraph-image"],
@@ -93,10 +95,10 @@ export default function ServicesPage() {
               What we offer
             </p>
             <h1 className="text-5xl md:text-6xl font-bold tracking-tight text-neutral-900 dark:text-white mb-5">
-              Three ways <br />we can help.
+              How we <br />can help.
             </h1>
             <p className="text-neutral-500 dark:text-neutral-400 text-lg max-w-lg">
-              Each tier is built for a specific stage of business growth. Pick
+              Each package is built for a specific stage of business growth. Pick
               the one that matches where you are right now.
             </p>
           </div>
@@ -107,6 +109,38 @@ export default function ServicesPage() {
               <ServiceCard key={tier.title} index={i} {...tier} />
             ))}
           </div>
+
+          {/* Flagship — Business OS */}
+          <Link
+            href="/services/business-os"
+            className="group mt-5 block relative overflow-hidden rounded-xl bg-neutral-900 dark:bg-neutral-950 text-white p-8 md:p-10 border border-neutral-800 shadow-sm hover:shadow-lg transition-shadow"
+          >
+            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+              <div className="max-w-2xl">
+                <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mb-3">
+                  <span className="text-xs font-bold uppercase tracking-widest text-indigo-400">
+                    Flagship
+                  </span>
+                  <span className="text-xs font-bold uppercase tracking-widest text-neutral-500">
+                    One-time · RM 10,000 onwards
+                  </span>
+                </div>
+                <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-3">
+                  Business OS
+                </h2>
+                <p className="text-neutral-400 leading-relaxed">
+                  Still running on spreadsheets, WhatsApp, and gut feel? We build
+                  a custom system around how your business actually works —
+                  customer tracking, invoicing, inventory, and MyInvois
+                  compliance, all in one place.
+                </p>
+              </div>
+              <div className="flex items-center text-sm font-semibold whitespace-nowrap shrink-0 group-hover:underline">
+                SEE WHAT YOU GET
+                <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+              </div>
+            </div>
+          </Link>
 
           {/* Bottom CTA */}
           <div className="mt-16 pt-12 border-t border-neutral-200 dark:border-neutral-800 flex flex-col sm:flex-row sm:items-center justify-between gap-6">
