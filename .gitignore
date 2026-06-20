@@ -42,3 +42,6 @@ next-env.d.ts
 
 # internal
 docs
+CLAUDE.md
+README.md
+.claude/
