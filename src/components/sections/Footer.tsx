@@ -16,6 +16,9 @@ const Footer: React.FC = () => {
           <p className="text-neutral-400 dark:text-neutral-500 text-sm mt-1">
             © {new Date().getFullYear()} IIDev Studio. All rights reserved.
           </p>
+          <p className="text-neutral-400 dark:text-neutral-500 text-xs mt-0.5">
+            IIDEV STUDIO · SSM Reg. 202603215168 (CA0426006-D)
+          </p>
         </div>
 
         {/* Middle – Visible contact details (trust signal + answer-engine friendly) */}
