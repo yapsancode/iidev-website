@@ -25,4 +25,11 @@ export const projects: Project[] = [
     tags: ["Next.js", "Tailwind", "Spring Boot"],
     link: "https://klinikmekar.com"
   },
+  {
+    title: "KerjaKit",
+    category: "Web App",
+    image: "/images/kerjakit.png",
+    tags: ["Next.js", "Supabase", "Tailwind"],
+    link: "https://kerjakit.com"
+  },
 ];

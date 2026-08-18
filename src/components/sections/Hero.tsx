@@ -149,7 +149,7 @@ export function Hero({ onBookingClick }: HeroProps) {
               "text-slate-600 dark:text-slate-400",
             )}
           >
-            iidev Studio designs fast, search-ready websites for Malaysian
+            IIDev Studio designs fast, search-ready websites for Malaysian
             service businesses — built to bring in more calls, bookings, and
             leads.
           </motion.p>

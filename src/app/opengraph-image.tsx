@@ -2,7 +2,7 @@ import { ImageResponse } from "next/og";
 
 // Route segment config
 export const alt =
-  "iidev Studio — Web Design & SEO for Malaysian businesses";
+  "IIDev Studio — Web Design & SEO for Malaysian businesses";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -26,7 +26,7 @@ export default function OpengraphImage() {
         {/* Brand */}
         <div style={{ display: "flex", alignItems: "center" }}>
           <div style={{ display: "flex", fontSize: 40, fontWeight: 700, color: "#FFFFFF" }}>
-            iidev studio
+            IIDev Studio
           </div>
           <div
             style={{

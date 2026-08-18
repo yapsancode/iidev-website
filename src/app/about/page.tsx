@@ -10,10 +10,10 @@ import { BookingButton } from "@/components/modal/BookingButton";
 export const metadata: Metadata = {
   title: "About — A Founder-Led Web & SEO Studio in Malaysia",
   description:
-    "iidev Studio is a two-person, founder-led web design and SEO studio in Malaysia. We build fast, search-ready websites that bring local service businesses more calls and bookings.",
+    "IIDev Studio is a two-person, founder-led web design and SEO studio in Malaysia. We build fast, search-ready websites that bring local service businesses more calls and bookings.",
   alternates: { canonical: "/about" },
   openGraph: {
-    title: "About iidev Studio",
+    title: "About IIDev Studio",
     description:
       "A two-person, founder-led web design and SEO studio in Malaysia. We build fast, search-ready websites that bring local service businesses more calls and bookings.",
     url: "https://iidevstudio.com/about",
@@ -36,9 +36,9 @@ const jsonLd = {
       "@type": "AboutPage",
       "@id": "https://iidevstudio.com/about#webpage",
       url: "https://iidevstudio.com/about",
-      name: "About iidev Studio",
+      name: "About IIDev Studio",
       description:
-        "iidev Studio is a two-person, founder-led web design and SEO studio in Malaysia, building fast, search-ready websites for local service businesses.",
+        "IIDev Studio is a two-person, founder-led web design and SEO studio in Malaysia, building fast, search-ready websites for local service businesses.",
       about: { "@id": "https://iidevstudio.com/#organization" },
       isPartOf: { "@id": "https://iidevstudio.com/#organization" },
     },
@@ -81,10 +81,10 @@ export default function AboutPage() {
             About us
           </p>
           <h1 className="text-5xl md:text-6xl font-bold tracking-tight text-neutral-900 dark:text-white mb-8">
-            About iidev Studio
+            About IIDev Studio
           </h1>
           <p className="text-neutral-600 dark:text-neutral-300 text-lg leading-relaxed mb-6">
-            iidev Studio is a Malaysian web design and SEO studio. We build fast,
+            IIDev Studio is a Malaysian web design and SEO studio. We build fast,
             search-ready websites for local service businesses — clinics,
             restaurants, consultants, contractors, and retailers — that need a
             website which actually brings in customers, not one that just sits

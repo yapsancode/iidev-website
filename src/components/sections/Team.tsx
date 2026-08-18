@@ -102,7 +102,7 @@ const TeamCard: React.FC<TeamCardProps> = ({ member, index }) => {
             {member.image ? (
               <Image
                 src={member.image}
-                alt={`${member.name}, ${member.role} at iidev Studio`}
+                alt={`${member.name}, ${member.role} at IIDev Studio`}
                 fill
                 sizes="(max-width: 768px) 100vw, 320px"
                 className="object-cover transition-transform duration-700 group-hover:scale-110"
@@ -135,7 +135,7 @@ const TeamCard: React.FC<TeamCardProps> = ({ member, index }) => {
             "{member.funFact}"
           </p>
           <div className="mt-8 pt-6 border-t border-neutral-800 w-full">
-            <span className="text-xs font-bold tracking-widest uppercase text-neutral-500">iidev studio</span>
+            <span className="text-xs font-bold tracking-widest uppercase text-neutral-500">IIDev Studio</span>
           </div>
         </div>
 

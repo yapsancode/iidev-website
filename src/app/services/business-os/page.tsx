@@ -22,7 +22,7 @@ export const metadata: Metadata = {
     "A custom-built system scoped to your exact business — customer and sales tracking, invoicing, inventory, and MyInvois e-invoice compliance, all in one place. Built local, launched fast. From RM 10,000.",
   alternates: { canonical: "/services/business-os" },
   openGraph: {
-    title: "Business OS | iidev Studio",
+    title: "Business OS | IIDev Studio",
     description:
       "A custom system built around how your business actually works — customers, invoicing, inventory, and MyInvois compliance, all in one place.",
     url: "https://iidevstudio.com/services/business-os",

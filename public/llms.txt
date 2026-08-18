@@ -1,8 +1,8 @@
-# iidev Studio
+# IIDev Studio
 
-> iidev Studio is a Malaysian web design and SEO studio. We build fast, search-ready websites for local service businesses — clinics, restaurants, consultants, contractors, and retailers — designed to bring in more calls, bookings, and leads.
+> IIDev Studio is a Malaysian web design and SEO studio. We build fast, search-ready websites for local service businesses — clinics, restaurants, consultants, contractors, and retailers — designed to bring in more calls, bookings, and leads.
 
-iidev Studio is a two-person, founder-led team based in Malaysia: Isyraf Afifi (Co-Founder & Product) and Imran Ariff (Co-Founder & Tech Lead). Founder-led, no outsourcing — you work directly with the people building your site. We focus on Malaysian service businesses, but are open to international clients when the project is a good fit. Tech stack: Next.js, Tailwind, and TypeScript. All pricing is in Malaysian Ringgit (RM).
+IIDev Studio is a two-person, founder-led team based in Malaysia: Isyraf Afifi (Co-Founder & Product) and Imran Ariff (Co-Founder & Tech Lead). Founder-led, no outsourcing — you work directly with the people building your site. We focus on Malaysian service businesses, but are open to international clients when the project is a good fit. Tech stack: Next.js, Tailwind, and TypeScript. All pricing is in Malaysian Ringgit (RM).
 
 ## Services
 - [Website Audit](https://iidevstudio.com/services/website-audit): A paid review of your website and Google presence with a prioritised, plain-language fix list. RM 500, credited back in full if you start a project with us within 30 days. The low-commitment way to start.

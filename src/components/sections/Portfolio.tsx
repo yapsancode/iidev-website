@@ -33,7 +33,7 @@ const Portfolio: React.FC = () => {
               <div className="relative overflow-hidden rounded-2xl mb-6 bg-neutral-100 dark:bg-neutral-800 aspect-[4/3]">
                 <Image
                   src={project.image}
-                  alt={`${project.title} — ${project.category} built by iidev Studio`}
+                  alt={`${project.title} — ${project.category} built by IIDev Studio`}
                   fill
                   sizes="(max-width: 768px) 100vw, 50vw"
                   className="object-cover transform transition-transform duration-700 group-hover:scale-105"

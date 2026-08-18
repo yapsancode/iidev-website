@@ -13,7 +13,7 @@ export const metadata: Metadata = {
     "Ongoing SEO for Malaysian businesses ready to grow consistently. Monthly content, technical fixes, rank tracking, and a plain-language report — with direct access to the person doing the work. From RM 1,000/month.",
   alternates: { canonical: "/services/growth-retainer" },
   openGraph: {
-    title: "Growth Retainer | iidev Studio",
+    title: "Growth Retainer | IIDev Studio",
     description:
       "Ongoing SEO for Malaysian businesses ready to grow consistently. Monthly content, technical fixes, rank tracking, and clear reporting.",
     url: "https://iidevstudio.com/services/growth-retainer",

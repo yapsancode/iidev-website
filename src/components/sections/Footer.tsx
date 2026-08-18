@@ -11,10 +11,10 @@ const Footer: React.FC = () => {
         {/* Left – Brand & copyright */}
         <div className="text-center md:text-left">
           <span className="text-lg font-bold text-neutral-900 dark:text-white">
-            iidev<span className="text-emerald-500">.</span>
+            IIDev<span className="text-emerald-500">.</span>
           </span>
           <p className="text-neutral-400 dark:text-neutral-500 text-sm mt-1">
-            © {new Date().getFullYear()} iidev studio. All rights reserved.
+            © {new Date().getFullYear()} IIDev Studio. All rights reserved.
           </p>
         </div>
 
@@ -62,7 +62,7 @@ const Footer: React.FC = () => {
             target="_blank"
             rel="noopener noreferrer"
             className="text-neutral-400 hover:text-emerald-500 transition-colors"
-            aria-label="iidev studio on LinkedIn"
+            aria-label="IIDev Studio on LinkedIn"
           >
             <Linkedin size={22} />
           </a>

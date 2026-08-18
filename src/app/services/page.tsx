@@ -13,7 +13,7 @@ export const metadata: Metadata = {
     "Web design and SEO for Malaysian businesses: get online (RM 1k–3k), get found on Google (RM 3k–6k), grow every month with an SEO retainer, or run your whole business on a custom system (Business OS, RM 10k onwards).",
   alternates: { canonical: "/services" },
   openGraph: {
-    title: "Services & Pricing | iidev Studio",
+    title: "Services & Pricing | IIDev Studio",
     description:
       "Web design and SEO for Malaysian businesses: get online, get found on Google, grow monthly with an SEO retainer, or run your business on a custom system.",
     url: "https://iidevstudio.com/services",

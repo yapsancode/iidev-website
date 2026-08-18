@@ -13,7 +13,7 @@ export const metadata: Metadata = {
     "A clear, honest review of your website and Google presence, with a prioritised fix list in plain language. RM 500 — credited back in full if you start a project with us within 30 days.",
   alternates: { canonical: "/services/website-audit" },
   openGraph: {
-    title: "Website Audit | iidev Studio",
+    title: "Website Audit | IIDev Studio",
     description:
       "A clear, honest review of your website and Google presence, with a prioritised fix list in plain language. RM 500, credited back if you hire us within 30 days.",
     url: "https://iidevstudio.com/services/website-audit",

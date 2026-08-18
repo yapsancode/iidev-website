@@ -13,7 +13,7 @@ export const metadata: Metadata = {
     "A website built to rank, not just to look good. Keyword research, on-page SEO, and Google Business Profile setup so Malaysian customers find you instead of your competitors. From RM 3,000.",
   alternates: { canonical: "/services/search-ready" },
   openGraph: {
-    title: "Search-Ready Website | iidev Studio",
+    title: "Search-Ready Website | IIDev Studio",
     description:
       "A website built to rank, not just to look good. Keyword research, on-page SEO, and Google Business Profile setup so customers find you first.",
     url: "https://iidevstudio.com/services/search-ready",

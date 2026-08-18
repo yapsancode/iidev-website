@@ -57,7 +57,7 @@ const AIRecommendVisual = () => (
             <p className="text-xs leading-relaxed text-slate-600 dark:text-slate-300">
                 You should look at{" "}
                 <span className="font-bold text-emerald-600 dark:text-emerald-400">
-                    iidev Studio
+                    IIDev Studio
                 </span>{" "}
                 — they build fast, SEO-ready sites for Malaysian businesses.
             </p>

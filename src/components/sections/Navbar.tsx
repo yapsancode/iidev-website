@@ -120,7 +120,7 @@ export const Navbar = () => {
                     onMouseLeave={() => setIsLogoHovered(false)}
                     className={`pointer-events-auto flex items-center gap-1 bg-black text-white dark:bg-white dark:text-black px-4 py-3 text-xs font-bold tracking-widest uppercase cursor-pointer select-none transition-opacity duration-300 ${mobileMenuOpen ? 'opacity-0' : 'opacity-100'}`}
                 >
-                    <motion.span layout>iidev</motion.span>
+                    <motion.span layout>IIDev</motion.span>
                     <AnimatePresence>
                         {isLogoHovered && (
                             <motion.span
@@ -215,7 +215,7 @@ export const Navbar = () => {
                                 }}
                                 className="bg-[#EFEEE9] dark:bg-neutral-800 px-4 py-3 text-[10px] font-bold tracking-[0.2em] uppercase rounded-sm shadow-sm hover:bg-white dark:hover:bg-neutral-700 transition-colors text-black dark:text-white"
                             >
-                                iidev Studio
+                                IIDev Studio
                             </motion.button>
 
                             <div className="flex items-center gap-4">
@@ -297,7 +297,7 @@ export const Navbar = () => {
 
                             {/* Copyright */}
                             <div className="mt-4 text-[10px] text-neutral-500 font-normal normal-case tracking-normal">
-                                © {new Date().getFullYear()} iidev Studio® All Rights Reserved
+                                © {new Date().getFullYear()} IIDev Studio® All Rights Reserved
                             </div>
                         </motion.div>
                     </motion.div>

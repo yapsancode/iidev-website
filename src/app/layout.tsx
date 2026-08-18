@@ -17,8 +17,8 @@ const pixelify = Pixelify_Sans({
 export const metadata: Metadata = {
   metadataBase: new URL("https://iidevstudio.com"),
   title: {
-    default: "iidev Studio | Web Design & SEO for Malaysian Businesses",
-    template: "%s | iidev Studio",
+    default: "IIDev Studio | Web Design & SEO for Malaysian Businesses",
+    template: "%s | IIDev Studio",
   },
   description:
     "High-performance websites and SEO for Malaysian service businesses. Built to load fast, rank on Google, and turn visitors into calls and bookings.",
@@ -29,26 +29,26 @@ export const metadata: Metadata = {
     "web development malaysia",
     "buat website malaysia",
     "small business website malaysia",
-    "iidev studio",
+    "IIDev Studio",
   ],
-  authors: [{ name: "iidev Studio" }],
-  creator: "iidev Studio",
-  publisher: "iidev Studio",
+  authors: [{ name: "IIDev Studio" }],
+  creator: "IIDev Studio",
+  publisher: "IIDev Studio",
   alternates: {
     canonical: "/",
   },
   openGraph: {
-    title: "iidev Studio | Web Design & SEO for Malaysian Businesses",
+    title: "IIDev Studio | Web Design & SEO for Malaysian Businesses",
     description:
       "High-performance websites and SEO for Malaysian service businesses. Built to load fast, rank on Google, and turn visitors into customers.",
     url: "https://iidevstudio.com",
-    siteName: "iidev Studio",
+    siteName: "IIDev Studio",
     locale: "en_MY",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "iidev Studio | Web Design & SEO for Malaysian Businesses",
+    title: "IIDev Studio | Web Design & SEO for Malaysian Businesses",
     description:
       "High-performance websites and SEO for Malaysian service businesses. Built to load fast, rank on Google, and turn visitors into customers.",
     creator: "@iidevstudio",
@@ -72,12 +72,12 @@ const jsonLd = {
     {
       "@type": "Organization",
       "@id": "https://iidevstudio.com/#organization",
-      name: "iidev Studio",
+      name: "IIDev Studio",
       url: "https://iidevstudio.com",
       email: "team.iidevstudio@gmail.com",
       telephone: "+60 11-3350 6561",
       description:
-        "iidev Studio is a Malaysian web design and SEO studio that builds high-performance, conversion-focused websites for local service businesses. Founder-led, two-person team, no outsourcing.",
+        "IIDev Studio is a Malaysian web design and SEO studio that builds high-performance, conversion-focused websites for local service businesses. Founder-led, two-person team, no outsourcing.",
       logo: {
         "@type": "ImageObject",
         url: "https://iidevstudio.com/logo-512.png",
@@ -109,7 +109,7 @@ const jsonLd = {
     {
       "@type": "ProfessionalService",
       "@id": "https://iidevstudio.com/#service",
-      name: "iidev Studio",
+      name: "IIDev Studio",
       url: "https://iidevstudio.com",
       image: "https://iidevstudio.com/logo-512.png",
       priceRange: "RM 500 – RM 15,000",

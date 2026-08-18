@@ -13,7 +13,7 @@ export const metadata: Metadata = {
     "A fast, credible website for Malaysian businesses getting online for the first time. Mobile-optimised, SEO-ready, and fully owned by you — no builder lock-in. From RM 1,000.",
   alternates: { canonical: "/services/web-presence" },
   openGraph: {
-    title: "Web Presence | iidev Studio",
+    title: "Web Presence | IIDev Studio",
     description:
       "A fast, credible website for Malaysian businesses getting online for the first time. Mobile-optimised, SEO-ready, fully owned by you.",
     url: "https://iidevstudio.com/services/web-presence",
