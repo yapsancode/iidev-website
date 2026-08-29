@@ -1,5 +1,5 @@
 // 📁 components/cards/ProblemCard.tsx
-import { ArrowRight, LucideIcon } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 
 interface ProblemCardProps {
   problem: string;

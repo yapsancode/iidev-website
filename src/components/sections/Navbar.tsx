@@ -1,308 +1,186 @@
 "use client";
-import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence, Variants } from 'framer-motion';
-import { usePathname, useRouter } from 'next/navigation';
-import Link from 'next/link';
-import { ThemeToggle } from '../ui/ThemeToggle';
+
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { useEffect, useState, type MouseEvent } from "react";
+import { ThemeToggle } from "../ui/ThemeToggle";
+
+const NAV_ITEMS = [
+  { label: "WHY US", href: "#why-us" },
+  { label: "PORTFOLIO", href: "#portfolio" },
+  { label: "FAQ", href: "#faq" },
+] as const;
 
 export const Navbar = () => {
-    const pathname = usePathname();
-    const router = useRouter();
-    const navItems = [
-        // { label: 'PROBLEMS', href: '#problems' },
-        { label: 'WHY US', href: '#why-us' },
-        { label: 'PORTFOLIO', href: '#portfolio' },
-        { label: 'FAQ', href: '#faq' },
-        // { label: 'SEE A DEMO', href: '#demo' },
-    ];
+  const pathname = usePathname();
+  const [activeSection, setActiveSection] = useState("home");
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-    // Added separate desktop items to match the user's original more extensive desktop list
-    const desktopNavItems = [
-        // { label: 'PROBLEMS', href: '#problems' },
-        { label: 'WHY US', href: '#why-us' },
-        { label: 'PORTFOLIO', href: '#portfolio' },
-        { label: 'FAQ', href: '#faq' },
-        // { label: 'SEE A DEMO', href: '#demo' },
-    ];
+  useEffect(() => {
+    document.body.classList.toggle("no-scroll", mobileMenuOpen);
+    return () => document.body.classList.remove("no-scroll");
+  }, [mobileMenuOpen]);
 
-    const [activeSection, setActiveSection] = useState('home');
-    const [isLogoHovered, setIsLogoHovered] = useState(false);
-    const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  useEffect(() => {
+    if (pathname !== "/") return;
 
-    // Prevent body scroll when menu is open
-    useEffect(() => {
-        if (mobileMenuOpen) {
-            document.body.classList.add('no-scroll');
-        } else {
-            document.body.classList.remove('no-scroll');
-        }
-    }, [mobileMenuOpen]);
-
-    // Smooth scroll handler
-    const handleNavClick = (e: React.MouseEvent, href: string) => {
-        e.preventDefault();
-        setMobileMenuOpen(false);
-        const element = document.querySelector(href);
-        if (element) {
-            // Tiny timeout to allow menu to close visually before scrolling starts
-            setTimeout(() => {
-                element.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            }, 300);
-        }
-    };
-
-    // Intersection Observer for scroll spying
-    useEffect(() => {
-        const sections = ['home', ...desktopNavItems.map(item => item.href.slice(1))];
-
-        const observer = new IntersectionObserver(
-            (entries) => {
-                entries.forEach((entry) => {
-                    if (entry.isIntersecting) {
-                        setActiveSection(entry.target.id);
-                    }
-                });
-            },
-            { rootMargin: '-20% 0px -70% 0px', threshold: 0 }
-        );
-
-        sections.forEach((id) => {
-            const el = document.getElementById(id);
-            if (el) observer.observe(el);
-        });
-
-        return () => observer.disconnect();
-    }, []);
-
-    // Animation Variants
-    const menuVariants: Variants = {
-        closed: {
-            opacity: 0,
-            transition: { duration: 0.3, delay: 0.2 }
-        },
-        open: {
-            opacity: 1,
-            transition: { duration: 0.3 }
-        }
-    };
-
-    const linkContainerVariants: Variants = {
-        open: {
-            transition: {
-                staggerChildren: 0.1,
-                delayChildren: 0.2
-            }
-        },
-        closed: {
-            transition: { staggerChildren: 0.05, staggerDirection: -1 }
-        }
-    };
-
-    const linkVariants: Variants = {
-        open: { y: 0, opacity: 1, transition: { type: "spring", stiffness: 300, damping: 24 } },
-        closed: { y: 20, opacity: 0, transition: { duration: 0.2 } }
-    };
-
-    return (
-        <>
-            {/* --- Main Navbar (Visible when menu closed) --- */}
-            <motion.nav
-                initial={{ y: -100, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                transition={{ duration: 0.8, ease: "easeOut" }}
-                className={`fixed top-0 left-0 right-0 z-40 flex items-center justify-between px-6 py-6 md:px-12 pointer-events-none`}
-            >
-                {/* Logo - visible on desktop, or mobile when menu closed */}
-                <motion.button
-                    layout
-                    onClick={() => pathname === '/' ? window.scrollTo({ top: 0, behavior: 'smooth' }) : router.push('/')}
-                    onMouseEnter={() => setIsLogoHovered(true)}
-                    onMouseLeave={() => setIsLogoHovered(false)}
-                    className={`pointer-events-auto flex items-center gap-1 bg-black text-white dark:bg-white dark:text-black px-4 py-3 text-xs font-bold tracking-widest uppercase cursor-pointer select-none transition-opacity duration-300 ${mobileMenuOpen ? 'opacity-0' : 'opacity-100'}`}
-                >
-                    <motion.span layout>IIDev</motion.span>
-                    <AnimatePresence>
-                        {isLogoHovered && (
-                            <motion.span
-                                initial={{ opacity: 0, width: 0 }}
-                                animate={{ opacity: 1, width: "auto" }}
-                                exit={{ opacity: 0, width: 0 }}
-                                transition={{ duration: 0.3, ease: "easeInOut" }}
-                                className="overflow-hidden whitespace-nowrap"
-                            >
-                                Studio
-                            </motion.span>
-                        )}
-                    </AnimatePresence>
-                </motion.button>
-
-                {/* Desktop Menu - Center Pills */}
-                <div className="pointer-events-auto hidden md:flex items-center gap-2 bg-[#F0F0F0]/90 dark:bg-neutral-900/90 backdrop-blur-md p-1.5 rounded-full border border-neutral-200 dark:border-neutral-800 shadow-sm">
-                    {pathname === '/' && desktopNavItems.map((item) => {
-                        const isActive = activeSection === item.href.slice(1);
-                        return (
-                            <button
-                                key={item.label}
-                                onClick={(e) => handleNavClick(e, item.href)}
-                                className={`relative px-5 py-2 rounded-full text-[11px] font-bold tracking-widest transition-colors duration-300
-                                    ${isActive ? 'text-black dark:text-black' : 'text-neutral-500 hover:text-black dark:text-neutral-400 dark:hover:text-white hover:bg-white/50 dark:hover:bg-neutral-800/50'}`}
-                            >
-                                {item.label}
-                                {isActive && (
-                                    <motion.div
-                                        layoutId="activePill"
-                                        className="absolute inset-0 bg-white shadow-md border border-black/5 rounded-full -z-10"
-                                        transition={{ type: "spring", stiffness: 400, damping: 30 }}
-                                    />
-                                )}
-                            </button>
-                        );
-                    })}
-                    <Link
-                        href="/about"
-                        className={`relative px-5 py-2 rounded-full text-[11px] font-bold tracking-widest transition-colors duration-300
-                            ${pathname === '/about'
-                                ? 'text-black dark:text-white bg-white dark:bg-neutral-800 shadow-md border border-black/5'
-                                : 'text-neutral-500 hover:text-black dark:text-neutral-400 dark:hover:text-white hover:bg-white/50 dark:hover:bg-neutral-800/50'}`}
-                    >
-                        ABOUT
-                    </Link>
-                    <div className="mx-1 h-4 w-px bg-neutral-300 dark:bg-neutral-700" />
-                    <ThemeToggle />
-                </div>
-
-                {/* Mobile Toggle Button - Only visible when menu is CLOSED */}
-                <div className="pointer-events-auto md:hidden">
-                    <AnimatePresence>
-                        {!mobileMenuOpen && (
-                            <motion.button
-                                initial={{ opacity: 0 }}
-                                animate={{ opacity: 1 }}
-                                exit={{ opacity: 0 }}
-                                onClick={() => setMobileMenuOpen(true)}
-                                className="flex flex-col gap-1.5 p-2"
-                                aria-label="Open menu"
-                            >
-                                <div className="h-0.5 w-6 bg-black rounded-full" />
-                                <div className="h-0.5 w-6 bg-black rounded-full" />
-                                <div className="h-0.5 w-4 bg-black rounded-full self-end" />
-                            </motion.button>
-                        )}
-                    </AnimatePresence>
-                </div>
-            </motion.nav>
-
-            {/* --- Mobile Full Screen Menu Overlay --- */}
-            <AnimatePresence>
-                {mobileMenuOpen && (
-                    <motion.div
-                        initial="closed"
-                        animate="open"
-                        exit="closed"
-                        variants={menuVariants}
-                        className="fixed inset-0 z-50 flex flex-col bg-[#E6E6E6] text-black overflow-y-auto"
-                    >
-                        {/* Top Header Row inside Menu */}
-                        <div className="flex justify-between items-start p-6">
-                            {/* Brand Button (Top Left) */}
-                            <motion.button
-                                initial={{ opacity: 0, y: -10 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ delay: 0.2 }}
-                                onClick={() => {
-                                    setMobileMenuOpen(false);
-                                    window.scrollTo({ top: 0, behavior: 'smooth' });
-                                }}
-                                className="bg-[#EFEEE9] dark:bg-neutral-800 px-4 py-3 text-[10px] font-bold tracking-[0.2em] uppercase rounded-sm shadow-sm hover:bg-white dark:hover:bg-neutral-700 transition-colors text-black dark:text-white"
-                            >
-                                IIDev Studio
-                            </motion.button>
-
-                            <div className="flex items-center gap-4">
-                                <ThemeToggle />
-                                {/* Close Button (Top Right) */}
-                                <motion.button
-                                    initial={{ opacity: 0, scale: 0.9 }}
-                                    animate={{ opacity: 1, scale: 1 }}
-                                    transition={{ delay: 0.2 }}
-                                    onClick={() => setMobileMenuOpen(false)}
-                                    className="bg-[#111] dark:bg-white text-white dark:text-black px-8 py-3.5 rounded-full text-[10px] font-bold tracking-[0.2em] hover:bg-black dark:hover:bg-gray-200 transition-colors"
-                                >
-                                    CLOSE
-                                </motion.button>
-                            </div>
-                        </div>
-
-                        {/* Centered Navigation Links */}
-                        <motion.div
-                            variants={linkContainerVariants}
-                            className="flex-1 flex flex-col justify-center items-center gap-5 w-full min-h-[400px]"
-                        >
-                            {pathname === '/' && navItems.map((item) => (
-                                <motion.div
-                                    key={item.label}
-                                    variants={linkVariants}
-                                    className="relative group"
-                                >
-                                    <button
-                                        onClick={(e) => handleNavClick(e, item.href)}
-                                        className="relative z-10 block w-40 py-4 bg-[#F1F0EB] rounded-[2rem] text-center text-xl font-normal tracking-wide shadow-sm border border-transparent transition-transform duration-200 active:scale-95 group-hover:-translate-y-1"
-                                    >
-                                        {item.label}
-                                    </button>
-                                    {/* Optional subtle shadow element for 3D effect */}
-                                    <div className="absolute inset-0 bg-[#D6D6D6] rounded-[2rem] transform translate-y-1 z-0 transition-transform group-hover:translate-y-2" />
-                                </motion.div>
-                            ))}
-
-                            {/* About — a real route, so always reachable */}
-                            <motion.div variants={linkVariants} className="relative group">
-                                <Link
-                                    href="/about"
-                                    onClick={() => setMobileMenuOpen(false)}
-                                    className="relative z-10 block w-40 py-4 bg-[#F1F0EB] rounded-[2rem] text-center text-xl font-normal tracking-wide shadow-sm border border-transparent transition-transform duration-200 active:scale-95 group-hover:-translate-y-1"
-                                >
-                                    ABOUT
-                                </Link>
-                                {/* Optional subtle shadow element for 3D effect */}
-                                <div className="absolute inset-0 bg-[#D6D6D6] rounded-[2rem] transform translate-y-1 z-0 transition-transform group-hover:translate-y-2" />
-                            </motion.div>
-                        </motion.div>
-
-                        {/* Footer Info Area */}
-                        <motion.div
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: 0.4, duration: 0.5 }}
-                            className="pb-10 flex flex-col items-center gap-8 text-[11px] font-bold text-neutral-800 tracking-widest uppercase"
-                        >
-                            {/* Socials */}
-                            <div className="flex flex-col items-center gap-3">
-                                <span className="bg-[#EFEEE9] px-2 py-1 rounded-[2px]">Follow</span>
-                                <div className="flex gap-6 mt-1">
-                                    <a href="https://www.linkedin.com/company/iidevstudio" target="_blank" className="hover:text-neutral-500 transition-colors">LinkedIn</a>
-                                </div>
-                            </div>
-
-                            {/* Contact */}
-                            <div className="flex flex-col items-center gap-3">
-                                <div className="flex gap-2">
-                                    <span className="bg-[#EFEEE9] px-2 py-1 rounded-[2px]">General</span>
-                                    <span className="bg-[#EFEEE9] px-2 py-1 rounded-[2px]">Enquiries</span>
-                                </div>
-                                <a href="mailto:team.iidevstudio@gmail.com" className="mt-1 lowercase tracking-normal text-sm font-normal text-neutral-600 hover:text-black">
-                                    team.iidevstudio@gmail.com
-                                </a>
-                            </div>
-
-                            {/* Copyright */}
-                            <div className="mt-4 text-[10px] text-neutral-500 font-normal normal-case tracking-normal">
-                                © {new Date().getFullYear()} IIDev Studio® All Rights Reserved
-                            </div>
-                        </motion.div>
-                    </motion.div>
-                )}
-            </AnimatePresence >
-        </>
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const current = entries.find((entry) => entry.isIntersecting);
+        if (current) setActiveSection(current.target.id);
+      },
+      { rootMargin: "-20% 0px -70% 0px", threshold: 0 },
     );
+
+    ["home", ...NAV_ITEMS.map((item) => item.href.slice(1))].forEach((id) => {
+      const section = document.getElementById(id);
+      if (section) observer.observe(section);
+    });
+
+    return () => observer.disconnect();
+  }, [pathname]);
+
+  const handleNavClick = (event: MouseEvent, href: string) => {
+    event.preventDefault();
+    setMobileMenuOpen(false);
+    document.querySelector(href)?.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+    });
+  };
+
+  const handleHomeClick = (event: MouseEvent<HTMLAnchorElement>) => {
+    if (pathname !== "/") return;
+    event.preventDefault();
+    setMobileMenuOpen(false);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  return (
+    <>
+      <nav className="pointer-events-none fixed inset-x-0 top-0 z-40 flex items-center justify-between px-6 py-6 md:px-12 md:animate-[hero-fade-up_0.6s_ease-out_both] motion-reduce:animate-none">
+        <Link
+          href="/"
+          onClick={handleHomeClick}
+          className={`group pointer-events-auto flex items-center gap-1 bg-black px-4 py-3 text-xs font-bold uppercase tracking-widest text-white transition-opacity duration-200 dark:bg-white dark:text-black ${mobileMenuOpen ? "opacity-0" : "opacity-100"}`}
+        >
+          <span>IIDev</span>
+          <span className="max-w-0 overflow-hidden whitespace-nowrap opacity-0 transition-[max-width,opacity] duration-300 group-hover:max-w-16 group-hover:opacity-100">
+            Studio
+          </span>
+        </Link>
+
+        <div className="pointer-events-auto hidden items-center gap-2 rounded-full border border-neutral-200 bg-[#F0F0F0]/95 p-1.5 shadow-sm dark:border-neutral-800 dark:bg-neutral-900/95 md:flex">
+          {pathname === "/" &&
+            NAV_ITEMS.map((item) => {
+              const active = activeSection === item.href.slice(1);
+              return (
+                <button
+                  key={item.label}
+                  onClick={(event) => handleNavClick(event, item.href)}
+                  className={`relative rounded-full px-5 py-2 text-[11px] font-bold tracking-widest transition-colors duration-200 ${active ? "bg-white text-black shadow-md" : "text-neutral-500 hover:bg-white/60 hover:text-black dark:text-neutral-400 dark:hover:bg-neutral-800 dark:hover:text-white"}`}
+                >
+                  {item.label}
+                </button>
+              );
+            })}
+          <Link
+            href="/about"
+            className={`relative rounded-full px-5 py-2 text-[11px] font-bold tracking-widest transition-colors duration-200 ${pathname === "/about" ? "border border-black/5 bg-white text-black shadow-md dark:bg-neutral-800 dark:text-white" : "text-neutral-500 hover:bg-white/60 hover:text-black dark:text-neutral-400 dark:hover:bg-neutral-800 dark:hover:text-white"}`}
+          >
+            ABOUT
+          </Link>
+          <div className="mx-1 h-4 w-px bg-neutral-300 dark:bg-neutral-700" />
+          <ThemeToggle />
+        </div>
+
+        {!mobileMenuOpen && (
+          <button
+            onClick={() => setMobileMenuOpen(true)}
+            className="pointer-events-auto flex flex-col gap-1.5 p-2 md:hidden"
+            aria-label="Open menu"
+            aria-expanded="false"
+          >
+            <span className="h-0.5 w-6 rounded-full bg-black dark:bg-white" />
+            <span className="h-0.5 w-6 rounded-full bg-black dark:bg-white" />
+            <span className="h-0.5 w-4 self-end rounded-full bg-black dark:bg-white" />
+          </button>
+        )}
+      </nav>
+
+      {mobileMenuOpen && (
+        <div className="fixed inset-0 z-50 flex animate-[menu-fade-in_0.2s_ease-out_both] flex-col overflow-y-auto bg-[#E6E6E6] text-black motion-reduce:animate-none dark:bg-neutral-950 dark:text-white md:hidden">
+          <div className="flex items-start justify-between p-6">
+            <Link
+              href="/"
+              onClick={handleHomeClick}
+              className="rounded-sm bg-[#EFEEE9] px-4 py-3 text-[10px] font-bold uppercase tracking-[0.2em] text-black shadow-sm dark:bg-neutral-800 dark:text-white"
+            >
+              IIDev Studio
+            </Link>
+            <div className="flex items-center gap-4">
+              <ThemeToggle />
+              <button
+                onClick={() => setMobileMenuOpen(false)}
+                className="rounded-full bg-[#111] px-8 py-3.5 text-[10px] font-bold tracking-[0.2em] text-white dark:bg-white dark:text-black"
+              >
+                CLOSE
+              </button>
+            </div>
+          </div>
+
+          <div className="flex min-h-[400px] flex-1 flex-col items-center justify-center gap-5">
+            {pathname === "/" &&
+              NAV_ITEMS.map((item) => (
+                <div key={item.label} className="group relative">
+                  <button
+                    onClick={(event) => handleNavClick(event, item.href)}
+                    className="relative z-10 block w-40 rounded-[2rem] border border-transparent bg-[#F1F0EB] py-4 text-center text-xl font-normal tracking-wide text-black shadow-sm transition-transform duration-200 active:scale-95 group-hover:-translate-y-1"
+                  >
+                    {item.label}
+                  </button>
+                  <div className="absolute inset-0 z-0 translate-y-1 rounded-[2rem] bg-[#D6D6D6] transition-transform group-hover:translate-y-2" />
+                </div>
+              ))}
+            <div className="group relative">
+              <Link
+                href="/about"
+                onClick={() => setMobileMenuOpen(false)}
+                className="relative z-10 block w-40 rounded-[2rem] border border-transparent bg-[#F1F0EB] py-4 text-center text-xl font-normal tracking-wide text-black shadow-sm transition-transform duration-200 active:scale-95 group-hover:-translate-y-1"
+              >
+                ABOUT
+              </Link>
+              <div className="absolute inset-0 z-0 translate-y-1 rounded-[2rem] bg-[#D6D6D6] transition-transform group-hover:translate-y-2" />
+            </div>
+          </div>
+
+          <div className="flex flex-col items-center gap-8 pb-10 text-[11px] font-bold uppercase tracking-widest text-neutral-800 dark:text-neutral-300">
+            <div className="flex flex-col items-center gap-3">
+              <span className="rounded-[2px] bg-[#EFEEE9] px-2 py-1 text-black">Follow</span>
+              <a
+                href="https://www.linkedin.com/company/iidevstudio"
+                target="_blank"
+                rel="noreferrer"
+                className="transition-colors hover:text-neutral-500"
+              >
+                LinkedIn
+              </a>
+            </div>
+            <div className="flex flex-col items-center gap-3">
+              <span className="rounded-[2px] bg-[#EFEEE9] px-2 py-1 text-black">General Enquiries</span>
+              <a
+                href="mailto:team.iidevstudio@gmail.com"
+                className="text-sm font-normal lowercase tracking-normal text-neutral-600 hover:text-black dark:text-neutral-400"
+              >
+                team.iidevstudio@gmail.com
+              </a>
+            </div>
+            <div className="mt-4 text-[10px] font-normal normal-case tracking-normal text-neutral-500">
+              © {new Date().getFullYear()} IIDev Studio® All Rights Reserved
+            </div>
+          </div>
+        </div>
+      )}
+    </>
+  );
 };

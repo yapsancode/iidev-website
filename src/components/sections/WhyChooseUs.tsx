@@ -1,5 +1,4 @@
 import React from "react";
-import { motion } from "framer-motion";
 import {
     Clock,
     MessageCircle,
@@ -19,24 +18,18 @@ const ChatVisual = () => (
                 Avg Reply: 12 mins
             </span>
         </div>
-        <motion.div
-            initial={{ opacity: 0, x: -10 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.2 }}
+        <div
             className="self-start bg-white dark:bg-neutral-800 p-3 rounded-2xl rounded-tl-none shadow-sm border border-slate-100 dark:border-neutral-700 text-slate-600 dark:text-slate-300 relative"
         >
             Need to change the hero image?
             <span className="absolute -bottom-5 left-1 text-[10px] text-slate-400">10:42 AM</span>
-        </motion.div>
-        <motion.div
-            initial={{ opacity: 0, x: 10 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.5 }}
+        </div>
+        <div
             className="self-end bg-blue-600 p-3 rounded-2xl rounded-tr-none shadow-sm text-white relative mt-3"
         >
             Sure! Uploading it now. ⚡️
             <span className="absolute -bottom-5 right-1 text-[10px] text-slate-400">10:48 AM</span>
-        </motion.div>
+        </div>
     </div>
 );
 
@@ -78,12 +71,7 @@ const AIRecommendVisual = () => (
 
 const SpeedVisual = () => (
     <div className="w-full bg-slate-100 h-2 rounded-full overflow-hidden mt-2">
-        <motion.div
-            initial={{ width: "0%" }}
-            whileInView={{ width: "94%" }}
-            transition={{ duration: 1.5, ease: "easeOut" }}
-            className="h-full bg-green-500 rounded-full"
-        />
+        <div className="h-full w-[94%] rounded-full bg-green-500" />
         <div className="flex justify-between text-[10px] text-slate-400 mt-1 font-mono">
             <span>Kickoff</span>
             <span className="font-semibold text-slate-600">14 Days later</span>
@@ -149,8 +137,7 @@ interface BentoItemProps {
 }
 
 const BentoItem: React.FC<BentoItemProps> = ({ title, desc, visual, className, icon, gradient, badge }) => (
-    <motion.div
-        whileHover={{ y: -4 }}
+    <div
         className={`relative overflow-hidden rounded-3xl p-6 md:p-8 flex flex-col justify-between group border border-slate-100 dark:border-neutral-700 bg-white dark:bg-neutral-800 shadow-sm hover:shadow-xl hover:border-blue-100 hover:dark:border-blue-900 transition-all duration-300 ${className}`}
     >
         {/* Optional Gradient Background */}
@@ -184,7 +171,7 @@ const BentoItem: React.FC<BentoItemProps> = ({ title, desc, visual, className, i
         <div className="relative z-10 mt-auto w-full">
             {visual}
         </div>
-    </motion.div>
+    </div>
 );
 
 export default function WhyChooseUs() {

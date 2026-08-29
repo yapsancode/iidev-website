@@ -1,8 +1,6 @@
-"use client"
 import React from 'react';
 import Image from 'next/image';
 import { ExternalLink } from 'lucide-react';
-import { motion } from 'framer-motion';
 import { projects } from '@/lib/data';
 
 const Portfolio: React.FC = () => {
@@ -22,12 +20,8 @@ const Portfolio: React.FC = () => {
 
         <div className="grid md:grid-cols-2 gap-8">
           {projects.map((project, index) => (
-            <motion.div
+            <div
               key={index}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: index * 0.1 }}
               className="group cursor-pointer"
             >
               <div className="relative overflow-hidden rounded-2xl mb-6 bg-neutral-100 dark:bg-neutral-800 aspect-[4/3]">
@@ -60,7 +54,7 @@ const Portfolio: React.FC = () => {
                   target="_blank"
                   rel="noopener noreferrer"
                   className="p-2 rounded-full border border-neutral-200 dark:border-neutral-700 text-neutral-400 hover:border-emerald-500 hover:text-emerald-500 transition-colors"
-                  onClick={(e) => e.stopPropagation()}
+                  aria-label={`Open ${project.title}`}
                 >
                   <ExternalLink size={20} />
                 </a>
@@ -73,7 +67,7 @@ const Portfolio: React.FC = () => {
                   </span>
                 ))}
               </div>
-            </motion.div>
+            </div>
           ))}
         </div>
       </div>

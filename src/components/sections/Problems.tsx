@@ -1,4 +1,4 @@
-import { CheckCircle2, XCircle, ArrowRight } from "lucide-react";
+import { XCircle, ArrowRight } from "lucide-react";
 
 export default function ProblemsSection() {
   const problems = [

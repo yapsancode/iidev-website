@@ -35,17 +35,13 @@ export function PriceReveal({ children, className }: PriceRevealProps) {
   const [resolved, setResolved] = useState(false);
 
   useEffect(() => {
-    if (reduceMotion) {
-      setDisplay(text);
-      setResolved(true);
-      return;
-    }
+    if (reduceMotion) return;
 
-    setResolved(false);
     const start = performance.now();
 
     const id = window.setInterval(() => {
       const progress = Math.min((performance.now() - start) / REVEAL_MS, 1);
+      if (progress < 1) setResolved(false);
       const locked = Math.floor(progress * text.length);
 
       let out = "";
@@ -67,6 +63,9 @@ export function PriceReveal({ children, className }: PriceRevealProps) {
     return () => window.clearInterval(id);
   }, [text, reduceMotion]);
 
+  const visibleDisplay = reduceMotion ? text : display;
+  const isResolved = reduceMotion || resolved;
+
   return (
     <p className={className}>
       <span className="sr-only">{text}</span>
@@ -77,14 +76,14 @@ export function PriceReveal({ children, className }: PriceRevealProps) {
         <span
           className="absolute left-0 top-0"
           style={{
-            color: resolved ? DEFAULT_COLOR : EMERALD,
-            textShadow: resolved ? "none" : GLOW,
+            color: isResolved ? DEFAULT_COLOR : EMERALD,
+            textShadow: isResolved ? "none" : GLOW,
             transition: "color 1s ease, text-shadow 1s ease",
             fontVariantNumeric: "tabular-nums",
             whiteSpace: "pre",
           }}
         >
-          {display}
+          {visibleDisplay}
         </span>
       </span>
     </p>

@@ -1,45 +1,26 @@
-"use client"
-import React, { useState } from 'react';
+import React from 'react';
 import CTA from '@/components/sections/CTA';
 import Footer from '@/components/sections/Footer';
 import { Hero } from '@/components/sections/Hero';
 import { Navbar } from '@/components/sections/Navbar';
 import Portfolio from '@/components/sections/Portfolio';
-import Problems from '@/components/sections/Problems';
-// import Services from '@/components/sections/Services';
-import Team from '@/components/sections/Team';
 import FAQ from '@/components/sections/FAQ';
 import WhyChooseUs from '@/components/sections/WhyChooseUs';
 import ProcessTimeline from '@/components/sections/ProcessTimeline';
-import { BookingModal } from '@/components/modal/BookingModal';
 
 const App: React.FC = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const handleOpenBooking = () => {
-    setIsModalOpen(true);
-  };
-
-  const handleCloseBooking = () => {
-    setIsModalOpen(false);
-  };
-
   return (
     <div className="min-h-screen flex flex-col font-sans overflow-x-hidden">
       <Navbar />
       <main className="grow">
-        <section id="home"><Hero onBookingClick={handleOpenBooking} /></section>
-        {/* <section id="problems"><Problems /></section> */}
+        <section id="home"><Hero /></section>
         <section id="why-us"><WhyChooseUs /></section>
         <section id="process"><ProcessTimeline /></section>
         <section id="portfolio"><Portfolio /></section>
         <section id="faq"><FAQ /></section>
-        <section id="demo"><CTA onBookingClick={handleOpenBooking} /></section>
+        <section id="demo"><CTA /></section>
       </main>
       <Footer />
-
-      {/* Global Booking Modal */}
-      <BookingModal isOpen={isModalOpen} onClose={handleCloseBooking} />
     </div>
   );
 };

@@ -1,7 +1,4 @@
-"use client";
-
 import React from "react";
-import { motion } from "framer-motion";
 import {
     Phone,
     FileText,
@@ -71,26 +68,18 @@ const ProcessTimeline = () => {
 
             <div className="container mx-auto px-4 relative z-10">
                 <div className="text-center mb-20">
-                    <motion.h2
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.6 }}
+                    <h2
                         className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-6 tracking-tight"
                     >
                         Our Process
-                    </motion.h2>
-                    <motion.p
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.6, delay: 0.1 }}
+                    </h2>
+                    <p
                         className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto"
                     >
                         From the first call to launch — and the growth after. You
                         work with the founders at every step. No hand-offs, no
                         black boxes.
-                    </motion.p>
+                    </p>
                 </div>
 
                 <div className="relative">
@@ -99,12 +88,8 @@ const ProcessTimeline = () => {
 
                     <div className="grid grid-cols-1 md:grid-cols-7 gap-8 md:gap-4">
                         {steps.map((step, index) => (
-                            <motion.div
+                            <div
                                 key={step.id}
-                                initial={{ opacity: 0, y: 30 }}
-                                whileInView={{ opacity: 1, y: 0 }}
-                                viewport={{ once: true }}
-                                transition={{ duration: 0.5, delay: index * 0.1 }}
                                 className="flex flex-col items-center text-center group"
                             >
                                 {/* Numbered Tile with Icon */}
@@ -129,7 +114,7 @@ const ProcessTimeline = () => {
                                 <p className="text-sm text-gray-500 dark:text-gray-400 leading-relaxed max-w-[150px]">
                                     {step.description}
                                 </p>
-                            </motion.div>
+                            </div>
                         ))}
                     </div>
                 </div>

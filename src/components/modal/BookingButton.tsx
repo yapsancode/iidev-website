@@ -1,32 +1,50 @@
 "use client";
-import React, { useState } from "react";
-import { BookingModal } from "./BookingModal";
+
+import {
+  useState,
+  type ComponentType,
+  type ReactNode,
+} from "react";
 
 interface BookingButtonProps {
   className?: string;
-  children: React.ReactNode;
-  /** Optional context passed to the modal (e.g. the service the user is viewing). */
+  children: ReactNode;
   service?: string;
 }
 
-/**
- * Self-contained booking CTA: renders a button and owns its own modal state.
- * Lets pages stay Server Components (so they can export per-page metadata)
- * while still offering the interactive booking flow.
- */
-export function BookingButton({ className, children, service }: BookingButtonProps) {
+interface BookingModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  service?: string;
+}
+
+export function BookingButton({
+  className,
+  children,
+  service,
+}: BookingButtonProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [Modal, setModal] = useState<ComponentType<BookingModalProps> | null>(null);
+
+  const handleOpen = async () => {
+    setIsModalOpen(true);
+    if (Modal) return;
+    const bookingModule = await import("./BookingModal");
+    setModal(() => bookingModule.BookingModal);
+  };
 
   return (
     <>
-      <button onClick={() => setIsModalOpen(true)} className={className}>
+      <button onClick={handleOpen} className={className}>
         {children}
       </button>
-      <BookingModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        service={service}
-      />
+      {Modal && (
+        <Modal
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          service={service}
+        />
+      )}
     </>
   );
 }

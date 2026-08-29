@@ -1,6 +1,4 @@
 import React, { useEffect, useRef, useState } from "react";
-import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
-import { X } from "lucide-react";
 import { WhatsAppIcon } from "@/components/ui/WhatsAppIcon";
 
 interface BookingModalProps {
@@ -24,7 +22,6 @@ export const BookingModal: React.FC<BookingModalProps> = ({
   const dialogRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const previouslyFocused = useRef<HTMLElement | null>(null);
-  const reduceMotion = useReducedMotion();
 
   // Lock body scroll, manage focus, and wire up keyboard handlers while open.
   useEffect(() => {
@@ -84,36 +81,25 @@ export const BookingModal: React.FC<BookingModalProps> = ({
     onClose();
   };
 
+  if (!isOpen) return null;
+
   return (
-    <AnimatePresence>
-      {isOpen && (
-        <>
+    <>
           {/* Scrim */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
+          <div
             onClick={onClose}
-            className="fixed inset-0 z-50 bg-neutral-950/70 backdrop-blur-sm"
+            className="fixed inset-0 z-50 animate-[menu-fade-in_0.15s_ease-out_both] bg-neutral-950/70 motion-reduce:animate-none"
             aria-hidden="true"
           />
 
           {/* Dialog */}
-          <motion.div
+          <div
             ref={dialogRef}
             role="dialog"
             aria-modal="true"
             aria-labelledby="booking-title"
             aria-describedby="booking-desc"
-            initial={reduceMotion ? { opacity: 0 } : { opacity: 0, y: 18, scale: 0.98 }}
-            animate={reduceMotion ? { opacity: 1 } : { opacity: 1, y: 0, scale: 1 }}
-            exit={reduceMotion ? { opacity: 0 } : { opacity: 0, y: 12, scale: 0.98 }}
-            transition={
-              reduceMotion
-                ? { duration: 0.15 }
-                : { type: "spring", damping: 24, stiffness: 360 }
-            }
-            className="fixed left-1/2 top-1/2 z-50 w-full max-w-md -translate-x-1/2 -translate-y-1/2 px-5"
+            className="fixed left-1/2 top-1/2 z-50 w-full max-w-md -translate-x-1/2 -translate-y-1/2 animate-[menu-fade-in_0.15s_ease-out_both] px-5 motion-reduce:animate-none"
           >
             <div className="relative rounded-none border-2 border-black bg-white shadow-[8px_8px_0px_0px_#10b981] dark:border-white dark:bg-neutral-900">
               <div className="p-6 sm:p-8">
@@ -144,7 +130,7 @@ export const BookingModal: React.FC<BookingModalProps> = ({
                     aria-label="Close"
                     className="flex h-9 w-9 shrink-0 cursor-pointer items-center justify-center rounded-none border-2 border-black bg-white text-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-none dark:border-white dark:bg-neutral-900 dark:text-white dark:shadow-[2px_2px_0px_0px_rgba(255,255,255,1)] dark:hover:shadow-none"
                   >
-                    <X size={18} strokeWidth={2.5} />
+                    <span aria-hidden="true" className="text-2xl leading-none">×</span>
                   </button>
                 </div>
 
@@ -184,9 +170,7 @@ export const BookingModal: React.FC<BookingModalProps> = ({
                 </form>
               </div>
             </div>
-          </motion.div>
-        </>
-      )}
-    </AnimatePresence>
+          </div>
+    </>
   );
 };
