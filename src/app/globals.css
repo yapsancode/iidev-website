@@ -163,6 +163,55 @@
   }
 }
 
+@keyframes hero-slot-reveal {
+  from {
+    opacity: 0.35;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(-5em);
+  }
+}
+
+.hero-slot-track {
+  animation: hero-slot-reveal 700ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  will-change: transform;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-slot-track {
+    animation: none;
+    transform: translateY(-5em);
+    will-change: auto;
+  }
+}
+
+@keyframes hero-brand-return {
+  from {
+    opacity: 0;
+    filter: blur(6px);
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    filter: blur(0);
+    transform: translateY(0);
+  }
+}
+
+.hero-brand-return {
+  animation: hero-brand-return 650ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  will-change: filter, opacity, transform;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-brand-return {
+    animation: none;
+    will-change: auto;
+  }
+}
+
 @keyframes menu-fade-in {
   from { opacity: 0; }
   to { opacity: 1; }

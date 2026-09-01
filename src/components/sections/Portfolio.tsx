@@ -1,78 +1,108 @@
-import React from 'react';
-import Image from 'next/image';
-import { ExternalLink } from 'lucide-react';
-import { projects } from '@/lib/data';
+import Image from "next/image";
+import { ExternalLink } from "lucide-react";
+import { projects, type Project } from "@/lib/data";
 
-const Portfolio: React.FC = () => {
+interface ProjectCardProps {
+  project: Project;
+  featured?: boolean;
+}
+
+function ProjectCard({ project, featured = false }: ProjectCardProps) {
+  const cardClassName = `grid overflow-hidden border-2 border-black bg-white shadow-[5px_5px_0px_0px_rgba(0,0,0,1)] focus-visible:outline-4 focus-visible:outline-offset-4 focus-visible:outline-emerald-500 dark:border-white dark:bg-neutral-800 dark:shadow-[5px_5px_0px_0px_rgba(255,255,255,1)] ${
+    featured ? "md:col-span-12 md:grid-cols-12" : "md:col-span-6"
+  }`;
+
+  const content = (
+    <>
+      <div
+        className={`relative aspect-[4/3] overflow-hidden border-b-2 border-black bg-neutral-100 dark:border-white dark:bg-neutral-900 ${
+          featured
+            ? "md:col-span-7 md:aspect-auto md:min-h-[420px] md:border-r-2 md:border-b-0"
+            : ""
+        }`}
+      >
+        <Image
+          src={project.image}
+          alt={`${project.title} — ${project.category} built by IIDev Studio`}
+          fill
+          sizes={featured ? "(max-width: 768px) 100vw, 60vw" : "(max-width: 768px) 100vw, 50vw"}
+          className="object-cover"
+        />
+      </div>
+
+      <div
+        className={`flex flex-col p-6 md:p-8 ${featured ? "md:col-span-5 md:p-10" : ""}`}
+      >
+        <span className="mb-8 font-mono text-xs font-bold uppercase tracking-[0.18em] text-emerald-700 dark:text-emerald-400">
+          {project.category}
+        </span>
+        <h3
+          className={`mb-4 font-bold leading-tight text-slate-900 dark:text-white ${
+            featured ? "text-3xl md:text-4xl" : "text-2xl md:text-3xl"
+          }`}
+        >
+          {project.title}
+        </h3>
+        {project.link && (
+          <span className="mt-auto inline-flex items-center gap-2 pt-10 font-mono text-xs font-bold uppercase tracking-[0.16em] text-slate-700 dark:text-neutral-200">
+            View live project
+            <ExternalLink size={16} aria-hidden="true" />
+          </span>
+        )}
+      </div>
+    </>
+  );
+
+  if (!project.link) {
+    return <article className={cardClassName}>{content}</article>;
+  }
+
   return (
-    <section id="work" className="py-24 bg-[#FAFAFA] dark:bg-neutral-900">
-      <div className="max-w-7xl mx-auto px-6">
-        <div className="flex justify-between items-end mb-16">
-          <div>
-            <h2 className="text-4xl md:text-5xl font-bold tracking-tight text-neutral-900 dark:text-white mb-4">
-              Recent projects
-            </h2>
-            <p className="text-neutral-500 dark:text-neutral-400 text-lg">
-              Hand-picked work that drove real business results.
-            </p>
+    <a
+      href={project.link}
+      target="_blank"
+      rel="noopener noreferrer"
+      className={cardClassName}
+      aria-label={`View ${project.title} live project (opens in a new tab)`}
+    >
+      {content}
+    </a>
+  );
+}
+
+export default function Portfolio() {
+  return (
+    <div
+      id="work"
+      className="bg-[#FAFAFA] px-4 py-20 dark:bg-neutral-900 md:px-6 md:py-24"
+      aria-labelledby="portfolio-heading"
+    >
+      <div className="mx-auto max-w-7xl">
+        <div className="mb-12 max-w-3xl md:mb-16">
+          <div className="mb-6 inline-flex -rotate-1 items-center border-2 border-black bg-white px-3.5 py-1.5 font-mono text-[11px] font-bold uppercase tracking-widest text-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] dark:border-white dark:bg-neutral-900 dark:text-white dark:shadow-[3px_3px_0px_0px_rgba(255,255,255,1)]">
+            Selected work
           </div>
+          <h2
+            id="portfolio-heading"
+            className="mb-6 text-4xl font-bold tracking-tight text-slate-900 dark:text-white md:text-5xl lg:text-6xl"
+          >
+            Recent projects
+          </h2>
+          <p className="max-w-2xl text-lg leading-relaxed text-slate-600 dark:text-neutral-400 md:text-xl">
+            Websites and digital products built for Malaysian businesses.
+          </p>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-12">
           {projects.map((project, index) => (
-            <div
-              key={index}
-              className="group cursor-pointer"
-            >
-              <div className="relative overflow-hidden rounded-2xl mb-6 bg-neutral-100 dark:bg-neutral-800 aspect-[4/3]">
-                <Image
-                  src={project.image}
-                  alt={`${project.title} — ${project.category} built by IIDev Studio`}
-                  fill
-                  sizes="(max-width: 768px) 100vw, 50vw"
-                  className="object-cover transform transition-transform duration-700 group-hover:scale-105"
-                />
-                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300" />
-                {project.result && (
-                  <div className="absolute top-4 left-4">
-                    <span className="bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-bold text-neutral-900 shadow-sm">
-                      {project.result}
-                    </span>
-                  </div>
-                )}
-              </div>
-
-              <div className="flex justify-between items-start mb-3">
-                <div>
-                  <h3 className="text-2xl font-bold text-neutral-900 dark:text-white group-hover:text-emerald-500 transition-colors">
-                    {project.title}
-                  </h3>
-                  <p className="text-neutral-500 dark:text-neutral-400">{project.category}</p>
-                </div>
-                <a
-                  href={project.link}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="p-2 rounded-full border border-neutral-200 dark:border-neutral-700 text-neutral-400 hover:border-emerald-500 hover:text-emerald-500 transition-colors"
-                  aria-label={`Open ${project.title}`}
-                >
-                  <ExternalLink size={20} />
-                </a>
-              </div>
-
-              <div className="flex flex-wrap gap-2">
-                {project.tags.map(tag => (
-                  <span key={tag} className="text-xs font-medium text-neutral-500 dark:text-neutral-300 bg-neutral-100 dark:bg-neutral-800 px-2 py-1 rounded-md">
-                    {tag}
-                  </span>
-                ))}
-              </div>
-            </div>
+            <ProjectCard
+              key={project.title}
+              project={project}
+              featured={index === 0}
+            />
           ))}
         </div>
       </div>
-    </section>
+    </div>
   );
-};
-
-export default Portfolio;
+}

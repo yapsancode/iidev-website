@@ -1,0 +1,4 @@
+-- Replace the emails and names, then run this against iidev-leads in D1.
+INSERT INTO internal_users(id,email,full_name,role) VALUES
+  ('founder-one','founder-one@example.com','Founder One','founder'),
+  ('founder-two','founder-two@example.com','Founder Two','founder');

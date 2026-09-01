@@ -1,0 +1,16 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "iidev-website",
+  "main": ".open-next/worker.js",
+  "compatibility_date": "2026-08-31",
+  "compatibility_flags": ["nodejs_compat"],
+  "workers_dev": false,
+  "assets": { "directory": ".open-next/assets", "binding": "ASSETS" },
+  "d1_databases": [{
+    "binding": "DB",
+    "database_name": "iidev-leads",
+    "database_id": "ed440e16-326f-4b69-893b-614e50c7698d",
+    "migrations_dir": "migrations"
+  }],
+  "vars": { "NEXT_PUBLIC_SITE_URL": "https://www.iidevstudio.com" }
+}

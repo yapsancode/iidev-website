@@ -2,8 +2,6 @@ import type { Metadata } from "next";
 import { Inter, Pixelify_Sans } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
-import { Analytics } from '@vercel/analytics/next';
-import { SpeedInsights } from '@vercel/speed-insights/next';
 // import { ThemeProvider } from "@/components/theme-provider";
 import { ThemeProvider } from "@wrksz/themes/next"
 
@@ -17,6 +15,7 @@ const pixelify = Pixelify_Sans({
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://iidevstudio.com"),
+  manifest: "/manifest.webmanifest",
   title: {
     default: "IIDev Studio | Web Design & SEO for Malaysian Businesses",
     template: "%s | IIDev Studio",
@@ -166,8 +165,6 @@ export default function RootLayout({
           {children}
         </ThemeProvider>
 
-        <Analytics />
-        <SpeedInsights />
       </body>
     </html>
   );

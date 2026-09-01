@@ -1,9 +1,15 @@
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { BookingButton } from "@/components/modal/BookingButton";
+import AnimatedHeadline from "@/components/ui/AnimatedHeadline";
+import { WaveCanvas } from "@/components/ui/wave-canvas";
 
 // Stable, crawlable hero heading.
 const BRAND_LINE = "We Don't Just Build Websites, We Help Businesses Thrive.";
+const HEADLINE_PHRASES = [
+  "Built for the AI era.",
+  "Looks good. Loads fast. Gets found.",
+] as const;
 
 export function Hero() {
   return (
@@ -12,6 +18,7 @@ export function Hero() {
       className="relative min-h-svh w-full overflow-hidden bg-[#FAFAFA] dark:bg-neutral-900"
     >
       <div className="pointer-events-none absolute inset-0 z-0 bg-[radial-gradient(circle_at_50%_20%,rgba(99,102,241,0.12),transparent_45%)] dark:bg-[radial-gradient(circle_at_50%_20%,rgba(99,102,241,0.18),transparent_45%)]" />
+      <WaveCanvas className="opacity-60" />
 
       <div className="absolute inset-0 z-0 pointer-events-none select-none">
         <div className="absolute h-full w-full bg-size-[50px_50px] mask-[radial-gradient(ellipse_80%_50%_at_50%_0%,#000_70%,transparent_110%)] bg-[linear-gradient(to_right,rgba(128,128,128,0.1)_1px,transparent_1px),linear-gradient(to_bottom,rgba(128,128,128,0.1)_1px,transparent_1px)] dark:bg-[linear-gradient(to_right,rgba(255,255,255,0.05)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.05)_1px,transparent_1px)]" />
@@ -49,10 +56,12 @@ export function Hero() {
               )}
             />
 
-            <div className="md:animate-[hero-scale-in_1s_0.1s_cubic-bezier(0.22,1,0.36,1)_both] motion-reduce:animate-none">
-              <h1 className="text-center text-6xl font-extrabold leading-[1.1] tracking-tight text-black dark:text-white md:text-8xl">
-                {BRAND_LINE}
-              </h1>
+            <div className="w-full md:animate-[hero-scale-in_1s_0.1s_cubic-bezier(0.22,1,0.36,1)_both] motion-reduce:animate-none">
+              <AnimatedHeadline
+                brandLine={BRAND_LINE}
+                phrases={HEADLINE_PHRASES}
+                className="text-6xl font-extrabold leading-[1.1] tracking-tight text-black dark:text-white md:text-8xl"
+              />
             </div>
           </div>
 
@@ -81,7 +90,7 @@ export function Hero() {
             <BookingButton
               className="bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-3 px-8 rounded-none border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all font-mono text-sm uppercase"
             >
-              Book Consultation
+              Book a Free Call
             </BookingButton>
 
             <Link

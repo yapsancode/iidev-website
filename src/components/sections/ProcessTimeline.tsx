@@ -1,126 +1,97 @@
-import React from "react";
-import {
-    Phone,
-    FileText,
-    PenTool,
-    Code2,
-    MessageSquare,
-    Rocket,
-    ShieldCheck,
-} from "lucide-react";
+import { Code2, FileText, Phone, Rocket, type LucideIcon } from "lucide-react";
 
-const steps = [
-    {
-        id: 1,
-        title: "Discovery",
-        description: "We discuss your goals and vision.",
-        icon: Phone,
-    },
-    {
-        id: 2,
-        title: "Strategy",
-        description: "We plan the roadmap and structure.",
-        icon: FileText,
-    },
-    {
-        id: 3,
-        title: "Design",
-        description: "We craft the visuals and user experience.",
-        icon: PenTool,
-    },
-    {
-        id: 4,
-        title: "Development",
-        description: "We build your site with clean code.",
-        icon: Code2,
-    },
-    {
-        id: 5,
-        title: "Refinement",
-        description: "We tweak based on your feedback.",
-        icon: MessageSquare,
-    },
-    {
-        id: 6,
-        title: "Launch",
-        description: "We go live to the world.",
-        icon: Rocket,
-    },
-    {
-        id: 7,
-        title: "Growth",
-        description: "We provide ongoing support.",
-        icon: ShieldCheck,
-    },
+interface ProcessStep {
+  number: string;
+  title: string;
+  description: string;
+  icon: LucideIcon;
+}
+
+const steps: ProcessStep[] = [
+  {
+    number: "01",
+    title: "Understand",
+    description:
+      "We learn how your business works, who you need to reach, and what the site must achieve.",
+    icon: Phone,
+  },
+  {
+    number: "02",
+    title: "Plan",
+    description:
+      "We agree on the structure, scope, price, and timeline before the build begins.",
+    icon: FileText,
+  },
+  {
+    number: "03",
+    title: "Build together",
+    description:
+      "We design and develop in focused rounds, with clear points for your feedback.",
+    icon: Code2,
+  },
+  {
+    number: "04",
+    title: "Launch and improve",
+    description:
+      "We handle the launch, then stay available for updates and the next stage of growth.",
+    icon: Rocket,
+  },
 ];
 
-const ProcessTimeline = () => {
-    return (
-        <section className="relative py-24 overflow-hidden bg-[#FAFAFA] dark:bg-neutral-900 transition-colors duration-300">
-            {/* Subtle Grain Texture (inline SVG — no external request) */}
-            <div
-                className="absolute inset-0 opacity-[0.03] pointer-events-none mix-blend-multiply"
-                style={{
-                    backgroundImage:
-                        "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E\")",
-                }}
-            ></div>
+export default function ProcessTimeline() {
+  return (
+    <div
+      className="overflow-hidden bg-[#FAFAFA] px-4 py-16 dark:bg-neutral-900 md:px-6 md:py-24"
+      aria-labelledby="process-heading"
+    >
+      <div className="mx-auto max-w-6xl">
+        <div className="mb-10 max-w-3xl md:mb-16">
+          <div className="mb-4 inline-flex -rotate-1 items-center border-2 border-black bg-white px-3.5 py-1.5 font-mono text-[11px] font-bold uppercase tracking-widest text-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] dark:border-white dark:bg-neutral-900 dark:text-white dark:shadow-[3px_3px_0px_0px_rgba(255,255,255,1)] md:mb-6">
+            Our process
+          </div>
+          <h2
+            id="process-heading"
+            className="mb-4 text-4xl font-bold tracking-tight text-slate-900 dark:text-white md:mb-6 md:text-5xl lg:text-6xl"
+          >
+            Four clear steps. No black box.
+          </h2>
+          <p className="max-w-2xl text-lg leading-relaxed text-slate-600 dark:text-neutral-400 md:text-xl">
+            You always know what we&apos;re working on, what we need from you,
+            and what happens next.
+          </p>
+        </div>
 
-            <div className="container mx-auto px-4 relative z-10">
-                <div className="text-center mb-20">
-                    <h2
-                        className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-6 tracking-tight"
-                    >
-                        Our Process
-                    </h2>
-                    <p
-                        className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto"
-                    >
-                        From the first call to launch — and the growth after. You
-                        work with the founders at every step. No hand-offs, no
-                        black boxes.
-                    </p>
+        <ol className="grid border-2 border-black bg-white shadow-[5px_5px_0px_0px_rgba(0,0,0,1)] dark:border-white dark:bg-neutral-800 dark:shadow-[5px_5px_0px_0px_rgba(255,255,255,1)] md:grid-cols-4">
+          {steps.map((step) => {
+            const Icon = step.icon;
+
+            return (
+              <li
+                key={step.number}
+                className="border-b-2 border-black p-5 last:border-b-0 dark:border-white md:border-r-2 md:border-b-0 md:p-8 md:last:border-r-0"
+              >
+                <div className="mb-6 flex items-start justify-between gap-4 md:mb-8">
+                  <span className="font-mono text-xs font-bold uppercase tracking-[0.18em] text-slate-500 dark:text-neutral-400">
+                    Step {step.number}
+                  </span>
+                  <span
+                    className="flex h-10 w-10 shrink-0 items-center justify-center border-2 border-black bg-emerald-300 text-black dark:border-white dark:bg-emerald-400 md:h-11 md:w-11"
+                    aria-hidden="true"
+                  >
+                    <Icon size={20} strokeWidth={2} />
+                  </span>
                 </div>
-
-                <div className="relative">
-                    {/* Connecting Line (Desktop) */}
-                    <div className="hidden md:block absolute top-12 left-0 w-full h-0.5 bg-black dark:bg-white -z-10" />
-
-                    <div className="grid grid-cols-1 md:grid-cols-7 gap-8 md:gap-4">
-                        {steps.map((step, index) => (
-                            <div
-                                key={step.id}
-                                className="flex flex-col items-center text-center group"
-                            >
-                                {/* Numbered Tile with Icon */}
-                                <div className="relative mb-6">
-                                    <div className="w-24 h-24 rounded-none bg-white dark:bg-neutral-900 border-2 border-black dark:border-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] dark:shadow-[4px_4px_0px_0px_rgba(255,255,255,1)] flex items-center justify-center relative z-10 transition-transform duration-300 group-hover:-translate-y-1">
-                                        <span className="absolute top-2 right-3 font-mono text-xs font-bold text-neutral-400 dark:text-neutral-500">
-                                            0{step.id}
-                                        </span>
-                                        <div className="w-12 h-12 rounded-none border-2 border-black dark:border-white bg-emerald-300 flex items-center justify-center text-black">
-                                            <step.icon size={24} strokeWidth={2} />
-                                        </div>
-                                    </div>
-                                    {/* Mobile Connecting Line (Vertical) */}
-                                    {index !== steps.length - 1 && (
-                                        <div className="md:hidden absolute top-24 left-1/2 w-0.5 h-16 bg-black dark:bg-white -translate-x-1/2" />
-                                    )}
-                                </div>
-
-                                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
-                                    {step.title}
-                                </h3>
-                                <p className="text-sm text-gray-500 dark:text-gray-400 leading-relaxed max-w-[150px]">
-                                    {step.description}
-                                </p>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-            </div>
-        </section>
-    );
-};
-
-export default ProcessTimeline;
+                <h3 className="mb-3 text-2xl font-bold leading-tight text-slate-900 dark:text-white">
+                  {step.title}
+                </h3>
+                <p className="leading-relaxed text-slate-600 dark:text-neutral-300">
+                  {step.description}
+                </p>
+              </li>
+            );
+          })}
+        </ol>
+      </div>
+    </div>
+  );
+}

@@ -10,7 +10,7 @@ import { ChevronDown } from "lucide-react";
 const faqs = [
   {
     q: "How much does a website cost in Malaysia?",
-    a: "Most of our one-time builds fall between RM 1,000 and RM 6,000, depending on the number of pages and whether you need SEO. Ongoing SEO retainers run RM 1,000–2,000 a month. We agree on a fixed price upfront after a short discovery call — no hourly billing, and no surprise fees later. If you're not ready to commit, a RM 500 website audit is the low-risk way to start — and it's credited back if you go ahead with a build.",
+    a: "Most one-time builds fall between RM 1,000 and RM 6,000, depending on the number of pages and how much search work is needed. Ongoing SEO retainers are RM 1,000–2,000 a month. After a short discovery call, we confirm a fixed scope and price before work starts — no hourly billing or surprise fees.",
   },
   {
     q: "How long does it take to build a website?",
@@ -38,11 +38,11 @@ const faqs = [
   },
   {
     q: "What are GEO and AEO, and why do they matter for my business?",
-    a: "Search is shifting from Google to AI tools like ChatGPT, Claude, and Perplexity. GEO (Generative Engine Optimization) and AEO (Answer Engine Optimization) mean structuring your website so these tools understand your business and recommend it by name when someone asks for help. We build this in from the start, so you're visible both on Google and in the AI tools your customers are starting to use.",
+    a: "Search is expanding beyond Google into AI tools such as ChatGPT, Claude, and Perplexity. GEO (Generative Engine Optimization) and AEO (Answer Engine Optimization) mean structuring your site so those tools can understand what your business does, where it operates, and when it is relevant. We build that foundation into your content and site structure without promising that any platform will recommend or rank you.",
   },
   {
     q: "How do I get started?",
-    a: "Message us on WhatsApp at +60 11-3350 6561, or book a free 15-minute discovery call. No sales pressure — just a straight conversation about your business and goals. We usually reply within minutes.",
+    a: "Book a free 15-minute call or message us on WhatsApp at +60 11-3350 6561. We'll ask a few practical questions about your business, goals, and current site, then recommend the clearest next step.",
   },
 ];
 
