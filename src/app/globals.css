@@ -396,6 +396,39 @@ body.no-scroll {
   }
 }
 
+/* "No black box": a solid block covers the words until they scroll into view,
+   then slides off to the right. StampObserver sets data-stamp, the same way it
+   does for stamps. The static page has no block at all. */
+.uncover {
+  position: relative;
+  display: inline-block;
+}
+
+@keyframes uncover {
+  to { transform: scaleX(0); }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .uncover[data-stamp="armed"]::after,
+  .uncover[data-stamp="in"]::after {
+    content: "";
+    position: absolute;
+    inset: 0.02em -0.08em;
+    transform-origin: right;
+    @apply bg-black;
+  }
+
+  /* The short wait lets the eye catch the block before it leaves. */
+  .uncover[data-stamp="in"]::after {
+    animation: uncover 420ms cubic-bezier(0.22, 1, 0.36, 1) 250ms both;
+  }
+
+  /* On the dark page a black block needs an edge to be seen. */
+  .dark .uncover::after {
+    @apply border-2 border-white;
+  }
+}
+
 /* FAQ answers slide open and shut instead of snapping. */
 @supports (interpolate-size: allow-keywords) {
   @media (prefers-reduced-motion: no-preference) {

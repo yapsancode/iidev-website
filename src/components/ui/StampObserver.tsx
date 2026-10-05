@@ -3,11 +3,13 @@
 import { useEffect } from "react";
 import { usePathname } from "next/navigation";
 
-const PENDING_STAMPS = '.stamp:not([data-stamp="in"]):not([data-stamp="done"])';
+const PENDING_STAMPS =
+  ':is(.stamp, .uncover):not([data-stamp="in"]):not([data-stamp="done"])';
 
 /**
  * Makes every label with the `stamp` class land with a small bounce the first
- * time it scrolls into view (the motion itself is in globals.css).
+ * time it scrolls into view (the motion itself is in globals.css). The same
+ * signal slides the block off words marked `uncover`.
  *
  * A label that is already on screen when the page opens is marked "done" and
  * left alone. Only labels still off screen are hidden ("armed"), so nothing

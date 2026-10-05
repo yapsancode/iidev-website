@@ -56,7 +56,10 @@ export default function ProcessTimeline() {
             id="process-heading"
             className="mb-4 text-4xl font-bold tracking-tight text-slate-900 dark:text-white md:mb-6 md:text-5xl lg:text-6xl"
           >
-            Four clear steps. No black box.
+            Four clear steps.{" "}
+            <span className="inline-block">
+              No <span className="uncover">black box</span>.
+            </span>
           </h2>
           <p className="max-w-2xl text-lg leading-relaxed text-slate-600 dark:text-neutral-400 md:text-xl">
             You always know what we&apos;re working on, what we need from you,
