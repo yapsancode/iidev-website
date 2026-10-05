@@ -87,19 +87,22 @@ export default function FAQ() {
         </div>
 
         {/* List — native <details> so every answer is in the HTML, needs no JS,
-            and is fully readable by search crawlers and answer engines. */}
+            and is fully readable by search crawlers and answer engines.
+            Each box lifts onto its shadow as it scrolls in (lift-in). An open
+            box stays pressed into its shadow with a green question row, so it
+            is clear which one is open. */}
         <div className="space-y-4">
           {faqs.map((item) => (
             <details
               key={item.q}
               name="faq"
-              className="faq-item group rounded-none border-2 border-black bg-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] dark:border-white dark:bg-neutral-800 dark:shadow-[4px_4px_0px_0px_rgba(255,255,255,1)]"
+              className="faq-item lift-in group rounded-none border-2 border-black bg-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-[translate,box-shadow] duration-150 [--lift-by:4px] open:translate-x-0.5 open:translate-y-0.5 open:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] motion-reduce:transition-none dark:border-white dark:bg-neutral-800 dark:shadow-[4px_4px_0px_0px_rgba(255,255,255,1)] dark:open:shadow-[2px_2px_0px_0px_rgba(255,255,255,1)]"
             >
-              <summary className="flex cursor-pointer list-none items-center justify-between gap-4 p-5 md:p-6 font-bold text-slate-900 dark:text-white [&::-webkit-details-marker]:hidden">
+              <summary className="flex cursor-pointer list-none items-center justify-between gap-4 border-b-2 border-transparent p-5 font-bold text-slate-900 transition-colors duration-150 group-open:border-black group-open:bg-emerald-300 motion-reduce:transition-none dark:text-white dark:group-open:border-white dark:group-open:bg-emerald-400 dark:group-open:text-black md:p-6 [&::-webkit-details-marker]:hidden">
                 <span className="text-base md:text-lg">{item.q}</span>
-                <ChevronDown className="h-5 w-5 shrink-0 text-slate-400 transition-transform duration-300 group-open:rotate-180" />
+                <ChevronDown className="h-5 w-5 shrink-0 text-slate-400 transition-[rotate,color] duration-300 group-open:rotate-180 group-open:text-black" />
               </summary>
-              <div className="px-5 pb-6 md:px-6">
+              <div className="px-5 pt-5 pb-6 md:px-6">
                 <p className="leading-relaxed text-slate-600 dark:text-neutral-300">
                   {item.a}
                 </p>
