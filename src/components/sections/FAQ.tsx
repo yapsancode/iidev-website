@@ -64,7 +64,7 @@ const faqJsonLd = {
 
 export default function FAQ() {
   return (
-    <section className="py-24 px-4 md:px-6 bg-[#FAFAFA] dark:bg-neutral-900 overflow-hidden">
+    <section className="py-24 px-4 md:px-6 bg-[#FAFAFA] dark:bg-neutral-900 overflow-clip">
       {/* FAQPage structured data — generated from the same array rendered below */}
       <script
         type="application/ld+json"
@@ -93,7 +93,7 @@ export default function FAQ() {
             <details
               key={item.q}
               name="faq"
-              className="group rounded-none border-2 border-black bg-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] dark:border-white dark:bg-neutral-800 dark:shadow-[4px_4px_0px_0px_rgba(255,255,255,1)]"
+              className="faq-item group rounded-none border-2 border-black bg-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] dark:border-white dark:bg-neutral-800 dark:shadow-[4px_4px_0px_0px_rgba(255,255,255,1)]"
             >
               <summary className="flex cursor-pointer list-none items-center justify-between gap-4 p-5 md:p-6 font-bold text-slate-900 dark:text-white [&::-webkit-details-marker]:hidden">
                 <span className="text-base md:text-lg">{item.q}</span>

@@ -6,6 +6,7 @@ import { Navbar } from "@/components/sections/Navbar";
 import Footer from "@/components/sections/Footer";
 import { BookingButton } from "@/components/modal/BookingButton";
 import { ServiceCard } from "@/components/cards/ServiceCard";
+import { ServiceMorph } from "@/components/ui/ServiceMorph";
 import { SITE_URL, absoluteUrl } from "@/lib/site-config";
 import {
   BADGE,
@@ -91,7 +92,7 @@ const breadcrumbJsonLd = {
 
 export default function ServicesPage() {
   return (
-    <div className="min-h-screen flex flex-col font-sans overflow-x-hidden">
+    <div className="min-h-screen flex flex-col font-sans overflow-x-clip">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
@@ -122,9 +123,11 @@ export default function ServicesPage() {
                   <span className={cn(LABEL, "bg-black px-2 py-1 text-white dark:bg-white dark:text-black")}>
                     Start here
                   </span>
-                  <span className={cn(LABEL, "text-neutral-700 dark:text-neutral-300")}>
-                    RM 500 · credited back if you hire us
-                  </span>
+                  <ServiceMorph slug="website-audit" part="price">
+                    <span className={cn(LABEL, "text-neutral-700 dark:text-neutral-300")}>
+                      RM 500 · credited back if you hire us
+                    </span>
+                  </ServiceMorph>
                 </div>
                 <h2 className="text-xl font-bold tracking-tight mb-1">
                   Not sure where you stand? Get a Website Audit.
@@ -157,6 +160,8 @@ export default function ServicesPage() {
               CARD_HOVER,
               "group mt-6 block bg-black p-8 text-white md:p-10",
               "shadow-[6px_6px_0px_0px_#10b981] hover:shadow-[3px_3px_0px_0px_#10b981] dark:shadow-[6px_6px_0px_0px_#10b981] dark:hover:shadow-[3px_3px_0px_0px_#10b981]",
+              // Tell the scroll-in lift about this card's green, deeper shadow.
+              "[--lift-by:6px] [--lift-shadow:#10b981]",
             )}
           >
             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
@@ -165,12 +170,16 @@ export default function ServicesPage() {
                   <span className={cn(LABEL, "bg-emerald-300 px-2 py-1 text-black")}>
                     Flagship
                   </span>
-                  <span className={cn(LABEL, "text-neutral-300")}>
-                    One-time · RM 10,000 onwards
-                  </span>
+                  <ServiceMorph slug="business-os" part="price">
+                    <span className={cn(LABEL, "text-neutral-300")}>
+                      One-time · RM 10,000 onwards
+                    </span>
+                  </ServiceMorph>
                 </div>
                 <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-3">
-                  Business OS
+                  <ServiceMorph slug="business-os" part="title">
+                    <span className="inline-block leading-none">Business OS</span>
+                  </ServiceMorph>
                 </h2>
                 <p className="text-neutral-300 leading-relaxed">
                   Still running on spreadsheets, WhatsApp, and gut feel? We build

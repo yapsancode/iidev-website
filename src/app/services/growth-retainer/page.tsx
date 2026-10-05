@@ -5,7 +5,7 @@ import { ArrowLeft, Check } from "lucide-react";
 import { Navbar } from "@/components/sections/Navbar";
 import Footer from "@/components/sections/Footer";
 import { BookingButton } from "@/components/modal/BookingButton";
-import { PriceReveal } from "@/components/ui/PriceReveal";
+import { ServiceMorph } from "@/components/ui/ServiceMorph";
 import { ORGANIZATION_ID, SITE_URL, absoluteUrl } from "@/lib/site-config";
 import {
   BADGE,
@@ -70,7 +70,7 @@ const jsonLd = {
 
 export default function GrowthRetainerPage() {
   return (
-    <div className="min-h-screen flex flex-col font-sans overflow-x-hidden">
+    <div className="min-h-screen flex flex-col font-sans overflow-x-clip">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
@@ -88,11 +88,15 @@ export default function GrowthRetainerPage() {
           </Link>
 
           {/* Header */}
-          <PriceReveal className={cn(BADGE, "mb-5 flex w-fit text-sm")}>
-            Monthly · RM 1,000 – 2,000 / month
-          </PriceReveal>
+          <ServiceMorph slug="growth-retainer" part="price">
+            <p className={cn(BADGE, "mb-5 flex w-fit text-sm")}>
+              Monthly · RM 1,000 – 2,000 / month
+            </p>
+          </ServiceMorph>
           <h1 className="text-5xl md:text-6xl font-bold tracking-tight text-neutral-900 dark:text-white mb-6">
-            Growth Retainer
+            <ServiceMorph slug="growth-retainer" part="title">
+              <span className="inline-block">Growth Retainer</span>
+            </ServiceMorph>
           </h1>
           <p className="text-neutral-600 dark:text-neutral-400 text-lg leading-relaxed mb-8 max-w-xl">
             You're already online and getting some traction. Now you want to

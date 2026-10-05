@@ -10,7 +10,7 @@ interface ProjectCardProps {
 }
 
 function ProjectCard({ project, featured = false }: ProjectCardProps) {
-  const cardClassName = `grid overflow-hidden border-2 border-black bg-white shadow-[5px_5px_0px_0px_rgba(0,0,0,1)] focus-visible:outline-4 focus-visible:outline-offset-4 focus-visible:outline-emerald-500 dark:border-white dark:bg-neutral-800 dark:shadow-[5px_5px_0px_0px_rgba(255,255,255,1)] ${
+  const cardClassName = `lift-in grid overflow-hidden border-2 border-black bg-white shadow-[5px_5px_0px_0px_rgba(0,0,0,1)] focus-visible:outline-4 focus-visible:outline-offset-4 focus-visible:outline-emerald-500 dark:border-white dark:bg-neutral-800 dark:shadow-[5px_5px_0px_0px_rgba(255,255,255,1)] ${
     featured ? "md:col-span-12 md:grid-cols-12" : "md:col-span-6"
   }`;
 

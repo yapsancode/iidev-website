@@ -5,6 +5,7 @@ import {
   Users,
   type LucideIcon,
 } from "lucide-react";
+import { SearchStory } from "@/components/ui/SearchStory";
 import { BADGE } from "@/lib/styles";
 import { cn } from "@/lib/utils";
 
@@ -16,6 +17,8 @@ interface Reason {
   icon: LucideIcon;
   span: string;
   featured?: boolean;
+  /** Shows the animated search story between the label row and the title. */
+  searchStory?: boolean;
 }
 
 const reasons: Reason[] = [
@@ -37,6 +40,7 @@ const reasons: Reason[] = [
       "We plan every page around how Malaysian customers search—on Google today and AI answers next.",
     icon: Search,
     span: "md:col-span-5",
+    searchStory: true,
   },
   {
     number: "03",
@@ -61,7 +65,7 @@ const reasons: Reason[] = [
 export default function WhyChooseUs() {
   return (
     <div
-      className="overflow-hidden bg-[#FAFAFA] px-4 py-20 dark:bg-neutral-900 md:px-6 md:py-24"
+      className="overflow-clip bg-[#FAFAFA] px-4 py-20 dark:bg-neutral-900 md:px-6 md:py-24"
       aria-labelledby="why-us-heading"
     >
       <div className="mx-auto max-w-6xl">
@@ -89,13 +93,17 @@ export default function WhyChooseUs() {
             return (
               <li
                 key={reason.number}
-                className={`${reason.span} flex flex-col border-2 p-6 shadow-[5px_5px_0px_0px_rgba(0,0,0,1)] md:p-8 lg:p-10 ${
+                className={`${reason.span} lift-in flex flex-col border-2 p-6 shadow-[5px_5px_0px_0px_rgba(0,0,0,1)] md:p-8 lg:p-10 ${
                   reason.featured
                     ? "border-black bg-emerald-300 text-black dark:border-white dark:bg-emerald-400 dark:shadow-[5px_5px_0px_0px_rgba(255,255,255,1)]"
                     : "border-black bg-white text-slate-900 dark:border-white dark:bg-neutral-800 dark:text-white dark:shadow-[5px_5px_0px_0px_rgba(255,255,255,1)]"
                 }`}
               >
-                <div className="mb-12 flex items-start justify-between gap-6 md:mb-16">
+                <div
+                  className={`flex items-start justify-between gap-6 ${
+                    reason.searchStory ? "mb-6" : "mb-12 md:mb-16"
+                  }`}
+                >
                   <span className="font-mono text-xs font-bold uppercase tracking-[0.18em]">
                     {reason.number} / {reason.label}
                   </span>
@@ -106,6 +114,8 @@ export default function WhyChooseUs() {
                     <Icon size={22} strokeWidth={2} />
                   </span>
                 </div>
+
+                {reason.searchStory && <SearchStory className="mb-8" />}
 
                 <div className="mt-auto">
                   <h3 className="mb-3 text-2xl font-bold leading-tight md:text-3xl">

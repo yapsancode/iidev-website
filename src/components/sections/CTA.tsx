@@ -7,12 +7,12 @@ export default function CTA() {
   return (
     <div
       id="contact"
-      className="overflow-hidden bg-[#FAFAFA] px-4 py-20 dark:bg-neutral-900 md:px-6 md:py-24"
+      className="overflow-clip bg-[#FAFAFA] px-4 py-20 dark:bg-neutral-900 md:px-6 md:py-24"
       aria-labelledby="cta-heading"
     >
-      <div className="mx-auto grid max-w-6xl gap-10 border-2 border-black bg-emerald-300 p-8 text-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] dark:border-white dark:bg-emerald-400 dark:shadow-[6px_6px_0px_0px_rgba(255,255,255,1)] md:grid-cols-[minmax(0,1fr)_auto] md:items-end md:p-12 lg:p-16">
+      <div className="lift-in mx-auto grid max-w-6xl gap-10 border-2 border-black bg-emerald-300 p-8 text-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] [--lift-by:6px] dark:border-white dark:bg-emerald-400 dark:shadow-[6px_6px_0px_0px_rgba(255,255,255,1)] md:grid-cols-[minmax(0,1fr)_auto] md:items-end md:p-12 lg:p-16">
         <div className="max-w-3xl">
-          <div className="mb-6 inline-flex -rotate-1 items-center border-2 border-black bg-white px-3.5 py-1.5 font-mono text-xs font-bold uppercase tracking-widest text-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]">
+          <div className="stamp mb-6 inline-flex -rotate-1 items-center border-2 border-black bg-white px-3.5 py-1.5 font-mono text-xs font-bold uppercase tracking-widest text-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]">
             Start a conversation
           </div>
           <h2

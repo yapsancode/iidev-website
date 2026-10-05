@@ -9,6 +9,7 @@ import {
   WHATSAPP_DISPLAY,
   absoluteUrl,
 } from "@/lib/site-config";
+import { StampObserver } from "@/components/ui/StampObserver";
 // import { ThemeProvider } from "@/components/theme-provider";
 import { ThemeProvider } from "@wrksz/themes/next"
 
@@ -164,6 +165,7 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           {children}
+          <StampObserver />
         </ThemeProvider>
 
       </body>

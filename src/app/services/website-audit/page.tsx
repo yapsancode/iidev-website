@@ -5,7 +5,7 @@ import { ArrowLeft, Check } from "lucide-react";
 import { Navbar } from "@/components/sections/Navbar";
 import Footer from "@/components/sections/Footer";
 import { BookingButton } from "@/components/modal/BookingButton";
-import { PriceReveal } from "@/components/ui/PriceReveal";
+import { ServiceMorph } from "@/components/ui/ServiceMorph";
 import { ORGANIZATION_ID, SITE_URL, absoluteUrl } from "@/lib/site-config";
 import {
   BADGE,
@@ -71,7 +71,7 @@ const jsonLd = {
 
 export default function WebsiteAuditPage() {
   return (
-    <div className="min-h-screen flex flex-col font-sans overflow-x-hidden">
+    <div className="min-h-screen flex flex-col font-sans overflow-x-clip">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
@@ -89,9 +89,11 @@ export default function WebsiteAuditPage() {
           </Link>
 
           {/* Header */}
-          <PriceReveal className={cn(BADGE, "mb-5 flex w-fit text-sm")}>
-            Start here · RM 500
-          </PriceReveal>
+          <ServiceMorph slug="website-audit" part="price">
+            <p className={cn(BADGE, "mb-5 flex w-fit text-sm")}>
+              Start here · RM 500
+            </p>
+          </ServiceMorph>
           <h1 className="text-5xl md:text-6xl font-bold tracking-tight text-neutral-900 dark:text-white mb-6">
             Website Audit
           </h1>

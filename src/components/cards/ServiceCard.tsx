@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { cva, type VariantProps } from "class-variance-authority";
 import { ArrowRight } from "lucide-react";
+import { ServiceMorph } from "@/components/ui/ServiceMorph";
 import {
   CARD_ACCENT,
   CARD_DARK,
@@ -55,13 +56,22 @@ export function ServiceCard({
   imgAlt,
   imgClassName,
 }: ServiceCardProps) {
+  const slug = href.slice(href.lastIndexOf("/") + 1);
+
   return (
     <Link href={href} className={cn(cardVariants({ variant }), className)}>
       <div className="relative z-10 flex h-full flex-col gap-3">
         <p className={cn(LABEL, "opacity-80")}>{target}</p>
-        <h3 className="text-2xl font-bold tracking-tight">{title}</h3>
+        <h3 className="text-2xl font-bold tracking-tight">
+          {/* leading-none matches the page's h1, so the two line up while they morph. */}
+          <ServiceMorph slug={slug} part="title">
+            <span className="inline-block leading-none">{title}</span>
+          </ServiceMorph>
+        </h3>
         <p className="text-sm leading-relaxed opacity-90">{description}</p>
-        <p className="mt-1 text-xl font-bold">{price}</p>
+        <ServiceMorph slug={slug} part="price">
+          <p className="mt-1 w-fit text-xl font-bold">{price}</p>
+        </ServiceMorph>
 
         <span className={cn(LABEL, "mt-auto flex items-center pt-4 group-hover:underline")}>
           See what you get

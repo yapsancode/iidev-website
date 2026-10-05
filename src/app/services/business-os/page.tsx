@@ -14,7 +14,7 @@ import {
 import { Navbar } from "@/components/sections/Navbar";
 import Footer from "@/components/sections/Footer";
 import { BookingButton } from "@/components/modal/BookingButton";
-import { PriceReveal } from "@/components/ui/PriceReveal";
+import { ServiceMorph } from "@/components/ui/ServiceMorph";
 import { ORGANIZATION_ID, SITE_URL, absoluteUrl } from "@/lib/site-config";
 import {
   BADGE,
@@ -133,7 +133,7 @@ const jsonLd = {
 
 export default function BusinessOSPage() {
   return (
-    <div className="min-h-screen flex flex-col font-sans overflow-x-hidden">
+    <div className="min-h-screen flex flex-col font-sans overflow-x-clip">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
@@ -151,11 +151,15 @@ export default function BusinessOSPage() {
           </Link>
 
           {/* Header */}
-          <PriceReveal className={cn(BADGE, "mb-5 flex w-fit text-sm")}>
-            One-time · RM 10,000 onwards
-          </PriceReveal>
+          <ServiceMorph slug="business-os" part="price">
+            <p className={cn(BADGE, "mb-5 flex w-fit text-sm")}>
+              One-time · RM 10,000 onwards
+            </p>
+          </ServiceMorph>
           <h1 className="text-5xl md:text-6xl font-bold tracking-tight text-neutral-900 dark:text-white mb-6">
-            Business OS
+            <ServiceMorph slug="business-os" part="title">
+              <span className="inline-block">Business OS</span>
+            </ServiceMorph>
           </h1>
           <p className="text-neutral-600 dark:text-neutral-400 text-lg leading-relaxed mb-8 max-w-xl">
             You're running your business on spreadsheets, WhatsApp, and gut feel

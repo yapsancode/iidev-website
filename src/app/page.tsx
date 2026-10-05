@@ -10,7 +10,7 @@ import ProcessTimeline from '@/components/sections/ProcessTimeline';
 
 const App: React.FC = () => {
   return (
-    <div className="min-h-screen flex flex-col font-sans overflow-x-hidden">
+    <div className="min-h-screen flex flex-col font-sans overflow-x-clip">
       <Navbar />
       <main id="main" className="grow">
         <section id="home"><Hero /></section>
