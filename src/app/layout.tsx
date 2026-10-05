@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
-import { Inter, Pixelify_Sans } from "next/font/google";
+import { Inter } from "next/font/google";
 import "./globals.css";
-import { cn } from "@/lib/utils";
 import {
   BRAND_NAME,
   CONTACT_EMAIL,
@@ -13,12 +12,11 @@ import {
 // import { ThemeProvider } from "@/components/theme-provider";
 import { ThemeProvider } from "@wrksz/themes/next"
 
-const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
-
-const pixelify = Pixelify_Sans({
-  subsets: ['latin'],
-  display: 'swap',
-  variable: '--font-pixel',
+// Mapped to Tailwind's font-sans in globals.css (@theme).
+const inter = Inter({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-inter",
 });
 
 export const metadata: Metadata = {
@@ -147,7 +145,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en-MY" suppressHydrationWarning className={`${pixelify.variable} scroll-smooth`}>
+    <html lang="en-MY" suppressHydrationWarning className={`${inter.variable} scroll-smooth`}>
       <head>
         {/* Organization / Brand schema */}
         <script
@@ -158,12 +156,7 @@ export default function RootLayout({
         />
       </head>
 
-      <body
-        className={cn(
-          "font-pixel min-h-screen bg-white font-sans antialiased",
-          inter.variable
-        )}
-      >
+      <body className="min-h-screen bg-white font-sans antialiased">
         <ThemeProvider
           attribute="class"
           defaultTheme="light"

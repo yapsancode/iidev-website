@@ -1,6 +1,8 @@
 import React from "react";
 import { ChevronDown } from "lucide-react";
 import { WHATSAPP_DISPLAY } from "@/lib/site-config";
+import { BADGE } from "@/lib/styles";
+import { cn } from "@/lib/utils";
 
 /**
  * Q&A content. A single source of truth: the visible <details> list and the
@@ -72,7 +74,7 @@ export default function FAQ() {
       <div className="max-w-3xl mx-auto">
         {/* Header */}
         <div className="text-center mb-16">
-          <div className="inline-flex -rotate-1 items-center gap-2 mb-4 rounded-none border-2 border-black bg-white px-3.5 py-1.5 font-mono text-[11px] font-bold uppercase tracking-widest text-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] dark:border-white dark:bg-neutral-900 dark:text-white dark:shadow-[3px_3px_0px_0px_rgba(255,255,255,1)]">
+          <div className={cn(BADGE, "mb-4")}>
             Questions? Answered.
           </div>
           <h2 className="text-4xl md:text-5xl font-bold text-slate-900 dark:text-white mb-6 tracking-tight">

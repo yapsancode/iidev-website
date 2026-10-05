@@ -12,7 +12,7 @@ const App: React.FC = () => {
   return (
     <div className="min-h-screen flex flex-col font-sans overflow-x-hidden">
       <Navbar />
-      <main className="grow">
+      <main id="main" className="grow">
         <section id="home"><Hero /></section>
         <section id="why-us"><WhyChooseUs /></section>
         <section id="process"><ProcessTimeline /></section>

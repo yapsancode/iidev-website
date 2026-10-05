@@ -1,7 +1,7 @@
-"use client"
 import React from 'react';
 import Image from 'next/image';
-import { motion } from 'framer-motion';
+import { CARD_WHITE, LABEL } from '@/lib/styles';
+import { cn } from '@/lib/utils';
 
 export interface TeamMember {
   name: string;
@@ -40,107 +40,55 @@ const getInitials = (name: string) =>
 
 const Team: React.FC = () => {
   return (
-    <section id="team" className="py-24 bg-[#FAFAFA] dark:bg-neutral-900 border-y border-neutral-100 dark:border-neutral-800 overflow-hidden">
-      <div className="max-w-6xl mx-auto px-6">
-        <div className="text-center mb-16">
-          <motion.h2
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-3xl md:text-5xl font-bold text-neutral-900 dark:text-white mb-6 tracking-tight"
-          >
-            Just two dedicated developers.<br />
-            <span className="text-neutral-400 dark:text-neutral-500">No middlemen. No surprises.</span>
-          </motion.h2>
+    <section id="team" className="max-w-3xl mx-auto px-6 pb-20">
+      <h2 className="text-3xl font-bold tracking-tight text-neutral-900 dark:text-white mb-5">
+        Just two dedicated developers.<br />
+        <span className="text-neutral-500 dark:text-neutral-400">No middlemen. No surprises.</span>
+      </h2>
+      <p className="text-neutral-600 dark:text-neutral-300 leading-relaxed mb-8">
+        Direct access to the founders shipping your code.
+      </p>
 
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.1 }}
-            className="text-lg text-neutral-500 dark:text-neutral-400 max-w-2xl mx-auto"
-          >
-            Direct access to the founders shipping your code.
-            Hover over the cards to learn a bit more about the humans behind the screen.
-          </motion.p>
-        </div>
-
-        <div className="flex flex-col md:flex-row justify-center items-center gap-8 md:gap-12 perspective-container">
-          {members.map((member, index) => (
-            <TeamCard key={member.name} member={member} index={index} />
-          ))}
-        </div>
+      <div className="grid gap-6 sm:grid-cols-2">
+        {members.map((member) => (
+          <TeamCard key={member.name} member={member} />
+        ))}
       </div>
     </section>
   );
 };
 
-interface TeamCardProps {
-  member: TeamMember;
-  index: number;
-}
-
-const TeamCard: React.FC<TeamCardProps> = ({ member, index }) => {
+// Everything is visible without hovering, so it reads the same on a phone.
+const TeamCard: React.FC<{ member: TeamMember }> = ({ member }) => {
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 50, rotateX: -10 }}
-      whileInView={{ opacity: 1, y: 0, rotateX: 0 }}
-      viewport={{ once: true, margin: "-50px" }}
-      transition={{
-        delay: index * 0.2,
-        type: "spring",
-        stiffness: 100,
-        damping: 20
-      }}
-      className="group h-[420px] w-full max-w-[320px] [perspective:1000px]"
-    >
-      <div className="relative h-full w-full transition-all duration-700 [transform-style:preserve-3d] group-hover:[transform:rotateY(180deg)] shadow-xl rounded-2xl">
-
-        {/* Front Face */}
-        <div className="absolute inset-0 h-full w-full rounded-2xl bg-white dark:bg-neutral-800 [backface-visibility:hidden] overflow-hidden border border-neutral-200 dark:border-neutral-700">
-          <div className="h-full w-full relative">
-            {member.image ? (
-              <Image
-                src={member.image}
-                alt={`${member.name}, ${member.role} at IIDev Studio`}
-                fill
-                sizes="(max-width: 768px) 100vw, 320px"
-                className="object-cover transition-transform duration-700 group-hover:scale-110"
-              />
-            ) : (
-              <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-neutral-700 to-neutral-900 transition-transform duration-700 group-hover:scale-110">
-                <span className="select-none text-7xl font-bold tracking-wide text-white/90">
-                  {getInitials(member.name)}
-                </span>
-              </div>
-            )}
-            {/* Gradient Overlay */}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-
-            {/* Text Content */}
-            <div className="absolute bottom-0 left-0 w-full p-6 text-left">
-              <h3 className="text-2xl font-bold text-white mb-1">{member.name}</h3>
-              <p className="text-sm font-medium text-neutral-300 uppercase tracking-wider">{member.role}</p>
-            </div>
+    <article className={cn(CARD_WHITE, "flex flex-col")}>
+      <div className="relative aspect-[4/3] overflow-hidden border-b-2 border-black bg-emerald-300 dark:border-white dark:bg-emerald-400 sm:aspect-[4/5]">
+        {member.image ? (
+          <Image
+            src={member.image}
+            alt={`${member.name}, ${member.role} at IIDev Studio`}
+            fill
+            sizes="(max-width: 640px) 100vw, 350px"
+            className="object-cover"
+          />
+        ) : (
+          <div className="flex h-full w-full items-center justify-center">
+            <span className="select-none text-7xl font-extrabold tracking-wide text-black" aria-hidden="true">
+              {getInitials(member.name)}
+            </span>
           </div>
-        </div>
-
-        {/* Back Face */}
-        <div className="absolute inset-0 h-full w-full rounded-2xl bg-neutral-900 px-8 text-center text-slate-200 [transform:rotateY(180deg)] [backface-visibility:hidden] flex flex-col items-center justify-center border border-neutral-700 shadow-inner">
-          <div className="mb-6 h-12 w-12 rounded-full bg-neutral-800 flex items-center justify-center text-2xl">
-            💡
-          </div>
-          <h4 className="text-lg font-semibold text-white mb-4">Fun Fact</h4>
-          <p className="text-neutral-300 leading-relaxed font-light italic">
-            "{member.funFact}"
-          </p>
-          <div className="mt-8 pt-6 border-t border-neutral-800 w-full">
-            <span className="text-xs font-bold tracking-widest uppercase text-neutral-500">IIDev Studio</span>
-          </div>
-        </div>
-
+        )}
       </div>
-    </motion.div>
+
+      <div className="flex flex-1 flex-col p-6">
+        <h3 className="text-2xl font-bold leading-tight">{member.name}</h3>
+        <p className={cn(LABEL, "mt-2 text-emerald-700 dark:text-emerald-400")}>{member.role}</p>
+        <p className={cn(LABEL, "mt-6 text-neutral-600 dark:text-neutral-400")}>Fun fact</p>
+        <p className="mt-2 leading-relaxed text-neutral-700 dark:text-neutral-300">
+          {member.funFact}
+        </p>
+      </div>
+    </article>
   );
 };
 

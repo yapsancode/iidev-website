@@ -6,8 +6,10 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  /* Labels and buttons marked font-mono share the body face for now.
+     Point this at a real monospace font if the brand wants one. */
+  --font-mono: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -119,10 +121,15 @@
   body {
     @apply bg-background text-foreground;
   }
+  /* One clear keyboard focus ring for every link and button. */
+  :focus-visible {
+    @apply outline-3 outline-offset-3 outline-indigo-600 dark:outline-indigo-400;
+  }
 }
 
-.font-pixel {
-  font-family: var(--font-pixel), sans-serif;
+/* Locks page scroll while the mobile menu is open (toggled by Navbar). */
+body.no-scroll {
+  overflow: hidden;
 }
 
 @keyframes hero-fade-up {

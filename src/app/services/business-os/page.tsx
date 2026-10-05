@@ -16,6 +16,14 @@ import Footer from "@/components/sections/Footer";
 import { BookingButton } from "@/components/modal/BookingButton";
 import { PriceReveal } from "@/components/ui/PriceReveal";
 import { ORGANIZATION_ID, SITE_URL, absoluteUrl } from "@/lib/site-config";
+import {
+  BADGE,
+  CARD_ACCENT,
+  CARD_WHITE,
+  LABEL,
+  PRIMARY_BUTTON,
+} from "@/lib/styles";
+import { cn } from "@/lib/utils";
 
 export const metadata: Metadata = {
   title: "Business OS — A Custom System to Run Your Business (RM 10k onwards)",
@@ -131,25 +139,25 @@ export default function BusinessOSPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
       <Navbar />
-      <main className="grow bg-[#FAFAFA] dark:bg-neutral-900">
+      <main id="main" className="grow bg-[#FAFAFA] dark:bg-neutral-900">
         <div className="max-w-3xl mx-auto px-6 pt-36 pb-24">
           {/* Back */}
           <Link
             href="/services"
-            className="inline-flex items-center gap-2 text-sm text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-200 transition-colors mb-12"
+            className="inline-flex min-h-11 items-center gap-2 text-sm text-neutral-600 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-neutral-200 transition-colors mb-6"
           >
             <ArrowLeft className="h-4 w-4" />
             All services
           </Link>
 
           {/* Header */}
-          <PriceReveal className="text-xs font-bold uppercase tracking-widest text-neutral-400 mb-4">
+          <PriceReveal className={cn(BADGE, "mb-5 flex w-fit text-sm")}>
             One-time · RM 10,000 onwards
           </PriceReveal>
           <h1 className="text-5xl md:text-6xl font-bold tracking-tight text-neutral-900 dark:text-white mb-6">
             Business OS
           </h1>
-          <p className="text-neutral-500 dark:text-neutral-400 text-lg leading-relaxed mb-16 max-w-xl">
+          <p className="text-neutral-600 dark:text-neutral-400 text-lg leading-relaxed mb-8 max-w-xl">
             You're running your business on spreadsheets, WhatsApp, and gut feel
             — and it's starting to cost you. Customers slip through the cracks.
             Stock goes missing. Invoices pile up. This is the fix: a system built
@@ -157,12 +165,19 @@ export default function BusinessOSPage() {
             to work around.
           </p>
 
+          {/* Early CTA — visitors who are already convinced don't have to scroll */}
+          <div className="mb-16">
+            <BookingButton service="Business OS" className={PRIMARY_BUTTON}>
+              Book a Free Call
+            </BookingButton>
+          </div>
+
           {/* Modules */}
           <div className="mb-16">
-            <h2 className="text-sm font-bold uppercase tracking-widest text-neutral-400 mb-3">
+            <h2 className={cn(LABEL, "mb-3 text-neutral-600 dark:text-neutral-300")}>
               What we can build
             </h2>
-            <p className="text-neutral-500 dark:text-neutral-400 leading-relaxed mb-8 max-w-xl">
+            <p className="text-neutral-600 dark:text-neutral-400 leading-relaxed mb-8 max-w-xl">
               Business OS isn't one fixed product — it's a set of modules we
               build around your business. Most clients start with the one or two
               that hurt most, then add the rest as they grow. You only pay for
@@ -172,18 +187,18 @@ export default function BusinessOSPage() {
               {modules.map(({ icon: Icon, title, desc, price, tag }) => (
                 <div
                   key={title}
-                  className="relative rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-800/50 p-5"
+                  className="relative border-2 border-black bg-white p-5 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] dark:border-white dark:bg-neutral-800 dark:shadow-[4px_4px_0px_0px_rgba(255,255,255,1)]"
                 >
                   {tag && (
-                    <span className="absolute top-5 right-5 text-[10px] font-bold uppercase tracking-widest text-indigo-500">
+                    <span className="absolute right-0 top-0 border-b-2 border-l-2 border-black bg-emerald-300 px-2 py-1 font-mono text-[11px] font-bold uppercase tracking-widest text-black dark:border-white">
                       {tag}
                     </span>
                   )}
-                  <Icon className="h-5 w-5 text-indigo-500 mb-3" />
+                  <Icon className="h-5 w-5 text-neutral-900 dark:text-white mb-3" aria-hidden="true" />
                   <h3 className="font-bold text-neutral-900 dark:text-white mb-1">
                     {title}
                   </h3>
-                  <p className="text-sm text-neutral-500 dark:text-neutral-400 leading-relaxed">
+                  <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-relaxed">
                     {desc}
                   </p>
                   <p className="text-sm font-bold text-neutral-900 dark:text-white mt-3">
@@ -192,12 +207,12 @@ export default function BusinessOSPage() {
                 </div>
               ))}
             </div>
-            <p className="text-sm text-neutral-500 dark:text-neutral-400 mt-6 leading-relaxed max-w-xl">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400 mt-6 leading-relaxed max-w-xl">
               Most builds combine two or three modules and start around RM
               10,000. The prices above are starting points — final scope and cost
               are set together on a discovery call, never before.
             </p>
-            <p className="text-sm text-neutral-400 mt-4">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400 mt-4">
               We'd rather get one module genuinely right than rush all of them.
               Start where it hurts most — add the rest when you're ready.
             </p>
@@ -205,10 +220,10 @@ export default function BusinessOSPage() {
 
           {/* See it in action */}
           <div className="mb-16">
-            <h2 className="text-sm font-bold uppercase tracking-widest text-neutral-400 mb-3">
+            <h2 className={cn(LABEL, "mb-3 text-neutral-600 dark:text-neutral-300")}>
               See it in action
             </h2>
-            <p className="text-neutral-500 dark:text-neutral-400 leading-relaxed mb-8 max-w-xl">
+            <p className="text-neutral-600 dark:text-neutral-400 leading-relaxed mb-8 max-w-xl">
               Don't take our word for it — click through a live demo. It's a
               real, working system with sample data, so you can see exactly how
               invoicing, stock, and your dashboard fit together before we build
@@ -216,13 +231,13 @@ export default function BusinessOSPage() {
             </p>
 
             {/* Browser-framed preview */}
-            <div className="rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-800/50 overflow-hidden shadow-sm">
+            <div className={cn(CARD_WHITE, "overflow-hidden")}>
               {/* Browser chrome */}
-              <div className="flex items-center gap-2 px-4 py-3 border-b border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-800">
+              <div className="flex items-center gap-2 px-4 py-3 border-b-2 border-black dark:border-white bg-neutral-50 dark:bg-neutral-800">
                 <span className="h-3 w-3 rounded-full bg-red-400" />
                 <span className="h-3 w-3 rounded-full bg-yellow-400" />
                 <span className="h-3 w-3 rounded-full bg-green-400" />
-                <div className="ml-3 flex-1 truncate rounded-md border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-900 px-3 py-1 text-xs text-neutral-400">
+                <div className="ml-3 flex-1 truncate rounded-md border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-900 px-3 py-1 text-xs text-neutral-500 dark:text-neutral-400">
                   {DEMO_URL || "demo.iidevstudio.com"}
                 </div>
               </div>
@@ -291,7 +306,7 @@ export default function BusinessOSPage() {
                   <ExternalLink className="h-4 w-4" />
                 </a>
               ) : (
-                <span className="inline-flex items-center gap-2 border-2 border-dashed border-neutral-300 dark:border-neutral-700 text-neutral-400 py-3 px-8 font-mono text-sm uppercase">
+                <span className="inline-flex items-center gap-2 border-2 border-dashed border-black dark:border-white text-neutral-700 dark:text-neutral-300 py-3 px-8 font-mono text-sm uppercase">
                   Live demo — coming soon
                 </span>
               )}
@@ -299,11 +314,11 @@ export default function BusinessOSPage() {
           </div>
 
           {/* Right fit */}
-          <div className="bg-neutral-100 dark:bg-neutral-800 rounded-xl p-6 mb-16">
-            <h2 className="font-bold text-neutral-900 dark:text-white mb-2">
+          <div className={cn(CARD_ACCENT, "mb-16 p-6 md:p-8")}>
+            <h2 className="font-bold mb-2">
               This is the right fit if:
             </h2>
-            <p className="text-neutral-600 dark:text-neutral-400 leading-relaxed">
+            <p className="text-black/80 leading-relaxed">
               You're an SME owner still stitching things together with Excel and
               WhatsApp. You know you need a proper system but don't want to pay
               for SAP or spend six months configuring Odoo. You want something
@@ -314,10 +329,10 @@ export default function BusinessOSPage() {
 
           {/* CTA */}
           <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
-            <BookingButton service="Business OS" className="bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-3 px-8 rounded-none border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all font-mono text-sm uppercase">
+            <BookingButton service="Business OS" className={PRIMARY_BUTTON}>
               Book a Free Call
             </BookingButton>
-            <p className="text-sm text-neutral-400">
+            <p className="text-sm text-neutral-600 dark:text-neutral-400">
               We'll map out how your business runs today and scope a system that
               fits it — no jargon, no six-month rollout.
             </p>

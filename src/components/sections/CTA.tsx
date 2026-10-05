@@ -1,5 +1,7 @@
 import { Calendar } from "lucide-react";
 import { BookingButton } from "@/components/modal/BookingButton";
+import { PRIMARY_BUTTON } from "@/lib/styles";
+import { cn } from "@/lib/utils";
 
 export default function CTA() {
   return (
@@ -10,7 +12,7 @@ export default function CTA() {
     >
       <div className="mx-auto grid max-w-6xl gap-10 border-2 border-black bg-emerald-300 p-8 text-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] dark:border-white dark:bg-emerald-400 dark:shadow-[6px_6px_0px_0px_rgba(255,255,255,1)] md:grid-cols-[minmax(0,1fr)_auto] md:items-end md:p-12 lg:p-16">
         <div className="max-w-3xl">
-          <div className="mb-6 inline-flex -rotate-1 items-center border-2 border-black bg-white px-3.5 py-1.5 font-mono text-[11px] font-bold uppercase tracking-widest text-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]">
+          <div className="mb-6 inline-flex -rotate-1 items-center border-2 border-black bg-white px-3.5 py-1.5 font-mono text-xs font-bold uppercase tracking-widest text-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]">
             Start a conversation
           </div>
           <h2
@@ -25,7 +27,14 @@ export default function CTA() {
           </p>
         </div>
 
-        <BookingButton className="inline-flex w-full items-center justify-center gap-2 border-2 border-black bg-black px-7 py-4 font-mono text-sm font-bold uppercase tracking-wide text-white shadow-[4px_4px_0px_0px_rgba(255,255,255,1)] transition-[transform,box-shadow] hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-[2px_2px_0px_0px_rgba(255,255,255,1)] active:translate-x-1 active:translate-y-1 active:shadow-none md:w-auto md:whitespace-nowrap">
+        {/* On the green panel the border and shadow stay black in dark mode too. */}
+        <BookingButton
+          className={cn(
+            PRIMARY_BUTTON,
+            "w-full px-7 py-4 tracking-wide md:w-auto md:whitespace-nowrap",
+            "dark:border-black dark:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] dark:hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]",
+          )}
+        >
           <Calendar size={18} aria-hidden="true" />
           Book a Free Call
         </BookingButton>

@@ -28,6 +28,8 @@ export const BookingModal: React.FC<BookingModalProps> = ({ isOpen, onClose, ser
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [fallbackUrl, setFallbackUrl] = useState<string | null>(null);
+  // Phones start with the required fields only, so the submit button fits on screen.
+  const [showOptional, setShowOptional] = useState(false);
   const dialogRef = useRef<HTMLDivElement>(null);
   const firstFieldRef = useRef<HTMLInputElement>(null);
   const previouslyFocused = useRef<HTMLElement | null>(null);
@@ -118,8 +120,9 @@ export const BookingModal: React.FC<BookingModalProps> = ({ isOpen, onClose, ser
   }
 
   if (!isOpen) return null;
-  const fieldClass = "mt-2 w-full rounded-none border-2 border-black bg-white px-3 py-3 text-base font-sans font-medium text-neutral-900 placeholder:text-neutral-400 focus:border-emerald-500 focus:outline-none focus:shadow-[3px_3px_0_#10b981] dark:border-white dark:bg-neutral-950 dark:text-white";
-  const labelClass = "block font-mono text-[11px] font-bold uppercase tracking-wider text-neutral-900 dark:text-white";
+  const fieldClass = "mt-2 w-full rounded-none border-2 border-black bg-white px-3 py-3 text-base font-sans font-medium text-neutral-900 placeholder:text-neutral-500 focus:border-emerald-500 focus:outline-none focus:shadow-[3px_3px_0_#10b981] dark:border-white dark:bg-neutral-950 dark:text-white";
+  const labelClass = "block font-mono text-xs font-bold uppercase tracking-wider text-neutral-900 dark:text-white";
+  const optionalTag = <span className="font-normal text-neutral-500 dark:text-neutral-400">optional</span>;
 
   return createPortal(
     <div
@@ -134,25 +137,28 @@ export const BookingModal: React.FC<BookingModalProps> = ({ isOpen, onClose, ser
           <div className="p-5 sm:p-7">
             <div className="mb-5 flex items-start justify-between gap-4">
               <div>
-                <span className="mb-3 inline-block -rotate-1 bg-black px-2 py-1 font-mono text-[10px] font-bold uppercase tracking-widest text-white dark:bg-white dark:text-black">Free consultation</span>
+                <span className="mb-3 inline-block -rotate-1 bg-black px-2 py-1 font-mono text-xs font-bold uppercase tracking-widest text-white dark:bg-white dark:text-black">Free consultation</span>
                 <h2 id="booking-title" className="font-sans text-3xl font-extrabold tracking-tight text-neutral-900 dark:text-white">Tell us what you need.</h2>
                 <p id="booking-desc" className="mt-2 max-w-xl font-sans text-sm leading-relaxed text-neutral-600 dark:text-neutral-400">We save your enquiry securely first, then continue the conversation on WhatsApp.</p>
               </div>
-              <button type="button" onClick={onClose} disabled={isSubmitting} aria-label="Close" className="grid h-10 w-10 shrink-0 place-items-center border-2 border-black bg-white text-2xl text-black disabled:opacity-50 dark:border-white dark:bg-neutral-900 dark:text-white">×</button>
+              <button type="button" onClick={onClose} disabled={isSubmitting} aria-label="Close" className="grid h-11 w-11 shrink-0 place-items-center border-2 border-black bg-white text-2xl text-black disabled:opacity-50 dark:border-white dark:bg-neutral-900 dark:text-white">×</button>
             </div>
-            {service && <div className="mb-5 inline-flex border-2 border-black bg-emerald-300 px-3 py-1.5 font-mono text-[11px] font-bold uppercase text-black dark:border-white"><span className="mr-1 opacity-60">About:</span>{service}</div>}
+            {service && <div className="mb-5 inline-flex border-2 border-black bg-emerald-300 px-3 py-1.5 font-mono text-xs font-bold uppercase text-black dark:border-white"><span className="mr-1 opacity-60">About:</span>{service}</div>}
             <form onSubmit={handleSubmit}>
               <div className="grid gap-4 sm:grid-cols-2">
                 <label className={labelClass}>Your name *<input ref={firstFieldRef} required minLength={2} maxLength={100} autoComplete="name" value={form.fullName} onChange={(event) => updateField("fullName", event.target.value)} className={fieldClass} placeholder="Aina" /></label>
-                <label className={labelClass}>Business name <span className="font-normal text-neutral-400">optional</span><input maxLength={120} autoComplete="organization" value={form.businessName} onChange={(event) => updateField("businessName", event.target.value)} className={fieldClass} placeholder="ABC Dental" /></label>
                 <label className={labelClass}>WhatsApp number *<input required minLength={7} maxLength={30} type="tel" autoComplete="tel" value={form.whatsapp} onChange={(event) => updateField("whatsapp", event.target.value)} className={fieldClass} placeholder="+60 12-345 6789" /></label>
-                <label className={labelClass}>Email <span className="font-normal text-neutral-400">optional</span><input maxLength={160} type="email" autoComplete="email" value={form.email} onChange={(event) => updateField("email", event.target.value)} className={fieldClass} placeholder="you@company.com" /></label>
-                <label className={labelClass}>Budget <span className="font-normal text-neutral-400">optional</span><select value={form.budget} onChange={(event) => updateField("budget", event.target.value as BudgetBand | "")} className={fieldClass}><option value="">Select a range</option>{budgetBands.map((budget) => <option key={budget} value={budget}>{budgetLabels[budget]}</option>)}</select></label>
-                <label className={labelClass}>Timeline <span className="font-normal text-neutral-400">optional</span><select value={form.timeline} onChange={(event) => updateField("timeline", event.target.value as TimelineBand | "")} className={fieldClass}><option value="">Select a timeline</option>{timelineBands.map((timeline) => <option key={timeline} value={timeline}>{timelineLabels[timeline]}</option>)}</select></label>
-                <label className={`${labelClass} sm:col-span-2`}>What does your business need? *<textarea required minLength={15} maxLength={4000} rows={4} value={form.enquiry} onChange={(event) => updateField("enquiry", event.target.value)} className={`${fieldClass} resize-y`} placeholder="We run a dental clinic in Shah Alam and need a website that brings in bookings." /></label>
+                <label className={`${labelClass} sm:col-span-2`}>What does your business need? *<textarea required minLength={15} maxLength={4000} rows={3} value={form.enquiry} onChange={(event) => updateField("enquiry", event.target.value)} className={`${fieldClass} resize-y`} placeholder="We run a dental clinic in Shah Alam and need a website that brings in bookings." /></label>
+                {!showOptional && <button type="button" onClick={() => setShowOptional(true)} aria-expanded="false" aria-controls="booking-optional" className="flex min-h-11 items-center justify-self-start font-sans text-sm font-bold text-neutral-800 underline underline-offset-4 dark:text-neutral-200 sm:hidden">+ Add more details (optional)</button>}
+                <div id="booking-optional" className={`${showOptional ? "grid" : "hidden sm:grid"} gap-4 sm:col-span-2 sm:grid-cols-2`}>
+                  <label className={labelClass}>Business name {optionalTag}<input maxLength={120} autoComplete="organization" value={form.businessName} onChange={(event) => updateField("businessName", event.target.value)} className={fieldClass} placeholder="ABC Dental" /></label>
+                  <label className={labelClass}>Email {optionalTag}<input maxLength={160} type="email" autoComplete="email" value={form.email} onChange={(event) => updateField("email", event.target.value)} className={fieldClass} placeholder="you@company.com" /></label>
+                  <label className={labelClass}>Budget {optionalTag}<select value={form.budget} onChange={(event) => updateField("budget", event.target.value as BudgetBand | "")} className={fieldClass}><option value="">Select a range</option>{budgetBands.map((budget) => <option key={budget} value={budget}>{budgetLabels[budget]}</option>)}</select></label>
+                  <label className={labelClass}>Timeline {optionalTag}<select value={form.timeline} onChange={(event) => updateField("timeline", event.target.value as TimelineBand | "")} className={fieldClass}><option value="">Select a timeline</option>{timelineBands.map((timeline) => <option key={timeline} value={timeline}>{timelineLabels[timeline]}</option>)}</select></label>
+                </div>
               </div>
               <label className="sr-only" aria-hidden="true">Company website<input tabIndex={-1} autoComplete="off" value={form.companyWebsite} onChange={(event) => updateField("companyWebsite", event.target.value)} /></label>
-              <label className="mt-4 flex cursor-pointer items-start gap-3 font-sans text-xs leading-relaxed text-neutral-600 dark:text-neutral-400"><input required type="checkbox" checked={form.consent} onChange={(event) => updateField("consent", event.target.checked)} className="mt-0.5 h-4 w-4 accent-emerald-600" /><span>I agree that IIDev Studio may use these details to understand my enquiry and contact me. <a href="/privacy" target="_blank" className="font-bold text-emerald-700 underline dark:text-emerald-400">Privacy notice</a>.</span></label>
+              <label className="mt-4 flex cursor-pointer items-start gap-3 font-sans text-xs leading-relaxed text-neutral-600 dark:text-neutral-400"><input required type="checkbox" checked={form.consent} onChange={(event) => updateField("consent", event.target.checked)} className="mt-0.5 h-5 w-5 shrink-0 accent-emerald-600" /><span>I agree that IIDev Studio may use these details to understand my enquiry and contact me. <a href="/privacy" target="_blank" className="font-bold text-emerald-700 underline dark:text-emerald-400">Privacy notice</a>.</span></label>
               {error && <div role="alert" className="mt-4 flex gap-2 border border-red-300 bg-red-50 p-3 font-sans text-sm text-red-800 dark:border-red-900 dark:bg-red-950 dark:text-red-200"><AlertCircle className="mt-0.5 h-4 w-4 shrink-0" />{error}</div>}
               <button type="submit" disabled={isSubmitting} className="mt-5 flex w-full items-center justify-center gap-2 border-2 border-black bg-emerald-500 px-5 py-4 font-mono text-sm font-bold uppercase text-black shadow-[4px_4px_0_#000] transition hover:bg-emerald-400 disabled:cursor-wait disabled:opacity-70 dark:border-white dark:shadow-[4px_4px_0_#fff]">
                 {isSubmitting ? <><Loader2 className="h-5 w-5 animate-spin" />Saving securely…</> : <><WhatsAppIcon size={20} />Save & continue on WhatsApp</>}

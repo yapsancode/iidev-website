@@ -7,6 +7,8 @@ import Footer from "@/components/sections/Footer";
 import Team from "@/components/sections/Team";
 import { BookingButton } from "@/components/modal/BookingButton";
 import { ORGANIZATION_ID, SITE_URL, absoluteUrl } from "@/lib/site-config";
+import { BADGE, CARD_WHITE, PRIMARY_BUTTON } from "@/lib/styles";
+import { cn } from "@/lib/utils";
 
 export const metadata: Metadata = {
   title: "About — A Founder-Led Web & SEO Studio in Malaysia",
@@ -75,12 +77,10 @@ export default function AboutPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
       <Navbar />
-      <main className="grow bg-[#FAFAFA] dark:bg-neutral-900">
+      <main id="main" className="grow bg-[#FAFAFA] dark:bg-neutral-900">
         {/* Intro */}
         <div className="max-w-3xl mx-auto px-6 pt-36 pb-16">
-          <p className="text-xs font-bold uppercase tracking-widest text-neutral-400 mb-4">
-            About us
-          </p>
+          <div className={cn(BADGE, "mb-6")}>About us</div>
           <h1 className="text-5xl md:text-6xl font-bold tracking-tight text-neutral-900 dark:text-white mb-8">
             About IIDev Studio
           </h1>
@@ -115,7 +115,7 @@ export default function AboutPage() {
           </p>
           <Link
             href="/services"
-            className="inline-flex items-center gap-2 text-sm font-bold text-indigo-600 hover:text-indigo-500 dark:text-indigo-400 transition-colors"
+            className="inline-flex min-h-11 items-center gap-2 text-sm font-bold text-indigo-600 hover:text-indigo-500 dark:text-indigo-400 transition-colors"
           >
             See how we can help
             <ArrowRight className="h-4 w-4" />
@@ -127,10 +127,10 @@ export default function AboutPage() {
           <h2 className="text-3xl font-bold tracking-tight text-neutral-900 dark:text-white mb-6">
             What we believe
           </h2>
-          <ul className="space-y-4">
+          <ul className={cn(CARD_WHITE, "space-y-4 p-6 md:p-8")}>
             {beliefs.map((item) => (
               <li key={item} className="flex items-start gap-3">
-                <Check className="h-5 w-5 text-indigo-500 mt-0.5 shrink-0" />
+                <Check className="h-5 w-5 text-emerald-600 dark:text-emerald-400 mt-0.5 shrink-0" aria-hidden="true" />
                 <span className="text-neutral-700 dark:text-neutral-300 leading-relaxed">
                   {item}
                 </span>
@@ -156,7 +156,7 @@ export default function AboutPage() {
         <Team />
 
         {/* CTA */}
-        <div className="max-w-3xl mx-auto px-6 py-24">
+        <div className="max-w-3xl mx-auto px-6 pt-4 pb-24">
           <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-neutral-900 dark:text-white mb-4">
             Let&apos;s see if we&apos;re a fit.
           </h2>
@@ -165,12 +165,12 @@ export default function AboutPage() {
             straight conversation about your business and whether we can help.
           </p>
           <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
-            <BookingButton className="bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-3 px-8 rounded-none border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all font-mono text-sm uppercase">
+            <BookingButton className={PRIMARY_BUTTON}>
               Book a Free Call
             </BookingButton>
             <Link
               href="/#faq"
-              className="text-sm text-neutral-500 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white transition-colors"
+              className="inline-flex min-h-11 items-center text-sm text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white transition-colors"
             >
               Got questions first? Read the FAQ →
             </Link>

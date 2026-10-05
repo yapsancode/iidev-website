@@ -1,12 +1,9 @@
-"use client";
-
-import { motion, useReducedMotion } from "framer-motion";
-
 /**
  * Re-mounts on every navigation into (and within) /services, so this entrance
  * animation runs each time the user enters a services page.
  *
- * Intentionally opacity-only: transform/filter/blur would make this wrapper the
+ * CSS-only on purpose: the server HTML is never hidden while JavaScript loads.
+ * Opacity-only as well: transform/filter/blur would make this wrapper the
  * containing block for the `position: fixed` Navbar and break its scroll behavior.
  */
 export default function ServicesTemplate({
@@ -14,15 +11,9 @@ export default function ServicesTemplate({
 }: {
   children: React.ReactNode;
 }) {
-  const reduceMotion = useReducedMotion();
-
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: reduceMotion ? 0 : 0.45, ease: [0.22, 1, 0.36, 1] }}
-    >
+    <div className="animate-[menu-fade-in_0.45s_cubic-bezier(0.22,1,0.36,1)_both] motion-reduce:animate-none">
       {children}
-    </motion.div>
+    </div>
   );
 }

@@ -7,6 +7,14 @@ import Footer from "@/components/sections/Footer";
 import { BookingButton } from "@/components/modal/BookingButton";
 import { PriceReveal } from "@/components/ui/PriceReveal";
 import { ORGANIZATION_ID, SITE_URL, absoluteUrl } from "@/lib/site-config";
+import {
+  BADGE,
+  CARD_ACCENT,
+  CARD_WHITE,
+  LABEL,
+  PRIMARY_BUTTON,
+} from "@/lib/styles";
+import { cn } from "@/lib/utils";
 
 export const metadata: Metadata = {
   title: "Web Presence — Get Your Business Online Properly (RM 1k–3k)",
@@ -68,39 +76,46 @@ export default function WebPresencePage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
       <Navbar />
-      <main className="grow bg-[#FAFAFA] dark:bg-neutral-900">
+      <main id="main" className="grow bg-[#FAFAFA] dark:bg-neutral-900">
         <div className="max-w-3xl mx-auto px-6 pt-36 pb-24">
           {/* Back */}
           <Link
             href="/services"
-            className="inline-flex items-center gap-2 text-sm text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-200 transition-colors mb-12"
+            className="inline-flex min-h-11 items-center gap-2 text-sm text-neutral-600 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-neutral-200 transition-colors mb-6"
           >
             <ArrowLeft className="h-4 w-4" />
             All services
           </Link>
 
           {/* Header */}
-          <PriceReveal className="text-xs font-bold uppercase tracking-widest text-neutral-400 mb-4">
+          <PriceReveal className={cn(BADGE, "mb-5 flex w-fit text-sm")}>
             One-time · RM 1,000 – 3,000
           </PriceReveal>
           <h1 className="text-5xl md:text-6xl font-bold tracking-tight text-neutral-900 dark:text-white mb-6">
             Web Presence
           </h1>
-          <p className="text-neutral-500 dark:text-neutral-400 text-lg leading-relaxed mb-16 max-w-xl">
+          <p className="text-neutral-600 dark:text-neutral-400 text-lg leading-relaxed mb-8 max-w-xl">
             You don't have a website yet — or the one you have makes you look
             like you closed two years ago. This gets you online properly, so
             customers stop second-guessing whether your business is real.
           </p>
 
-          {/* Outcomes */}
+          {/* Early CTA — visitors who are already convinced don't have to scroll */}
           <div className="mb-16">
-            <h2 className="text-sm font-bold uppercase tracking-widest text-neutral-400 mb-6">
+            <BookingButton service="Web Presence" className={PRIMARY_BUTTON}>
+              Book a Free Call
+            </BookingButton>
+          </div>
+
+          {/* Outcomes */}
+          <div className={cn(CARD_WHITE, "mb-16 p-6 md:p-8")}>
+            <h2 className={cn(LABEL, "mb-6 text-neutral-600 dark:text-neutral-300")}>
               What you get
             </h2>
             <ul className="space-y-4">
               {outcomes.map((item) => (
                 <li key={item} className="flex items-start gap-3">
-                  <Check className="h-5 w-5 text-indigo-500 mt-0.5 shrink-0" />
+                  <Check className="h-5 w-5 text-emerald-600 dark:text-emerald-400 mt-0.5 shrink-0" aria-hidden="true" />
                   <span className="text-neutral-700 dark:text-neutral-300 leading-relaxed">
                     {item}
                   </span>
@@ -110,11 +125,11 @@ export default function WebPresencePage() {
           </div>
 
           {/* Right fit */}
-          <div className="bg-neutral-100 dark:bg-neutral-800 rounded-xl p-6 mb-16">
-            <h2 className="font-bold text-neutral-900 dark:text-white mb-2">
+          <div className={cn(CARD_ACCENT, "mb-16 p-6 md:p-8")}>
+            <h2 className="font-bold mb-2">
               This is the right fit if:
             </h2>
-            <p className="text-neutral-600 dark:text-neutral-400 leading-relaxed">
+            <p className="text-black/80 leading-relaxed">
               You're a new business, a clinic, a restaurant, or a service
               provider who needs a professional online home — something you can
               confidently send customers to. You're not chasing page-one Google
@@ -124,11 +139,11 @@ export default function WebPresencePage() {
 
           {/* CTA */}
           <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
-            <BookingButton service="Web Presence" className="bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-3 px-8 rounded-none border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all font-mono text-sm uppercase">
+            <BookingButton service="Web Presence" className={PRIMARY_BUTTON}>
               Book a Free Call
             </BookingButton>
-            <p className="text-sm text-neutral-400">
-              30 minutes. No pitch. Just clarity on whether this is the right
+            <p className="text-sm text-neutral-600 dark:text-neutral-400">
+              15 minutes. No pitch. Just clarity on whether this is the right
               move for you.
             </p>
           </div>

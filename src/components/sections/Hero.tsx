@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { BADGE, PRIMARY_BUTTON } from "@/lib/styles";
 import { cn } from "@/lib/utils";
 import { BookingButton } from "@/components/modal/BookingButton";
 import AnimatedHeadline from "@/components/ui/AnimatedHeadline";
@@ -13,10 +14,7 @@ const HEADLINE_PHRASES = [
 
 export function Hero() {
   return (
-    <section
-      id="home"
-      className="relative min-h-svh w-full overflow-hidden bg-[#FAFAFA] dark:bg-neutral-900"
-    >
+    <div className="relative min-h-svh w-full overflow-hidden bg-[#FAFAFA] dark:bg-neutral-900">
       <div className="pointer-events-none absolute inset-0 z-0 bg-[radial-gradient(circle_at_50%_20%,rgba(99,102,241,0.12),transparent_45%)] dark:bg-[radial-gradient(circle_at_50%_20%,rgba(99,102,241,0.18),transparent_45%)]" />
       <WaveCanvas className="opacity-60" />
 
@@ -24,20 +22,11 @@ export function Hero() {
         <div className="absolute h-full w-full bg-size-[50px_50px] mask-[radial-gradient(ellipse_80%_50%_at_50%_0%,#000_70%,transparent_110%)] bg-[linear-gradient(to_right,rgba(128,128,128,0.1)_1px,transparent_1px),linear-gradient(to_bottom,rgba(128,128,128,0.1)_1px,transparent_1px)] dark:bg-[linear-gradient(to_right,rgba(255,255,255,0.05)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.05)_1px,transparent_1px)]" />
       </div>
 
-      <div className="relative z-10 flex min-h-svh flex-col items-center justify-center px-4 pt-20">
+      <div className="relative z-10 flex min-h-svh flex-col items-center justify-center px-4 pt-24 md:pt-20">
         <div className="flex w-full max-w-5xl flex-col items-center text-center">
           {/* Status Badge */}
           <div className="mb-8 md:animate-[hero-fade-up_0.8s_ease-out_both] motion-reduce:animate-none">
-            <div
-              className={cn(
-                "relative inline-flex -rotate-1 items-center gap-2 rounded-none",
-                "border-2 border-black bg-white",
-                "dark:border-white dark:bg-neutral-900",
-                "px-3.5 py-1.5 font-mono text-[11px] font-bold uppercase tracking-widest",
-                "text-black dark:text-white",
-                "shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] dark:shadow-[3px_3px_0px_0px_rgba(255,255,255,1)]",
-              )}
-            >
+            <div className={cn(BADGE, "relative gap-2")}>
               <span className="relative flex h-2 w-2">
                 <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-500 opacity-75 motion-reduce:hidden"></span>
                 <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500"></span>
@@ -60,7 +49,10 @@ export function Hero() {
               <AnimatedHeadline
                 brandLine={BRAND_LINE}
                 phrases={HEADLINE_PHRASES}
-                className="text-6xl font-extrabold leading-[1.1] tracking-tight text-black dark:text-white md:text-8xl"
+                // On phones the size follows the screen width (about 41px on a
+                // 375px phone, capped at 60px). That keeps the buttons below on
+                // screen and makes the line breaks the same on every phone.
+                className="text-[length:min(calc((100vw-2rem)*0.12),3.75rem)] font-extrabold leading-[1.1] tracking-tight text-black dark:text-white md:text-8xl"
               />
             </div>
           </div>
@@ -87,9 +79,7 @@ export function Hero() {
           </p>
 
           <div className="flex flex-col gap-6 sm:flex-row items-center md:animate-[hero-fade-up_0.8s_0.8s_ease-out_both] motion-reduce:animate-none">
-            <BookingButton
-              className="bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-3 px-8 rounded-none border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all font-mono text-sm uppercase"
-            >
+            <BookingButton className={PRIMARY_BUTTON}>
               Book a Free Call
             </BookingButton>
 
@@ -105,6 +95,6 @@ export function Hero() {
           </div>
         </div>
       </div>
-    </section>
+    </div>
   );
 }

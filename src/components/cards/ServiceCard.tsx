@@ -1,34 +1,36 @@
-"use client";
-import * as React from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { cva, type VariantProps } from "class-variance-authority";
-import { motion, type Variants } from "framer-motion";
 import { ArrowRight } from "lucide-react";
+import {
+  CARD_ACCENT,
+  CARD_DARK,
+  CARD_HOVER,
+  CARD_WHITE,
+  LABEL,
+} from "@/lib/styles";
 import { cn } from "@/lib/utils";
 
 const cardVariants = cva(
-  "relative flex flex-col justify-between w-full p-8 overflow-hidden rounded-xl shadow-sm transition-shadow duration-300 ease-in-out group hover:shadow-lg min-h-[280px]",
+  cn(
+    "group relative flex min-h-[280px] w-full flex-col justify-between overflow-hidden p-8",
+    CARD_HOVER,
+  ),
   {
     variants: {
       variant: {
-        default: "bg-card text-card-foreground",
-        blue: "bg-blue-500/90 text-white",
-        gray: "bg-secondary text-secondary-foreground",
-        dark: "bg-neutral-900 text-white dark:bg-neutral-800",
+        light: CARD_WHITE,
+        accent: CARD_ACCENT,
+        dark: CARD_DARK,
       },
     },
     defaultVariants: {
-      variant: "default",
+      variant: "light",
     },
   }
 );
 
-export interface ServiceCardProps
-  extends Omit<
-      React.HTMLAttributes<HTMLDivElement>,
-      "onAnimationStart" | "onDrag" | "onDragStart" | "onDragEnd"
-    >,
-    VariantProps<typeof cardVariants> {
+export interface ServiceCardProps extends VariantProps<typeof cardVariants> {
   title: string;
   href: string;
   price: string;
@@ -37,112 +39,55 @@ export interface ServiceCardProps
   imgSrc?: string;
   imgAlt?: string;
   imgClassName?: string;
-  /** Position in the grid, used to stagger the entrance animation. */
-  index?: number;
+  className?: string;
 }
 
-const cardAnimation: Variants = {
-  hidden: { opacity: 0, y: 24 },
-  visible: (i: number = 0) => ({
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.5, delay: i * 0.1, ease: [0.22, 1, 0.36, 1] },
-  }),
-  hover: { scale: 1.02, transition: { duration: 0.3 } },
-};
+// The whole card is one link, so it can be tapped anywhere.
+export function ServiceCard({
+  className,
+  variant,
+  title,
+  href,
+  price,
+  target,
+  description,
+  imgSrc,
+  imgAlt,
+  imgClassName,
+}: ServiceCardProps) {
+  return (
+    <Link href={href} className={cn(cardVariants({ variant }), className)}>
+      <div className="relative z-10 flex h-full flex-col gap-3">
+        <p className={cn(LABEL, "opacity-80")}>{target}</p>
+        <h3 className="text-2xl font-bold tracking-tight">{title}</h3>
+        <p className="text-sm leading-relaxed opacity-90">{description}</p>
+        <p className="mt-1 text-xl font-bold">{price}</p>
 
-const imageAnimation: Variants = {
-  hover: {
-    scale: 1.1,
-    rotate: 3,
-    x: 10,
-    transition: { duration: 0.4, ease: "easeInOut" },
-  },
-};
+        <span className={cn(LABEL, "mt-auto flex items-center pt-4 group-hover:underline")}>
+          See what you get
+          <ArrowRight
+            className="ml-2 h-4 w-4 transition-transform duration-300 group-hover:translate-x-1 motion-reduce:transition-none"
+            aria-hidden="true"
+          />
+        </span>
+      </div>
 
-const arrowAnimation: Variants = {
-  hover: {
-    x: 5,
-    transition: {
-      duration: 0.3,
-      ease: "easeInOut",
-      repeat: Infinity,
-      repeatType: "reverse" as const,
-    },
-  },
-};
-
-const ServiceCard = React.forwardRef<HTMLDivElement, ServiceCardProps>(
-  (
-    {
-      className,
-      variant,
-      title,
-      href,
-      price,
-      target,
-      description,
-      imgSrc,
-      imgAlt,
-      imgClassName,
-      index = 0,
-      ...props
-    },
-    ref
-  ) => {
-    return (
-      <motion.div
-        className={cn(cardVariants({ variant, className }))}
-        ref={ref}
-        variants={cardAnimation}
-        custom={index}
-        initial="hidden"
-        whileInView="visible"
-        whileHover="hover"
-        viewport={{ once: true, margin: "-40px" }}
-        {...props}
-      >
-        <div className="relative z-10 flex flex-col h-full gap-3">
-          <p className="text-xs font-bold uppercase tracking-widest opacity-60">
-            {target}
-          </p>
-          <h3 className="text-2xl font-bold tracking-tight">{title}</h3>
-          <p className="text-sm opacity-75 leading-relaxed">{description}</p>
-          <p className="text-xl font-bold mt-1">{price}</p>
-
-          <a
-            href={href}
-            aria-label={`Learn more about ${title}`}
-            className="mt-auto pt-4 flex items-center text-sm font-semibold group-hover:underline"
-          >
-            SEE WHAT YOU GET
-            <motion.div variants={arrowAnimation}>
-              <ArrowRight className="ml-2 h-4 w-4" />
-            </motion.div>
-          </a>
+      {imgSrc && (
+        <div
+          className={cn(
+            "absolute transition-transform duration-500 ease-in-out group-hover:translate-x-2 group-hover:rotate-3 group-hover:scale-110 motion-reduce:transition-none",
+            imgClassName ?? "-right-8 -bottom-8 h-40 w-40"
+          )}
+        >
+          <Image
+            src={imgSrc}
+            alt={imgAlt ?? title}
+            fill
+            sizes="160px"
+            className="object-contain opacity-90 group-hover:opacity-100"
+          />
         </div>
-
-        {imgSrc && (
-          <motion.div
-            className={cn(
-              "absolute",
-              imgClassName ?? "-right-8 -bottom-8 w-40 h-40"
-            )}
-            variants={imageAnimation}
-          >
-            <Image
-              src={imgSrc}
-              alt={imgAlt ?? title}
-              fill
-              sizes="160px"
-              className="object-contain opacity-90 group-hover:opacity-100"
-            />
-          </motion.div>
-        )}
-      </motion.div>
-    );
-  }
-);
-
-ServiceCard.displayName = "ServiceCard";
-export { ServiceCard };
+      )}
+    </Link>
+  );
+}

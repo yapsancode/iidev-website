@@ -1,4 +1,6 @@
 import { Code2, FileText, Phone, Rocket, type LucideIcon } from "lucide-react";
+import { BADGE } from "@/lib/styles";
+import { cn } from "@/lib/utils";
 
 interface ProcessStep {
   number: string;
@@ -46,7 +48,7 @@ export default function ProcessTimeline() {
     >
       <div className="mx-auto max-w-6xl">
         <div className="mb-10 max-w-3xl md:mb-16">
-          <div className="mb-4 inline-flex -rotate-1 items-center border-2 border-black bg-white px-3.5 py-1.5 font-mono text-[11px] font-bold uppercase tracking-widest text-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] dark:border-white dark:bg-neutral-900 dark:text-white dark:shadow-[3px_3px_0px_0px_rgba(255,255,255,1)] md:mb-6">
+          <div className={cn(BADGE, "mb-4 md:mb-6")}>
             Our process
           </div>
           <h2

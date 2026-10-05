@@ -1,10 +1,9 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { useReducedMotion } from "framer-motion";
+import { useMediaQuery } from "@/hooks/use-media-query";
 
 const EMERALD = "#10b981";
-const DEFAULT_COLOR = "#a3a3a3"; // neutral-400 — the resting eyebrow colour
 const GLOW =
   "0 0 14px rgba(16,185,129,0.85), 0 0 28px rgba(16,185,129,0.45)";
 const SCRAMBLE_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789#@$%&*";
@@ -22,14 +21,14 @@ interface PriceRevealProps {
 /**
  * Glitch-scrambles the price in on entry: characters flicker through random
  * glyphs in glowing emerald, lock in left-to-right, then the whole line settles
- * to the default muted colour.
+ * to the text colour set by `className`.
  *
  * - An invisible sizer reserves the final width, so scrambling never shifts layout.
  * - The animated text is aria-hidden; the real price is exposed via an sr-only node.
  * - Falls back to static text under prefers-reduced-motion.
  */
 export function PriceReveal({ children, className }: PriceRevealProps) {
-  const reduceMotion = useReducedMotion();
+  const reduceMotion = useMediaQuery("(prefers-reduced-motion: reduce)");
   const text = String(children).trim();
   const [display, setDisplay] = useState(text);
   const [resolved, setResolved] = useState(false);
@@ -76,7 +75,7 @@ export function PriceReveal({ children, className }: PriceRevealProps) {
         <span
           className="absolute left-0 top-0"
           style={{
-            color: isResolved ? DEFAULT_COLOR : EMERALD,
+            color: isResolved ? undefined : EMERALD,
             textShadow: isResolved ? "none" : GLOW,
             transition: "color 1s ease, text-shadow 1s ease",
             fontVariantNumeric: "tabular-nums",
