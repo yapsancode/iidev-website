@@ -12,6 +12,12 @@ interface TrailNode {
   y: number;
   vx: number;
   vy: number;
+  // Position before the latest physics step, and the blended position that
+  // is actually drawn this frame.
+  prevX: number;
+  prevY: number;
+  drawX: number;
+  drawY: number;
 }
 
 interface Trail {
@@ -20,8 +26,17 @@ interface Trail {
   nodes: TrailNode[];
 }
 
-const FRAME_INTERVAL_MS = 1_000 / 30;
+// The trail physics advance 30 times a second on every device, so the wave
+// has the same shape and speed everywhere. Drawing happens on every screen
+// frame and blends between the last two physics steps, which keeps the motion
+// smooth on 60Hz and 144Hz screens alike. Raise SIMULATION_HZ to make the
+// trails follow the pointer more tightly.
+const SIMULATION_HZ = 30;
+const STEP_MS = 1_000 / SIMULATION_HZ;
+const MAX_STEPS_PER_FRAME = 4;
 const BURST_DECAY_MS = 900;
+const SETTLE_EPSILON = 0.01;
+const CLEAR_PADDING = 2;
 const DESKTOP_TRAILS = 12;
 const DESKTOP_NODES = 36;
 const MOBILE_TRAILS = 6;
@@ -41,12 +56,21 @@ export function WaveCanvas({ className }: WaveCanvasProps) {
     let isIntersecting = true;
     let pageVisible = document.visibilityState === "visible";
     let animationFrameId: number | null = null;
-    let frameTimerId: number | null = null;
     let activeUntil = 0;
+    let lastFrameTime = 0;
+    let pendingTime = 0;
+    let inMotion = false;
+    let dpr = 1;
     let canvasWidth = 0;
     let canvasHeight = 0;
+    // Where the canvas sits in the page. Cached so pointer events don't have
+    // to measure layout on every mouse move.
+    let originX = 0;
+    let originY = 0;
     let trails: Trail[] = [];
     const pointer = { x: 0, y: 0 };
+    // The area painted by the last frame — the only part that needs clearing.
+    const painted = { minX: 0, minY: 0, maxX: 0, maxY: 0, any: false };
 
     const canAnimate = () =>
       isIntersecting && pageVisible && !reducedMotion.matches;
@@ -54,10 +78,8 @@ export function WaveCanvas({ className }: WaveCanvasProps) {
     const clearCanvas = () => {
       context.setTransform(1, 0, 0, 1, 0, 0);
       context.clearRect(0, 0, canvas.width, canvas.height);
-      const dpr = coarsePointer.matches
-        ? 1
-        : Math.min(window.devicePixelRatio || 1, 1.5);
       context.setTransform(dpr, 0, 0, dpr, 0, 0);
+      painted.any = false;
     };
 
     const stopAnimation = (clear = true) => {
@@ -65,17 +87,20 @@ export function WaveCanvas({ className }: WaveCanvasProps) {
         window.cancelAnimationFrame(animationFrameId);
         animationFrameId = null;
       }
-      if (frameTimerId !== null) {
-        window.clearTimeout(frameTimerId);
-        frameTimerId = null;
-      }
       activeUntil = 0;
       if (clear) clearCanvas();
     };
 
-    const resizeCanvas = () => {
+    const measureOrigin = () => {
       const bounds = canvas.getBoundingClientRect();
-      const dpr = coarsePointer.matches
+      originX = bounds.left + window.scrollX;
+      originY = bounds.top + window.scrollY;
+      return bounds;
+    };
+
+    const resizeCanvas = () => {
+      const bounds = measureOrigin();
+      dpr = coarsePointer.matches
         ? 1
         : Math.min(window.devicePixelRatio || 1, 1.5);
 
@@ -95,31 +120,31 @@ export function WaveCanvas({ className }: WaveCanvasProps) {
       trails = Array.from({ length: trailCount }, (_, trailIndex) => ({
         spring: 0.42 + (trailIndex / trailCount) * 0.035,
         friction: 0.48 + (trailIndex % 3) * 0.004,
-        nodes: Array.from({ length: nodeCount }, (_, nodeIndex) => ({
-          x: pointer.x - nodeIndex * (coarsePointer.matches ? 1.2 : 0.8),
-          y: pointer.y + Math.sin(nodeIndex * 0.55 + trailIndex) * 4,
-          vx: 0,
-          vy: 0,
-        })),
+        nodes: Array.from({ length: nodeCount }, (_, nodeIndex) => {
+          const x = pointer.x - nodeIndex * (coarsePointer.matches ? 1.2 : 0.8);
+          const y = pointer.y + Math.sin(nodeIndex * 0.55 + trailIndex) * 4;
+          return { x, y, vx: 0, vy: 0, prevX: x, prevY: y, drawX: x, drawY: y };
+        }),
       }));
     };
 
-    const updateAndDraw = (timestamp: number) => {
-      context.globalCompositeOperation = "source-over";
-      context.clearRect(0, 0, canvasWidth, canvasHeight);
-      context.globalCompositeOperation = "lighter";
-      context.lineWidth = 1;
-      context.strokeStyle = `hsla(${Math.round(285 + Math.sin(timestamp * 0.0015) * 85)}, 100%, 50%, 0.15)`;
+    // Advances the physics by one step. Returns false once every node has
+    // come to rest, so the caller can skip redrawing an unchanged picture.
+    const stepTrails = () => {
+      let moved = false;
 
       for (const trail of trails) {
+        const nodes = trail.nodes;
         let spring = trail.spring;
 
-        for (let index = 0; index < trail.nodes.length; index += 1) {
-          const node = trail.nodes[index];
-          const previousNode = index > 0 ? trail.nodes[index - 1] : null;
-          const targetX = previousNode?.x ?? pointer.x;
-          const targetY = previousNode?.y ?? pointer.y;
+        for (let index = 0; index < nodes.length; index += 1) {
+          const node = nodes[index];
+          const previousNode = index > 0 ? nodes[index - 1] : null;
+          const targetX = previousNode ? previousNode.x : pointer.x;
+          const targetY = previousNode ? previousNode.y : pointer.y;
 
+          node.prevX = node.x;
+          node.prevY = node.y;
           node.vx += (targetX - node.x) * spring;
           node.vy += (targetY - node.y) * spring;
           if (previousNode) {
@@ -131,69 +156,134 @@ export function WaveCanvas({ className }: WaveCanvasProps) {
           node.x += node.vx;
           node.y += node.vy;
           spring *= 0.98;
+
+          if (Math.abs(node.vx) + Math.abs(node.vy) > SETTLE_EPSILON) {
+            moved = true;
+          }
+        }
+      }
+
+      return moved;
+    };
+
+    // `blend` is how far we are between the previous physics step (0) and the
+    // latest one (1).
+    const drawTrails = (timestamp: number, blend: number) => {
+      context.globalCompositeOperation = "source-over";
+      if (painted.any) {
+        context.clearRect(
+          painted.minX - CLEAR_PADDING,
+          painted.minY - CLEAR_PADDING,
+          painted.maxX - painted.minX + CLEAR_PADDING * 2,
+          painted.maxY - painted.minY + CLEAR_PADDING * 2,
+        );
+      }
+
+      context.globalCompositeOperation = "lighter";
+      context.lineWidth = 1;
+      context.strokeStyle = `hsla(${Math.round(285 + Math.sin(timestamp * 0.0015) * 85)}, 100%, 50%, 0.15)`;
+
+      let minX = Infinity;
+      let minY = Infinity;
+      let maxX = -Infinity;
+      let maxY = -Infinity;
+
+      for (const trail of trails) {
+        const nodes = trail.nodes;
+        const last = nodes.length - 1;
+
+        // Every curve stays inside the box around its nodes.
+        for (let index = 0; index <= last; index += 1) {
+          const node = nodes[index];
+          const x = node.prevX + (node.x - node.prevX) * blend;
+          const y = node.prevY + (node.y - node.prevY) * blend;
+          node.drawX = x;
+          node.drawY = y;
+          if (x < minX) minX = x;
+          if (x > maxX) maxX = x;
+          if (y < minY) minY = y;
+          if (y > maxY) maxY = y;
         }
 
-        const [first, ...remainingNodes] = trail.nodes;
         context.beginPath();
-        context.moveTo(first.x, first.y);
-        for (let index = 0; index < remainingNodes.length - 1; index += 1) {
-          const node = remainingNodes[index];
-          const next = remainingNodes[index + 1];
+        context.moveTo(nodes[0].drawX, nodes[0].drawY);
+        for (let index = 1; index < last; index += 1) {
+          const node = nodes[index];
+          const next = nodes[index + 1];
           context.quadraticCurveTo(
-            node.x,
-            node.y,
-            (node.x + next.x) * 0.5,
-            (node.y + next.y) * 0.5,
+            node.drawX,
+            node.drawY,
+            (node.drawX + next.drawX) * 0.5,
+            (node.drawY + next.drawY) * 0.5,
           );
         }
         context.stroke();
       }
+
+      painted.minX = minX;
+      painted.minY = minY;
+      painted.maxX = maxX;
+      painted.maxY = maxY;
+      painted.any = trails.length > 0;
     };
 
-    const scheduleFrame = (immediate = false) => {
-      if (
-        !canAnimate() ||
-        animationFrameId !== null ||
-        frameTimerId !== null
-      ) {
+    const renderFrame = (timestamp: number) => {
+      animationFrameId = null;
+      if (!canAnimate() || timestamp >= activeUntil) {
+        stopAnimation();
         return;
       }
 
-      const requestFrame = () => {
-        frameTimerId = null;
-        animationFrameId = window.requestAnimationFrame((timestamp) => {
-          animationFrameId = null;
-          if (!canAnimate() || timestamp >= activeUntil) {
-            stopAnimation();
-            return;
-          }
-          updateAndDraw(timestamp);
-          scheduleFrame();
-        });
-      };
+      // Turn elapsed time into whole physics steps. A burst starts with one
+      // step; a long pause is capped so the wave never fast-forwards.
+      pendingTime +=
+        lastFrameTime === 0
+          ? STEP_MS
+          : Math.min(timestamp - lastFrameTime, STEP_MS * MAX_STEPS_PER_FRAME);
+      lastFrameTime = timestamp;
 
-      if (immediate) requestFrame();
-      else frameTimerId = window.setTimeout(requestFrame, FRAME_INTERVAL_MS);
+      let stepped = false;
+      let moved = false;
+      while (pendingTime >= STEP_MS) {
+        if (stepTrails()) moved = true;
+        stepped = true;
+        pendingTime -= STEP_MS;
+      }
+      if (stepped) inMotion = moved;
+
+      // Once every node is at rest the picture no longer changes, so skip
+      // the redraw until the pointer moves again.
+      if (inMotion) drawTrails(timestamp, pendingTime / STEP_MS);
+
+      animationFrameId = window.requestAnimationFrame(renderFrame);
     };
 
     const handlePointer = (event: PointerEvent) => {
       if (!canAnimate()) return;
 
-      const bounds = canvas.getBoundingClientRect();
-      if (
-        event.clientX < bounds.left ||
-        event.clientX > bounds.right ||
-        event.clientY < bounds.top ||
-        event.clientY > bounds.bottom
-      ) {
-        return;
+      let x = event.pageX - originX;
+      let y = event.pageY - originY;
+      if (x < 0 || x > canvasWidth || y < 0 || y > canvasHeight) return;
+
+      const idle = animationFrameId === null;
+      if (idle) {
+        // One layout read when a burst starts, in case the page has shifted.
+        measureOrigin();
+        x = event.pageX - originX;
+        y = event.pageY - originY;
       }
 
-      pointer.x = event.clientX - bounds.left;
-      pointer.y = event.clientY - bounds.top;
+      pointer.x = x;
+      pointer.y = y;
       if (trails.length === 0) createTrails();
       activeUntil = performance.now() + BURST_DECAY_MS;
-      scheduleFrame(true);
+
+      if (idle) {
+        lastFrameTime = 0;
+        pendingTime = 0;
+        inMotion = false;
+        animationFrameId = window.requestAnimationFrame(renderFrame);
+      }
     };
 
     const handleVisibilityChange = () => {
