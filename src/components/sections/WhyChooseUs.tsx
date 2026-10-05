@@ -77,7 +77,10 @@ export default function WhyChooseUs() {
             id="why-us-heading"
             className="mb-6 text-4xl font-bold tracking-tight text-slate-900 dark:text-white md:text-5xl lg:text-6xl"
           >
-            Less agency. More ownership.
+            Less agency.{" "}
+            <span className="stamp inline-block [--stamp-scale:1.2] [--stamp-tilt:-3deg]">
+              More <span className="marker">ownership</span>.
+            </span>
           </h2>
           <p className="max-w-2xl text-lg leading-relaxed text-slate-600 dark:text-neutral-400 md:text-xl">
             You work directly with the people building your site—with clear

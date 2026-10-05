@@ -342,12 +342,42 @@ body.no-scroll {
 }
 
 /* Labels land like a rubber stamp: slightly too big and too tilted, then a
-   small squash before they settle. StampObserver sets data-stamp. */
+   small squash before they settle. StampObserver sets data-stamp. A big stamp
+   (a heading line) can set --stamp-scale and --stamp-tilt to start closer to
+   its resting size than a small label does. */
 @keyframes stamp-in {
   from {
     opacity: 0;
-    transform: scale(1.5) rotate(-8deg);
+    transform: scale(var(--stamp-scale, 1.5)) rotate(var(--stamp-tilt, -8deg));
   }
+}
+
+/* A highlighter stroke behind the lower part of a word. It is always there on
+   the static page; inside a stamp it wipes across just after the stamp lands. */
+.marker {
+  position: relative;
+  display: inline-block;
+  isolation: isolate;
+}
+
+.marker::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: auto -0.06em 0.06em;
+  height: 0.3em;
+  transform-origin: left;
+  @apply bg-emerald-300;
+}
+
+/* Darker in dark mode so the white letters on top stay easy to read. Written
+   out because the `dark:` variant cannot follow a pseudo-element. */
+.dark .marker::before {
+  @apply bg-emerald-600;
+}
+
+@keyframes marker-wipe {
+  from { transform: scaleX(0); }
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -359,6 +389,10 @@ body.no-scroll {
   .story-enquiry {
     animation: stamp-in 320ms
       linear(0, 0.12 15%, 0.5 32%, 1 46%, 1.1 56%, 1.04 68%, 0.985 82%, 1);
+  }
+
+  .stamp[data-stamp="in"] .marker::before {
+    animation: marker-wipe 300ms cubic-bezier(0.22, 1, 0.36, 1) 300ms backwards;
   }
 }
 
