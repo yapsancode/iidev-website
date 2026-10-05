@@ -1,4 +1,5 @@
 import { MetadataRoute } from "next";
+import { absoluteUrl } from "@/lib/site-config";
 
 export default function robots(): MetadataRoute.Robots {
   return {
@@ -7,6 +8,6 @@ export default function robots(): MetadataRoute.Robots {
       allow: "/",
       disallow: ["/internal", "/api/"],
     }],
-    sitemap: "https://iidevstudio.com/sitemap.xml",
+    sitemap: absoluteUrl("/sitemap.xml"),
   };
 }

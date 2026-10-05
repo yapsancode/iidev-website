@@ -8,6 +8,7 @@ import {
   type CSSProperties,
 } from "react";
 import { useMediaQuery } from "@/hooks/use-media-query";
+import { useMounted } from "@/hooks/use-mounted";
 import { cn } from "@/lib/utils";
 import {
   INITIAL_HEADLINE_STATE,
@@ -80,10 +81,11 @@ export default function AnimatedHeadline({
   phrases,
   className,
 }: AnimatedHeadlineProps) {
-  const headingRef = useRef<HTMLHeadingElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
   const [state, setState] = useState<HeadlineState>(INITIAL_HEADLINE_STATE);
   const [isIntersecting, setIsIntersecting] = useState(true);
   const [pageVisible, setPageVisible] = useState(true);
+  const mounted = useMounted();
   const reduceMotion = useMediaQuery("(prefers-reduced-motion: reduce)");
 
   const tallestLine = useMemo(
@@ -95,14 +97,14 @@ export default function AnimatedHeadline({
   );
 
   useEffect(() => {
-    const heading = headingRef.current;
-    if (!heading) return;
+    const container = containerRef.current;
+    if (!container) return;
 
     const observer = new IntersectionObserver(
       ([entry]) => setIsIntersecting(entry.isIntersecting),
       { threshold: 0.1 },
     );
-    observer.observe(heading);
+    observer.observe(container);
     return () => observer.disconnect();
   }, []);
 
@@ -116,7 +118,10 @@ export default function AnimatedHeadline({
       document.removeEventListener("visibilitychange", handleVisibilityChange);
   }, []);
 
-  const animationActive = isIntersecting && pageVisible && !reduceMotion;
+  // Server HTML and the first paint show the plain brand line; the slot reveal
+  // only starts once the client has hydrated.
+  const animationActive =
+    mounted && isIntersecting && pageVisible && !reduceMotion;
 
   useEffect(() => {
     if (!animationActive) return;
@@ -137,26 +142,26 @@ export default function AnimatedHeadline({
   const showBrandReturn = animationActive && state.phase === "brand-return";
 
   return (
-    <h1 ref={headingRef} className={cn("relative text-center", className)}>
-      <span className="sr-only">{brandLine}</span>
-      <span aria-hidden="true" className="invisible">
-        {tallestLine}
-      </span>
-      <span
-        aria-hidden="true"
-        className="absolute inset-0 flex items-center justify-center overflow-hidden"
-        data-headline-phase={reduceMotion ? "reduced-motion" : state.phase}
-      >
-        {showSlotReveal ? (
-          <SlotReveal text={brandLine} />
-        ) : showBrandReturn ? (
-          <span key="brand-return" className="hero-brand-return">
-            {brandLine}
-          </span>
-        ) : (
-          visibleText
-        )}
-      </span>
-    </h1>
+    <div ref={containerRef} className={cn("relative text-center", className)}>
+      {/* The real heading: brand line only, so crawlers never see animation markup. */}
+      <h1 className="sr-only">{brandLine}</h1>
+      <div aria-hidden="true">
+        <span className="invisible">{tallestLine}</span>
+        <span
+          className="absolute inset-0 flex items-center justify-center overflow-hidden"
+          data-headline-phase={reduceMotion ? "reduced-motion" : state.phase}
+        >
+          {showSlotReveal ? (
+            <SlotReveal text={brandLine} />
+          ) : showBrandReturn ? (
+            <span key="brand-return" className="hero-brand-return">
+              {brandLine}
+            </span>
+          ) : (
+            visibleText
+          )}
+        </span>
+      </div>
+    </div>
   );
 }

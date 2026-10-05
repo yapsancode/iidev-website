@@ -2,6 +2,14 @@ import type { Metadata } from "next";
 import { Inter, Pixelify_Sans } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
+import {
+  BRAND_NAME,
+  CONTACT_EMAIL,
+  ORGANIZATION_ID,
+  SITE_URL,
+  WHATSAPP_DISPLAY,
+  absoluteUrl,
+} from "@/lib/site-config";
 // import { ThemeProvider } from "@/components/theme-provider";
 import { ThemeProvider } from "@wrksz/themes/next"
 
@@ -14,11 +22,11 @@ const pixelify = Pixelify_Sans({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://iidevstudio.com"),
+  metadataBase: new URL(SITE_URL),
   manifest: "/manifest.webmanifest",
   title: {
-    default: "IIDev Studio | Web Design & SEO for Malaysian Businesses",
-    template: "%s | IIDev Studio",
+    default: `${BRAND_NAME} | Web Design & SEO for Malaysian Businesses`,
+    template: `%s | ${BRAND_NAME}`,
   },
   description:
     "High-performance websites and SEO for Malaysian service businesses. Built to load fast, rank on Google, and turn visitors into calls and bookings.",
@@ -29,26 +37,26 @@ export const metadata: Metadata = {
     "web development malaysia",
     "buat website malaysia",
     "small business website malaysia",
-    "IIDev Studio",
+    BRAND_NAME,
   ],
-  authors: [{ name: "IIDev Studio" }],
-  creator: "IIDev Studio",
-  publisher: "IIDev Studio",
+  authors: [{ name: BRAND_NAME }],
+  creator: BRAND_NAME,
+  publisher: BRAND_NAME,
   alternates: {
     canonical: "/",
   },
   openGraph: {
-    title: "IIDev Studio | Web Design & SEO for Malaysian Businesses",
+    title: `${BRAND_NAME} | Web Design & SEO for Malaysian Businesses`,
     description:
       "High-performance websites and SEO for Malaysian service businesses. Built to load fast, rank on Google, and turn visitors into customers.",
-    url: "https://iidevstudio.com",
-    siteName: "IIDev Studio",
+    url: "/",
+    siteName: BRAND_NAME,
     locale: "en_MY",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "IIDev Studio | Web Design & SEO for Malaysian Businesses",
+    title: `${BRAND_NAME} | Web Design & SEO for Malaysian Businesses`,
     description:
       "High-performance websites and SEO for Malaysian service businesses. Built to load fast, rank on Google, and turn visitors into customers.",
     creator: "@iidevstudio",
@@ -71,16 +79,16 @@ const jsonLd = {
   "@graph": [
     {
       "@type": "Organization",
-      "@id": "https://iidevstudio.com/#organization",
-      name: "IIDev Studio",
-      url: "https://iidevstudio.com",
-      email: "team.iidevstudio@gmail.com",
-      telephone: "+60 11-3350 6561",
+      "@id": ORGANIZATION_ID,
+      name: BRAND_NAME,
+      url: SITE_URL,
+      email: CONTACT_EMAIL,
+      telephone: WHATSAPP_DISPLAY,
       description:
         "IIDev Studio is a Malaysian web design and SEO studio that builds high-performance, conversion-focused websites for local service businesses. Founder-led, two-person team, no outsourcing.",
       logo: {
         "@type": "ImageObject",
-        url: "https://iidevstudio.com/logo-512.png",
+        url: absoluteUrl("/logo-512.png"),
         width: 512,
         height: 512
       },
@@ -108,13 +116,13 @@ const jsonLd = {
     },
     {
       "@type": "ProfessionalService",
-      "@id": "https://iidevstudio.com/#service",
-      name: "IIDev Studio",
-      url: "https://iidevstudio.com",
-      image: "https://iidevstudio.com/logo-512.png",
+      "@id": absoluteUrl("/#service"),
+      name: BRAND_NAME,
+      url: SITE_URL,
+      image: absoluteUrl("/logo-512.png"),
       priceRange: "RM 500 – RM 15,000",
-      telephone: "+60 11-3350 6561",
-      email: "team.iidevstudio@gmail.com",
+      telephone: WHATSAPP_DISPLAY,
+      email: CONTACT_EMAIL,
       description:
         "Web design and SEO for Malaysian service businesses. High-performance websites built to load fast, rank on Google, and turn visitors into customers.",
       address: {
@@ -126,7 +134,7 @@ const jsonLd = {
         name: "Malaysia"
       },
       provider: {
-        "@id": "https://iidevstudio.com/#organization"
+        "@id": ORGANIZATION_ID
       },
       sameAs: ["https://www.linkedin.com/company/iidevstudio"]
     }

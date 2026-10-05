@@ -6,6 +6,7 @@ import { Navbar } from "@/components/sections/Navbar";
 import Footer from "@/components/sections/Footer";
 import { BookingButton } from "@/components/modal/BookingButton";
 import { ServiceCard } from "@/components/cards/ServiceCard";
+import { SITE_URL, absoluteUrl } from "@/lib/site-config";
 
 export const metadata: Metadata = {
   title: "Services & Pricing — Web Design & SEO for Malaysian Businesses",
@@ -16,7 +17,7 @@ export const metadata: Metadata = {
     title: "Services & Pricing | IIDev Studio",
     description:
       "Web design and SEO for Malaysian businesses: get online, get found on Google, grow monthly with an SEO retainer, or run your business on a custom system.",
-    url: "https://iidevstudio.com/services",
+    url: "/services",
     type: "website",
     images: ["/opengraph-image"],
   },
@@ -68,13 +69,13 @@ const breadcrumbJsonLd = {
       "@type": "ListItem",
       position: 1,
       name: "Home",
-      item: "https://iidevstudio.com",
+      item: SITE_URL,
     },
     {
       "@type": "ListItem",
       position: 2,
       name: "Services",
-      item: "https://iidevstudio.com/services",
+      item: absoluteUrl("/services"),
     },
   ],
 };

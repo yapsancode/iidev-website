@@ -6,6 +6,7 @@ import { Navbar } from "@/components/sections/Navbar";
 import Footer from "@/components/sections/Footer";
 import { BookingButton } from "@/components/modal/BookingButton";
 import { PriceReveal } from "@/components/ui/PriceReveal";
+import { ORGANIZATION_ID, SITE_URL, absoluteUrl } from "@/lib/site-config";
 
 export const metadata: Metadata = {
   title: "Website Audit — A Straight Diagnosis Before You Rebuild (RM 500)",
@@ -16,7 +17,7 @@ export const metadata: Metadata = {
     title: "Website Audit | IIDev Studio",
     description:
       "A clear, honest review of your website and Google presence, with a prioritised fix list in plain language. RM 500, credited back if you hire us within 30 days.",
-    url: "https://iidevstudio.com/services/website-audit",
+    url: "/services/website-audit",
     type: "website",
     images: ["/opengraph-image"],
   },
@@ -39,21 +40,21 @@ const jsonLd = {
       serviceType: "Website and SEO audit",
       description:
         "A paid review of your website and Google presence with a prioritised, plain-language fix list. Credited back in full if you start a project within 30 days.",
-      provider: { "@id": "https://iidevstudio.com/#organization" },
+      provider: { "@id": ORGANIZATION_ID },
       areaServed: { "@type": "Country", name: "Malaysia" },
       offers: {
         "@type": "Offer",
         priceCurrency: "MYR",
         price: "500",
-        url: "https://iidevstudio.com/services/website-audit",
+        url: absoluteUrl("/services/website-audit"),
       },
     },
     {
       "@type": "BreadcrumbList",
       itemListElement: [
-        { "@type": "ListItem", position: 1, name: "Home", item: "https://iidevstudio.com" },
-        { "@type": "ListItem", position: 2, name: "Services", item: "https://iidevstudio.com/services" },
-        { "@type": "ListItem", position: 3, name: "Website Audit", item: "https://iidevstudio.com/services/website-audit" },
+        { "@type": "ListItem", position: 1, name: "Home", item: SITE_URL },
+        { "@type": "ListItem", position: 2, name: "Services", item: absoluteUrl("/services") },
+        { "@type": "ListItem", position: 3, name: "Website Audit", item: absoluteUrl("/services/website-audit") },
       ],
     },
   ],

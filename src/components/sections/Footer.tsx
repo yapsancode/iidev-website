@@ -2,6 +2,12 @@
 import React from "react";
 import { Mail, Linkedin } from "lucide-react";
 import { WhatsAppIcon } from "@/components/ui/WhatsAppIcon";
+import {
+  BRAND_NAME,
+  CONTACT_EMAIL,
+  WHATSAPP_DISPLAY,
+  WHATSAPP_URL,
+} from "@/lib/site-config";
 
 const Footer: React.FC = () => {
   return (
@@ -11,10 +17,10 @@ const Footer: React.FC = () => {
         {/* Left – Brand & copyright */}
         <div className="text-center md:text-left">
           <span className="text-lg font-bold text-neutral-900 dark:text-white">
-            IIDev<span className="text-emerald-500">.</span>
+            {BRAND_NAME}<span className="text-emerald-500">.</span>
           </span>
           <p className="text-neutral-400 dark:text-neutral-500 text-sm mt-1">
-            © {new Date().getFullYear()} IIDev Studio. All rights reserved.
+            © {new Date().getFullYear()} {BRAND_NAME}. All rights reserved.
           </p>
           <p className="text-neutral-400 dark:text-neutral-500 text-xs mt-0.5">
             IIDEV STUDIO · SSM Reg. 202603215168 (CA0426006-D)
@@ -24,18 +30,18 @@ const Footer: React.FC = () => {
         {/* Middle – Visible contact details (trust signal + answer-engine friendly) */}
         <div className="flex flex-col items-center gap-1.5 text-sm md:items-start">
           <a
-            href="https://wa.me/601133506561"
+            href={WHATSAPP_URL}
             target="_blank"
             rel="noopener noreferrer"
             className="text-neutral-500 dark:text-neutral-400 hover:text-emerald-500 transition-colors"
           >
-            WhatsApp: +60 11-3350 6561
+            WhatsApp: {WHATSAPP_DISPLAY}
           </a>
           <a
-            href="mailto:team.iidevstudio@gmail.com"
+            href={`mailto:${CONTACT_EMAIL}`}
             className="text-neutral-500 dark:text-neutral-400 hover:text-emerald-500 transition-colors"
           >
-            team.iidevstudio@gmail.com
+            {CONTACT_EMAIL}
           </a>
           <p className="text-neutral-400 dark:text-neutral-500">
             Serving service businesses across Malaysia
@@ -45,7 +51,7 @@ const Footer: React.FC = () => {
         {/* Right – Social / quick-contact icons */}
         <div className="flex items-center gap-8">
           <a
-            href="https://wa.me/601133506561"
+            href={WHATSAPP_URL}
             target="_blank"
             rel="noopener noreferrer"
             className="text-neutral-400 hover:text-emerald-500 transition-colors"
@@ -54,7 +60,7 @@ const Footer: React.FC = () => {
             <WhatsAppIcon size={22} />
           </a>
           <a
-            href="mailto:team.iidevstudio@gmail.com"
+            href={`mailto:${CONTACT_EMAIL}`}
             className="text-neutral-400 hover:text-emerald-500 transition-colors"
             aria-label="Email us"
           >
@@ -65,7 +71,7 @@ const Footer: React.FC = () => {
             target="_blank"
             rel="noopener noreferrer"
             className="text-neutral-400 hover:text-emerald-500 transition-colors"
-            aria-label="IIDev Studio on LinkedIn"
+            aria-label={`${BRAND_NAME} on LinkedIn`}
           >
             <Linkedin size={22} />
           </a>

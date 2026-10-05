@@ -6,6 +6,7 @@ import { Navbar } from "@/components/sections/Navbar";
 import Footer from "@/components/sections/Footer";
 import { BookingButton } from "@/components/modal/BookingButton";
 import { PriceReveal } from "@/components/ui/PriceReveal";
+import { ORGANIZATION_ID, SITE_URL, absoluteUrl } from "@/lib/site-config";
 
 export const metadata: Metadata = {
   title: "Growth Retainer — Monthly SEO That Compounds (RM 1k–2k/mo)",
@@ -16,7 +17,7 @@ export const metadata: Metadata = {
     title: "Growth Retainer | IIDev Studio",
     description:
       "Ongoing SEO for Malaysian businesses ready to grow consistently. Monthly content, technical fixes, rank tracking, and clear reporting.",
-    url: "https://iidevstudio.com/services/growth-retainer",
+    url: "/services/growth-retainer",
     type: "website",
     images: ["/opengraph-image"],
   },
@@ -39,21 +40,21 @@ const jsonLd = {
       serviceType: "Monthly SEO and content retainer",
       description:
         "Ongoing SEO for Malaysian businesses ready to grow consistently. Monthly content, technical fixes, rank tracking, and clear reporting.",
-      provider: { "@id": "https://iidevstudio.com/#organization" },
+      provider: { "@id": ORGANIZATION_ID },
       areaServed: { "@type": "Country", name: "Malaysia" },
       offers: {
         "@type": "Offer",
         priceCurrency: "MYR",
         price: "1000",
-        url: "https://iidevstudio.com/services/growth-retainer",
+        url: absoluteUrl("/services/growth-retainer"),
       },
     },
     {
       "@type": "BreadcrumbList",
       itemListElement: [
-        { "@type": "ListItem", position: 1, name: "Home", item: "https://iidevstudio.com" },
-        { "@type": "ListItem", position: 2, name: "Services", item: "https://iidevstudio.com/services" },
-        { "@type": "ListItem", position: 3, name: "Growth Retainer", item: "https://iidevstudio.com/services/growth-retainer" },
+        { "@type": "ListItem", position: 1, name: "Home", item: SITE_URL },
+        { "@type": "ListItem", position: 2, name: "Services", item: absoluteUrl("/services") },
+        { "@type": "ListItem", position: 3, name: "Growth Retainer", item: absoluteUrl("/services/growth-retainer") },
       ],
     },
   ],

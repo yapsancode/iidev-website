@@ -6,6 +6,7 @@ import { Navbar } from "@/components/sections/Navbar";
 import Footer from "@/components/sections/Footer";
 import { BookingButton } from "@/components/modal/BookingButton";
 import { PriceReveal } from "@/components/ui/PriceReveal";
+import { ORGANIZATION_ID, SITE_URL, absoluteUrl } from "@/lib/site-config";
 
 export const metadata: Metadata = {
   title: "Search-Ready Website — Get Found on Google (RM 3k–6k)",
@@ -16,7 +17,7 @@ export const metadata: Metadata = {
     title: "Search-Ready Website | IIDev Studio",
     description:
       "A website built to rank, not just to look good. Keyword research, on-page SEO, and Google Business Profile setup so customers find you first.",
-    url: "https://iidevstudio.com/services/search-ready",
+    url: "/services/search-ready",
     type: "website",
     images: ["/opengraph-image"],
   },
@@ -39,21 +40,21 @@ const jsonLd = {
       serviceType: "SEO website design and development",
       description:
         "A website built to rank, not just to look good. Keyword research, on-page SEO, and Google Business Profile setup so customers find you first.",
-      provider: { "@id": "https://iidevstudio.com/#organization" },
+      provider: { "@id": ORGANIZATION_ID },
       areaServed: { "@type": "Country", name: "Malaysia" },
       offers: {
         "@type": "Offer",
         priceCurrency: "MYR",
         price: "3000",
-        url: "https://iidevstudio.com/services/search-ready",
+        url: absoluteUrl("/services/search-ready"),
       },
     },
     {
       "@type": "BreadcrumbList",
       itemListElement: [
-        { "@type": "ListItem", position: 1, name: "Home", item: "https://iidevstudio.com" },
-        { "@type": "ListItem", position: 2, name: "Services", item: "https://iidevstudio.com/services" },
-        { "@type": "ListItem", position: 3, name: "Search-Ready Website", item: "https://iidevstudio.com/services/search-ready" },
+        { "@type": "ListItem", position: 1, name: "Home", item: SITE_URL },
+        { "@type": "ListItem", position: 2, name: "Services", item: absoluteUrl("/services") },
+        { "@type": "ListItem", position: 3, name: "Search-Ready Website", item: absoluteUrl("/services/search-ready") },
       ],
     },
   ],

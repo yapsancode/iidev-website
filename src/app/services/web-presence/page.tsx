@@ -6,6 +6,7 @@ import { Navbar } from "@/components/sections/Navbar";
 import Footer from "@/components/sections/Footer";
 import { BookingButton } from "@/components/modal/BookingButton";
 import { PriceReveal } from "@/components/ui/PriceReveal";
+import { ORGANIZATION_ID, SITE_URL, absoluteUrl } from "@/lib/site-config";
 
 export const metadata: Metadata = {
   title: "Web Presence — Get Your Business Online Properly (RM 1k–3k)",
@@ -16,7 +17,7 @@ export const metadata: Metadata = {
     title: "Web Presence | IIDev Studio",
     description:
       "A fast, credible website for Malaysian businesses getting online for the first time. Mobile-optimised, SEO-ready, fully owned by you.",
-    url: "https://iidevstudio.com/services/web-presence",
+    url: "/services/web-presence",
     type: "website",
     images: ["/opengraph-image"],
   },
@@ -39,21 +40,21 @@ const jsonLd = {
       serviceType: "Website design and development",
       description:
         "A fast, credible website for Malaysian businesses getting online for the first time. Mobile-optimised, SEO-ready, and fully owned by you.",
-      provider: { "@id": "https://iidevstudio.com/#organization" },
+      provider: { "@id": ORGANIZATION_ID },
       areaServed: { "@type": "Country", name: "Malaysia" },
       offers: {
         "@type": "Offer",
         priceCurrency: "MYR",
         price: "1000",
-        url: "https://iidevstudio.com/services/web-presence",
+        url: absoluteUrl("/services/web-presence"),
       },
     },
     {
       "@type": "BreadcrumbList",
       itemListElement: [
-        { "@type": "ListItem", position: 1, name: "Home", item: "https://iidevstudio.com" },
-        { "@type": "ListItem", position: 2, name: "Services", item: "https://iidevstudio.com/services" },
-        { "@type": "ListItem", position: 3, name: "Web Presence", item: "https://iidevstudio.com/services/web-presence" },
+        { "@type": "ListItem", position: 1, name: "Home", item: SITE_URL },
+        { "@type": "ListItem", position: 2, name: "Services", item: absoluteUrl("/services") },
+        { "@type": "ListItem", position: 3, name: "Web Presence", item: absoluteUrl("/services/web-presence") },
       ],
     },
   ],

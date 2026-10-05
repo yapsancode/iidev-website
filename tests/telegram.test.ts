@@ -79,7 +79,7 @@ describe("Telegram lead alerts", () => {
   it("sends an escaped private-group alert with a secure dashboard link", async () => {
     process.env.TELEGRAM_BOT_TOKEN = "test-token";
     process.env.TELEGRAM_CHAT_ID = "-100123";
-    process.env.NEXT_PUBLIC_SITE_URL = "https://iidevstudio.com";
+    process.env.NEXT_PUBLIC_SITE_URL = "https://www.iidevstudio.com";
     const fetchMock = vi.fn().mockResolvedValue(new Response("ok", { status: 200 }));
     vi.stubGlobal("fetch", fetchMock);
 
@@ -89,7 +89,7 @@ describe("Telegram lead alerts", () => {
 
     expect(payload.chat_id).toBe("-100123");
     expect(payload.text).toContain("Aina &lt;Bakery&gt;");
-    expect(payload.text).toContain("https://iidevstudio.com/internal/leads/08b4535a-d0f2-4ad8-b916-e0b3ca123456");
+    expect(payload.text).toContain("https://www.iidevstudio.com/internal/leads/08b4535a-d0f2-4ad8-b916-e0b3ca123456");
   });
 
   it("returns a bounded error when Telegram rejects the alert", async () => {

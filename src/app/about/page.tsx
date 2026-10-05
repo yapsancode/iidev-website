@@ -6,6 +6,7 @@ import { Navbar } from "@/components/sections/Navbar";
 import Footer from "@/components/sections/Footer";
 import Team from "@/components/sections/Team";
 import { BookingButton } from "@/components/modal/BookingButton";
+import { ORGANIZATION_ID, SITE_URL, absoluteUrl } from "@/lib/site-config";
 
 export const metadata: Metadata = {
   title: "About — A Founder-Led Web & SEO Studio in Malaysia",
@@ -16,7 +17,7 @@ export const metadata: Metadata = {
     title: "About IIDev Studio",
     description:
       "A two-person, founder-led web design and SEO studio in Malaysia. We build fast, search-ready websites that bring local service businesses more calls and bookings.",
-    url: "https://iidevstudio.com/about",
+    url: "/about",
     type: "website",
     images: ["/opengraph-image"],
   },
@@ -34,33 +35,33 @@ const jsonLd = {
   "@graph": [
     {
       "@type": "AboutPage",
-      "@id": "https://iidevstudio.com/about#webpage",
-      url: "https://iidevstudio.com/about",
+      "@id": absoluteUrl("/about#webpage"),
+      url: absoluteUrl("/about"),
       name: "About IIDev Studio",
       description:
         "IIDev Studio is a two-person, founder-led web design and SEO studio in Malaysia, building fast, search-ready websites for local service businesses.",
-      about: { "@id": "https://iidevstudio.com/#organization" },
-      isPartOf: { "@id": "https://iidevstudio.com/#organization" },
+      about: { "@id": ORGANIZATION_ID },
+      isPartOf: { "@id": ORGANIZATION_ID },
     },
     {
       "@type": "Person",
-      "@id": "https://iidevstudio.com/#isyraf-afifi",
+      "@id": absoluteUrl("/#isyraf-afifi"),
       name: "Isyraf Afifi",
       jobTitle: "Co-Founder & Product",
-      worksFor: { "@id": "https://iidevstudio.com/#organization" },
+      worksFor: { "@id": ORGANIZATION_ID },
     },
     {
       "@type": "Person",
-      "@id": "https://iidevstudio.com/#imran-ariff",
+      "@id": absoluteUrl("/#imran-ariff"),
       name: "Imran Ariff",
       jobTitle: "Co-Founder & Tech Lead",
-      worksFor: { "@id": "https://iidevstudio.com/#organization" },
+      worksFor: { "@id": ORGANIZATION_ID },
     },
     {
       "@type": "BreadcrumbList",
       itemListElement: [
-        { "@type": "ListItem", position: 1, name: "Home", item: "https://iidevstudio.com" },
-        { "@type": "ListItem", position: 2, name: "About", item: "https://iidevstudio.com/about" },
+        { "@type": "ListItem", position: 1, name: "Home", item: SITE_URL },
+        { "@type": "ListItem", position: 2, name: "About", item: absoluteUrl("/about") },
       ],
     },
   ],

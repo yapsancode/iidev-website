@@ -1,5 +1,6 @@
 import React from "react";
 import { ChevronDown } from "lucide-react";
+import { WHATSAPP_DISPLAY } from "@/lib/site-config";
 
 /**
  * Q&A content. A single source of truth: the visible <details> list and the
@@ -42,7 +43,7 @@ const faqs = [
   },
   {
     q: "How do I get started?",
-    a: "Book a free 15-minute call or message us on WhatsApp at +60 11-3350 6561. We'll ask a few practical questions about your business, goals, and current site, then recommend the clearest next step.",
+    a: `Book a free 15-minute call or message us on WhatsApp at ${WHATSAPP_DISPLAY}. We'll ask a few practical questions about your business, goals, and current site, then recommend the clearest next step.`,
   },
 ];
 

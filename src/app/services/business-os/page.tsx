@@ -15,6 +15,7 @@ import { Navbar } from "@/components/sections/Navbar";
 import Footer from "@/components/sections/Footer";
 import { BookingButton } from "@/components/modal/BookingButton";
 import { PriceReveal } from "@/components/ui/PriceReveal";
+import { ORGANIZATION_ID, SITE_URL, absoluteUrl } from "@/lib/site-config";
 
 export const metadata: Metadata = {
   title: "Business OS — A Custom System to Run Your Business (RM 10k onwards)",
@@ -25,7 +26,7 @@ export const metadata: Metadata = {
     title: "Business OS | IIDev Studio",
     description:
       "A custom system built around how your business actually works — customers, invoicing, inventory, and MyInvois compliance, all in one place.",
-    url: "https://iidevstudio.com/services/business-os",
+    url: "/services/business-os",
     type: "website",
     images: ["/opengraph-image"],
   },
@@ -90,13 +91,13 @@ const jsonLd = {
       serviceType: "Custom business management system",
       description:
         "A custom system built around how your business actually works — customer and sales tracking, invoicing, inventory, and MyInvois e-invoice compliance, all in one place.",
-      provider: { "@id": "https://iidevstudio.com/#organization" },
+      provider: { "@id": ORGANIZATION_ID },
       areaServed: { "@type": "Country", name: "Malaysia" },
       offers: {
         "@type": "Offer",
         priceCurrency: "MYR",
         price: "10000",
-        url: "https://iidevstudio.com/services/business-os",
+        url: absoluteUrl("/services/business-os"),
       },
       hasOfferCatalog: {
         "@type": "OfferCatalog",
@@ -114,9 +115,9 @@ const jsonLd = {
     {
       "@type": "BreadcrumbList",
       itemListElement: [
-        { "@type": "ListItem", position: 1, name: "Home", item: "https://iidevstudio.com" },
-        { "@type": "ListItem", position: 2, name: "Services", item: "https://iidevstudio.com/services" },
-        { "@type": "ListItem", position: 3, name: "Business OS", item: "https://iidevstudio.com/services/business-os" },
+        { "@type": "ListItem", position: 1, name: "Home", item: SITE_URL },
+        { "@type": "ListItem", position: 2, name: "Services", item: absoluteUrl("/services") },
+        { "@type": "ListItem", position: 3, name: "Business OS", item: absoluteUrl("/services/business-os") },
       ],
     },
   ],

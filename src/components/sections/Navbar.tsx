@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState, type MouseEvent } from "react";
 import { ThemeToggle } from "../ui/ThemeToggle";
+import { BRAND_NAME, CONTACT_EMAIL } from "@/lib/site-config";
 
 const NAV_ITEMS = [
   { label: "WHY US", href: "#why-us" },
@@ -64,7 +65,7 @@ export const Navbar = () => {
           onClick={handleHomeClick}
           className={`group pointer-events-auto flex items-center gap-1 bg-black px-4 py-3 text-xs font-bold uppercase tracking-widest text-white transition-opacity duration-200 dark:bg-white dark:text-black ${mobileMenuOpen ? "opacity-0" : "opacity-100"}`}
         >
-          <span>IIDev</span>
+          <span>IIDev</span>{" "}
           <span className="max-w-0 overflow-hidden whitespace-nowrap opacity-0 transition-[max-width,opacity] duration-300 group-hover:max-w-16 group-hover:opacity-100">
             Studio
           </span>
@@ -116,7 +117,7 @@ export const Navbar = () => {
               onClick={handleHomeClick}
               className="rounded-sm bg-[#EFEEE9] px-4 py-3 text-[10px] font-bold uppercase tracking-[0.2em] text-black shadow-sm dark:bg-neutral-800 dark:text-white"
             >
-              IIDev Studio
+              {BRAND_NAME}
             </Link>
             <div className="flex items-center gap-4">
               <ThemeToggle />
@@ -169,14 +170,14 @@ export const Navbar = () => {
             <div className="flex flex-col items-center gap-3">
               <span className="rounded-[2px] bg-[#EFEEE9] px-2 py-1 text-black">General Enquiries</span>
               <a
-                href="mailto:team.iidevstudio@gmail.com"
+                href={`mailto:${CONTACT_EMAIL}`}
                 className="text-sm font-normal lowercase tracking-normal text-neutral-600 hover:text-black dark:text-neutral-400"
               >
-                team.iidevstudio@gmail.com
+                {CONTACT_EMAIL}
               </a>
             </div>
             <div className="mt-4 text-[10px] font-normal normal-case tracking-normal text-neutral-500">
-              © {new Date().getFullYear()} IIDev Studio® All Rights Reserved
+              © {new Date().getFullYear()} {BRAND_NAME}® All Rights Reserved
             </div>
           </div>
         </div>
