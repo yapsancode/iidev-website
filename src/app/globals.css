@@ -250,7 +250,8 @@ body.no-scroll {
    with the visible one last, so this matches that shape and only the last
    layer grows. Set per element so a card can bring its own --lift-shadow. */
 .lift-in,
-.story-found {
+.story-found,
+.nudge {
   --lift-flat:
     0 0 #0000, 0 0 #0000, 0 0 #0000, 0 0 #0000, 0 0 0 0 var(--lift-shadow);
 }
@@ -469,6 +470,22 @@ body.no-scroll {
       type-in var(--type-time) steps(var(--chars)) var(--type-wait) backwards,
       type-cursor calc(var(--type-wait) + var(--type-time)) linear,
       type-cursor-blink 700ms steps(1) calc(var(--type-wait) + var(--type-time)) 3;
+  }
+}
+
+/* The main button in the closing panel presses itself once when it scrolls
+   into view: all the way down onto its 4px shadow (PRIMARY_BUTTON in
+   lib/styles.ts) and back up. StampObserver sets data-stamp. */
+@keyframes nudge {
+  40% {
+    transform: translate(4px, 4px);
+    box-shadow: var(--lift-flat);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .nudge[data-stamp="in"] {
+    animation: nudge 520ms cubic-bezier(0.22, 1, 0.36, 1) 400ms;
   }
 }
 

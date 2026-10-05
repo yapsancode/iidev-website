@@ -27,11 +27,12 @@ export default function CTA() {
           </p>
         </div>
 
-        {/* On the green panel the border and shadow stay black in dark mode too. */}
+        {/* On the green panel the border and shadow stay black in dark mode too.
+            `nudge` presses the button once when it scrolls into view. */}
         <BookingButton
           className={cn(
             PRIMARY_BUTTON,
-            "w-full px-7 py-4 tracking-wide md:w-auto md:whitespace-nowrap",
+            "nudge w-full px-7 py-4 tracking-wide [--lift-shadow:#000] md:w-auto md:whitespace-nowrap",
             "dark:border-black dark:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] dark:hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]",
           )}
         >
