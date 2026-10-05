@@ -429,6 +429,49 @@ body.no-scroll {
   }
 }
 
+/* Project cards: the site's address types itself into the browser bar the
+   first time the card scrolls into view. StampObserver sets data-stamp.
+
+   The letters are always in the page. The animation only widens the box around
+   them one letter per step, which is why it needs a monospace font: --chars
+   letters are exactly --chars `ch` wide. The right border is the cursor. It
+   stays solid while typing, blinks three times, then goes away. */
+.type-in {
+  --type-time: calc(var(--chars) * 55ms);
+  --type-wait: 200ms;
+  display: inline-block;
+  overflow: hidden;
+  border-right: 2px solid transparent;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  white-space: nowrap;
+}
+
+@keyframes type-in {
+  from { width: 0; }
+  to { width: calc(var(--chars) * 1ch); }
+}
+
+@keyframes type-cursor {
+  from, to { border-right-color: currentColor; }
+}
+
+@keyframes type-cursor-blink {
+  50% { border-right-color: currentColor; }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .type-in[data-stamp="armed"] {
+    width: 0;
+  }
+
+  .type-in[data-stamp="in"] {
+    animation:
+      type-in var(--type-time) steps(var(--chars)) var(--type-wait) backwards,
+      type-cursor calc(var(--type-wait) + var(--type-time)) linear,
+      type-cursor-blink 700ms steps(1) calc(var(--type-wait) + var(--type-time)) 3;
+  }
+}
+
 /* FAQ answers slide open and shut instead of snapping. */
 @supports (interpolate-size: allow-keywords) {
   @media (prefers-reduced-motion: no-preference) {

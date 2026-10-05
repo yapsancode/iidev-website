@@ -1,8 +1,40 @@
+import type { CSSProperties } from "react";
 import Image from "next/image";
 import { ExternalLink } from "lucide-react";
 import { projects, type Project } from "@/lib/data";
 import { BADGE } from "@/lib/styles";
 import { cn } from "@/lib/utils";
+
+/** "https://www.example.com/" becomes "example.com". */
+function getAddress(link: string) {
+  return new URL(link).hostname.replace(/^www\./, "");
+}
+
+/**
+ * The top of a browser window, showing where the project lives. The address
+ * types itself the first time the card scrolls into view (`type-in`, see
+ * globals.css). Decorative: the card itself is the link.
+ */
+function BrowserBar({ address }: { address: string }) {
+  return (
+    <div
+      aria-hidden="true"
+      className="flex items-center gap-1.5 border-b-2 border-black bg-white px-3 py-2 text-black dark:border-white dark:bg-neutral-800 dark:text-white"
+    >
+      <span className="h-2.5 w-2.5 shrink-0 border-2 border-current" />
+      <span className="h-2.5 w-2.5 shrink-0 border-2 border-current" />
+      <span className="h-2.5 w-2.5 shrink-0 border-2 border-current" />
+      <span className="ml-1.5 flex h-7 min-w-0 flex-1 items-center border-2 border-current px-2 text-xs font-medium">
+        <span
+          className="type-in"
+          style={{ "--chars": address.length } as CSSProperties}
+        >
+          {address}
+        </span>
+      </span>
+    </div>
+  );
+}
 
 interface ProjectCardProps {
   project: Project;
@@ -17,19 +49,24 @@ function ProjectCard({ project, featured = false }: ProjectCardProps) {
   const content = (
     <>
       <div
-        className={`relative aspect-[4/3] overflow-hidden border-b-2 border-black bg-neutral-100 dark:border-white dark:bg-neutral-900 ${
-          featured
-            ? "md:col-span-7 md:aspect-auto md:min-h-[420px] md:border-r-2 md:border-b-0"
-            : ""
+        className={`flex flex-col border-b-2 border-black dark:border-white ${
+          featured ? "md:col-span-7 md:border-r-2 md:border-b-0" : ""
         }`}
       >
-        <Image
-          src={project.image}
-          alt={`${project.title} — ${project.category} built by IIDev Studio`}
-          fill
-          sizes={featured ? "(max-width: 768px) 100vw, 60vw" : "(max-width: 768px) 100vw, 50vw"}
-          className="object-cover"
-        />
+        {project.link && <BrowserBar address={getAddress(project.link)} />}
+        <div
+          className={`relative aspect-[4/3] overflow-hidden bg-neutral-100 dark:bg-neutral-900 ${
+            featured ? "md:aspect-auto md:min-h-[420px] md:grow" : ""
+          }`}
+        >
+          <Image
+            src={project.image}
+            alt={`${project.title} — ${project.category} built by IIDev Studio`}
+            fill
+            sizes={featured ? "(max-width: 768px) 100vw, 60vw" : "(max-width: 768px) 100vw, 50vw"}
+            className="object-cover"
+          />
+        </div>
       </div>
 
       <div
