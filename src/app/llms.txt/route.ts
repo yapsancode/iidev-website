@@ -19,7 +19,7 @@ IIDev Studio is a two-person, founder-led team based in Malaysia: Isyraf Afifi (
 - [Web Presence](${absoluteUrl("/services/web-presence")}): Get your business online properly — a fast, credible, SEO-ready website you fully own. One-time, RM 1,000–3,000.
 - [Search-Ready Website](${absoluteUrl("/services/search-ready")}): A website built to be found on Google — keyword research, on-page SEO, and Google Business Profile setup. One-time, RM 3,000–6,000.
 - [Growth Retainer](${absoluteUrl("/services/growth-retainer")}): Ongoing monthly SEO — content, technical fixes, rank tracking, and plain-language reporting. RM 1,000–2,000 per month.
-- [Business OS](${absoluteUrl("/services/business-os")}): A custom-built system to run your business — customer and sales tracking, invoicing, inventory, and MyInvois e-invoice compliance, all in one place. One-time, from RM 10,000.
+- [Business OS](${absoluteUrl("/services/business-os")}): A custom-built system to run your business — customer and sales tracking, invoicing, inventory, and bookings, all in one place. One-time, from RM 10,000: a core system (RM 6,000) plus the modules you need (from RM 4,000 each). After launch, hosting and upkeep are a separate monthly fee, from RM 200. A MyInvois e-invoicing module is coming soon and not available yet.
 
 ## Key pages
 - [Home](${SITE_URL}): Overview of what we do and who we help.

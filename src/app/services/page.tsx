@@ -184,8 +184,8 @@ export default function ServicesPage() {
                 <p className="text-neutral-300 leading-relaxed">
                   Still running on spreadsheets, WhatsApp, and gut feel? We build
                   a custom system around how your business actually works —
-                  customer tracking, invoicing, inventory, and MyInvois
-                  compliance, all in one place.
+                  customer tracking, invoicing, inventory, and bookings, all in
+                  one place.
                 </p>
               </div>
               <div className={cn(LABEL, "flex items-center whitespace-nowrap shrink-0 group-hover:underline")}>
