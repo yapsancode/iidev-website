@@ -155,14 +155,17 @@ export const Navbar = () => {
 
           <button
             onClick={() => setMobileMenuOpen(true)}
-            className="flex h-11 w-11 flex-col items-center justify-center gap-1.5 md:hidden"
+            className="flex h-11 w-11 items-center justify-center md:hidden"
             aria-label="Open menu"
             aria-expanded={mobileMenuOpen}
             aria-controls="mobile-menu"
           >
-            <span className="h-0.5 w-6 rounded-full bg-black dark:bg-white" />
-            <span className="h-0.5 w-6 rounded-full bg-black dark:bg-white" />
-            <span className="h-0.5 w-4 self-end rounded-full bg-black dark:bg-white" />
+            {/* The bars share one 24px box, so the short bar lines up with the others. */}
+            <span className="flex w-6 flex-col items-end gap-1.5">
+              <span className="h-0.5 w-6 rounded-full bg-black dark:bg-white" />
+              <span className="h-0.5 w-6 rounded-full bg-black dark:bg-white" />
+              <span className="h-0.5 w-4 rounded-full bg-black dark:bg-white" />
+            </span>
           </button>
         </div>
       </nav>
@@ -195,7 +198,8 @@ export const Navbar = () => {
             </div>
           </div>
 
-          <div className="flex min-h-[400px] flex-1 flex-col items-center justify-center gap-5 py-4">
+          {/* No fixed min-height: it let this block shrink smaller than its buttons, so they covered the rows above and below on short screens. */}
+          <div className="flex flex-1 flex-col items-center justify-center gap-5 py-4">
             {pathname === "/" &&
               NAV_ITEMS.map((item) => (
                 <button
