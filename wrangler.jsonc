@@ -5,6 +5,11 @@
   "compatibility_date": "2026-08-31",
   "compatibility_flags": ["nodejs_compat"],
   "workers_dev": false,
+  "routes": [
+    { "pattern": "www.iidevstudio.com", "custom_domain": true },
+    // The bare domain is attached too, so the site can redirect it to www.
+    { "pattern": "iidevstudio.com", "custom_domain": true }
+  ],
   // html_handling none: serve /google….html as a file. Google's site verification does not follow a redirect.
   "assets": { "directory": ".open-next/assets", "binding": "ASSETS", "html_handling": "none" },
   // Resizes and compresses images for next/image, as Vercel did.
