@@ -5,9 +5,11 @@ import { getDashboardData } from "@/lib/leads/data";
 import { budgetLabels } from "@/lib/leads/types";
 import { EmptyState } from "@/components/internal/EmptyState";
 import { PriorityBadge } from "@/components/internal/PriorityBadge";
+import { OutboundToday } from "@/components/internal/OutboundToday";
+import { getOutboundOverview } from "@/lib/prospects/data";
 
 export default async function InternalHomePage() {
-  const [user, dashboard] = await Promise.all([requireInternalUser(), getDashboardData()]);
+  const [user, dashboard, outbound] = await Promise.all([requireInternalUser(), getDashboardData(), getOutboundOverview()]);
   const today = new Intl.DateTimeFormat("en-MY", { timeZone: "Asia/Kuala_Lumpur", weekday: "short", day: "numeric", month: "short" }).format(new Date());
   const firstName = user.full_name.split(" ")[0];
   const health = dashboard.openCount === 0 ? null : Math.max(0, Math.min(100, Math.round(100 - dashboard.needsReviewCount * 15 - dashboard.missedFollowUps * 20)));
@@ -20,6 +22,8 @@ export default async function InternalHomePage() {
         <div className="flex items-start justify-between gap-5"><div><p className="font-sans text-xs text-emerald-200">Pipeline health</p><h2 className="mt-2 font-sans text-2xl font-bold">{dashboard.openCount} active {dashboard.openCount === 1 ? "lead" : "leads"}</h2></div><div className="grid h-16 w-16 place-items-center rounded-full border-[7px] border-[#ef6552] font-sans text-sm font-bold">{health === null ? "—" : `${health}%`}</div></div>
         <div className="mt-6 grid grid-cols-3 border-t border-white/15 pt-5 text-center"><div className="border-r border-white/15"><strong className="block font-sans text-lg">{dashboard.highPriorityCount}</strong><span className="font-sans text-[10px] text-neutral-400">High priority</span></div><div className="border-r border-white/15"><strong className="block font-sans text-lg">{dashboard.needsReviewCount}</strong><span className="font-sans text-[10px] text-neutral-400">Needs review</span></div><div><strong className="block font-sans text-lg">{dashboard.missedFollowUps}</strong><span className="font-sans text-[10px] text-neutral-400">Missed follow-ups</span></div></div>
       </section>
+
+      <OutboundToday overview={outbound} />
 
       <div className="mt-7 flex items-end justify-between"><div><h2 className="font-sans text-lg font-bold">Today’s attention</h2><p className="mt-1 font-sans text-xs text-neutral-500 dark:text-neutral-400">High priority and manual-review leads</p></div><Link href="/internal/leads" className="font-sans text-xs font-bold text-[#e95f4d]">See all</Link></div>
       {dashboard.recent.length === 0 ? <div className="mt-4"><EmptyState title="No leads yet" description="New website enquiries will appear here after the D1 migration and Worker secrets are configured." /></div> : (

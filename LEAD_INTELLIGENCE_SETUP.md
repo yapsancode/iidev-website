@@ -78,3 +78,20 @@ The small retention Worker runs daily at 03:00 UTC to enforce the 12/24-month da
 3. Sign in at `/internal` with a founder email.
 4. Confirm the lead, score, AI summary, and Telegram alert appear.
 5. Try a non-founder email and confirm Cloudflare Access blocks it.
+
+## Outbound prospects (added October 2026)
+
+The internal area also tracks businesses we contact first, at `/internal/prospects`. Claude Code reads and updates them through `/api/internal/prospects`, which needs its own secret.
+
+Deploy in this order. The pages read the new tables, so the migration must run before the new code goes live.
+
+```bash
+npm run db:migrate:remote
+npx wrangler secret put SALES_API_TOKEN
+npm run deploy:cf
+npm run deploy:retention
+```
+
+Use at least 32 random characters for `SALES_API_TOKEN`. Put the same value, plus `SALES_API_URL=https://www.iidevstudio.com`, in the `.env` file of the IIDEV Studio folder so the sales skills can reach the API. Without the secret the API answers 401 to everyone.
+
+Prospects marked Lost or Not fit are deleted after 12 months with no activity, the same rule as leads.

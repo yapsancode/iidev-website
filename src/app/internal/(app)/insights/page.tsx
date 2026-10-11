@@ -2,12 +2,14 @@ import { AlertTriangle, BrainCircuit, Clock3, Gauge, TrendingUp } from "lucide-r
 import { EmptyState } from "@/components/internal/EmptyState";
 import { requireInternalUser } from "@/lib/auth/internal-user";
 import { getInsightsData } from "@/lib/leads/data";
+import { OutboundInsights } from "@/components/internal/OutboundInsights";
+import { getOutboundOverview } from "@/lib/prospects/data";
 
 function metric(value: number | null, suffix = "") { return value === null ? "—" : `${value}${suffix}`; }
 
 export default async function InsightsPage() {
   await requireInternalUser();
-  const insights = await getInsightsData();
+  const [insights, outbound] = await Promise.all([getInsightsData(), getOutboundOverview()]);
   const weekly = new Map<string, { total: number; qualified: number; won: number }>();
   insights.records.forEach((lead) => {
     const date = new Date(lead.created_at);
@@ -23,6 +25,7 @@ export default async function InsightsPage() {
   return (
     <>
       <div><p className="font-sans text-xs text-neutral-500 dark:text-neutral-400">Last 90 days</p><h1 className="mt-1 font-sans text-3xl font-bold tracking-tight">Insights</h1><p className="mt-2 font-sans text-sm text-neutral-500 dark:text-neutral-400">Only metrics supported by actual lead and audit-event data.</p></div>
+      <h2 className="mt-8 font-sans text-2xl font-bold tracking-tight">Inbound</h2>
       {insights.total === 0 ? <div className="mt-6"><EmptyState title="Not enough data yet" description="Insights will appear after real or test enquiries have moved through the lead workflow." /></div> : <>
         <div className="mt-6 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
           <section className="rounded-[1.6rem] bg-white p-5 dark:bg-neutral-900"><Gauge className="h-5 w-5 text-[#ef6552]" /><p className="mt-5 font-sans text-xs text-neutral-500">Average lead score</p><strong className="mt-2 block font-sans text-3xl">{metric(insights.averageScore, "/100")}</strong></section>
@@ -35,6 +38,7 @@ export default async function InsightsPage() {
           <section className="rounded-[2rem] bg-white p-5 dark:bg-neutral-900 sm:p-7"><h2 className="font-sans text-lg font-bold">Service demand</h2>{insights.serviceDemand.length === 0 ? <p className="mt-5 font-sans text-sm text-neutral-500">No service data extracted yet.</p> : <div className="mt-5 space-y-4">{insights.serviceDemand.map(([service, count]) => <div key={service} className="flex items-center justify-between gap-3"><span className="font-sans text-xs capitalize">{service.replaceAll("_", " ")}</span><strong className="rounded-full bg-emerald-100 px-2.5 py-1 font-mono text-xs text-emerald-800 dark:bg-emerald-950 dark:text-emerald-200">{count}</strong></div>)}</div>}</section>
         </div>
       </>}
+      <OutboundInsights overview={outbound} />
     </>
   );
 }

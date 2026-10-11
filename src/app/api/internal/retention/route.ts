@@ -16,5 +16,7 @@ export async function GET(request: NextRequest) {
 
   const deleted=await db.prepare("DELETE FROM leads WHERE status IN ('lost','not_fit') AND last_activity_at<?").bind(twelveMonthsAgo.toISOString()).run();
   const flagged=await db.prepare("UPDATE leads SET retention_review_due=1 WHERE status NOT IN ('lost','not_fit') AND last_activity_at<?").bind(twentyFourMonthsAgo.toISOString()).run();
-  return NextResponse.json({deleted:deleted.meta.changes||0,flaggedForReview:flagged.meta.changes||0});
+  // Outbound prospects we gave up on follow the same 12-month rule.
+  const prospects=await db.prepare("DELETE FROM prospects WHERE status IN ('lost','not_fit') AND last_activity_at<?").bind(twelveMonthsAgo.toISOString()).run();
+  return NextResponse.json({deleted:deleted.meta.changes||0,flaggedForReview:flagged.meta.changes||0,prospectsDeleted:prospects.meta.changes||0});
 }
