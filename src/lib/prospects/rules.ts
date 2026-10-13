@@ -48,6 +48,11 @@ export function followUpDate(sentOn: string): string {
   return addDays(sentOn, FOLLOW_UP_DAYS);
 }
 
+/** They asked us to stop. Nothing more is drafted, sent or planned for this business. */
+export function isDoNotContact(prospect: Pick<ProspectRecord, "lost_reason">): boolean {
+  return prospect.lost_reason === "asked_to_stop";
+}
+
 export function isClosed(status: ProspectStatus): boolean {
   return closedProspectStatuses.includes(status);
 }

@@ -1,7 +1,45 @@
 import { BarList, CategoryStageChart, StatTile, WeeklyActivityChart } from "@/components/internal/charts/OutboundCharts";
 import type { OutboundOverview } from "@/lib/prospects/data";
-import { categoryByStage, websiteStateOfAudited } from "@/lib/prospects/stats";
-import { prospectStatusLabels, websiteStateLabels } from "@/lib/prospects/types";
+import { categoryByStage, countByField, replyRateBy, websiteStateOfAudited, type GroupReplyRate } from "@/lib/prospects/stats";
+import { lostReasonLabels, objectionLabels, prospectStatusLabels, websiteStateLabels, type LostReason, type Objection } from "@/lib/prospects/types";
+
+/** Below this many sends, a reply rate is noise. Apollo's guidance is about 100 per version. */
+const ENOUGH_SENDS = 100;
+
+function ReplyRateTable({ title, note, rows }: { title: string; note: string; rows: GroupReplyRate[] }) {
+  return (
+    <section className="rounded-[2rem] bg-white p-5 dark:bg-neutral-900 sm:p-7">
+      <h3 className="font-sans text-lg font-bold">{title}</h3>
+      <p className="mt-1 font-sans text-xs text-neutral-500 dark:text-neutral-400">{note}</p>
+      {rows.length === 0 ? (
+        <p className="mt-5 font-sans text-sm text-neutral-500">No first messages logged yet.</p>
+      ) : (
+        <table className="mt-5 w-full font-sans text-sm">
+          <thead>
+            <tr className="text-left text-[10px] uppercase text-neutral-400">
+              <th className="pb-2 font-bold">Group</th>
+              <th className="pb-2 text-right font-bold">Sent</th>
+              <th className="pb-2 text-right font-bold">Replied</th>
+              <th className="pb-2 text-right font-bold">Rate</th>
+            </tr>
+          </thead>
+          <tbody>
+            {rows.map((row) => (
+              <tr key={row.label} className="border-t border-neutral-100 dark:border-neutral-800">
+                <td className="py-2">{row.label}</td>
+                <td className="py-2 text-right tabular-nums">{row.messaged}</td>
+                <td className="py-2 text-right tabular-nums">{row.replied}</td>
+                <td className="py-2 text-right tabular-nums">
+                  {row.percent}%{row.messaged < ENOUGH_SENDS && <span className="ml-1 text-[10px] text-neutral-400">too few</span>}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      )}
+    </section>
+  );
+}
 
 /** The outbound section of Insights. Every number comes from prospects and their logged events. */
 export function OutboundInsights({ overview }: { overview: OutboundOverview }) {
@@ -39,6 +77,38 @@ export function OutboundInsights({ overview }: { overview: OutboundOverview }) {
               note="No website and weak website are the ones worth messaging."
               rows={websiteStateOfAudited(overview.prospects).map((entry) => ({ label: websiteStateLabels[entry.state], value: entry.count }))}
               emptyText="Nothing audited yet."
+            />
+            <ReplyRateTable
+              title="Reply rate by message version"
+              note={`Compare versions only after about ${ENOUGH_SENDS} sends each.`}
+              rows={replyRateBy(overview.prospects, overview.events, (prospect) => prospect.message_variant)}
+            />
+            <ReplyRateTable
+              title="Reply rate by business type"
+              note="Which kinds of business answer."
+              rows={replyRateBy(overview.prospects, overview.events, (prospect) => prospect.category)}
+            />
+            <ReplyRateTable
+              title="Reply rate by language"
+              note="Bahasa Melayu or English."
+              rows={replyRateBy(overview.prospects, overview.events, (prospect) => (prospect.draft_language === "ms" ? "Bahasa Melayu" : prospect.draft_language === "en" ? "English" : null))}
+            />
+            <ReplyRateTable
+              title="Reply rate with and without a preview link"
+              note="A link exists only after they said yes, so read this as how many got a page, not as a fair test."
+              rows={replyRateBy(overview.prospects, overview.events, (prospect) => (prospect.preview_token ? "Has a preview link" : "No preview link"))}
+            />
+            <BarList
+              title="Why prospects were lost"
+              note="Lost prospects with a reason recorded."
+              rows={countByField(overview.prospects, (prospect) => (prospect.status === "lost" ? prospect.lost_reason : null)).map((entry) => ({ label: lostReasonLabels[entry.value as LostReason] || entry.value, value: entry.count }))}
+              emptyText="No lost reasons recorded yet."
+            />
+            <BarList
+              title="Objections heard"
+              note="The main thing that held them back, from their replies. These are the beliefs to answer earlier."
+              rows={countByField(overview.prospects, (prospect) => prospect.objection).map((entry) => ({ label: objectionLabels[entry.value as Objection] || entry.value, value: entry.count }))}
+              emptyText="No objections recorded yet."
             />
           </div>
         </>

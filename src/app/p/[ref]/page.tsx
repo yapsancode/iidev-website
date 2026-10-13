@@ -4,7 +4,7 @@ import { Check, MessageCircle } from "lucide-react";
 import { ViewBeacon } from "@/components/preview/ViewBeacon";
 import { getProspectByPreviewToken } from "@/lib/prospects/data";
 import { PREVIEW_VIEW_DELAY_MS, tokenFromRef } from "@/lib/prospects/preview";
-import { previewCopy } from "@/lib/prospects/preview-copy";
+import { previewCopy, previewProof } from "@/lib/prospects/preview-copy";
 import { BRAND_NAME, WHATSAPP_DISPLAY, WHATSAPP_URL } from "@/lib/site-config";
 import { CARD_ACCENT, CARD_DARK, CARD_WHITE, LABEL, PRIMARY_BUTTON } from "@/lib/styles";
 import { cn } from "@/lib/utils";
@@ -112,7 +112,9 @@ export default async function PreviewPage({ params }: Props) {
 
         <section className={cn(CARD_ACCENT, "mt-12 p-5")}>
           <h2 className="font-bold">{copy.proofTitle}</h2>
-          <p className="mt-2 leading-relaxed text-black/80">{copy.proof}</p>
+          {previewProof(copy, prospect.category).map((line) => (
+            <p key={line} className="mt-2 leading-relaxed text-black/80">{line}</p>
+          ))}
         </section>
 
         <section className={cn(CARD_DARK, "mt-12 p-6")}>

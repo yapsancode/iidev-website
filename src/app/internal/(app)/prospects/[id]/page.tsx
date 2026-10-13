@@ -8,10 +8,10 @@ import { requireInternalUser } from "@/lib/auth/internal-user";
 import { getProspect } from "@/lib/prospects/data";
 import { previewPath } from "@/lib/prospects/preview";
 import { previewShareMessage } from "@/lib/prospects/preview-copy";
-import { isDue, isReadyToMessage, isToAudit, todayInMalaysia, whatsappLink } from "@/lib/prospects/rules";
-import { prospectEventLabels, prospectStatuses, prospectStatusLabels, websiteStateLabels, type ProspectAction, type ProspectStatus } from "@/lib/prospects/types";
+import { isDoNotContact, isDue, isReadyToMessage, isToAudit, todayInMalaysia, whatsappLink } from "@/lib/prospects/rules";
+import { lostReasonLabels, lostReasons, objectionLabels, objections, prospectEventLabels, prospectStatuses, prospectStatusLabels, websiteStateLabels, type ProspectAction, type ProspectStatus } from "@/lib/prospects/types";
 import { absoluteUrl } from "@/lib/site-config";
-import { addProspectNote, runProspectAction, setProspectPreview, setProspectStatus } from "../../../prospect-actions";
+import { addProspectNote, markProspectLost, runProspectAction, setProspectObjection, setProspectPreview, setProspectStatus } from "../../../prospect-actions";
 
 export const metadata: Metadata = { title: "Prospect" };
 
@@ -62,8 +62,11 @@ export default async function ProspectDetailPage({ params }: { params: Promise<{
   const previewTime = (value: string | null) =>
     value ? new Intl.DateTimeFormat("en-MY", { dateStyle: "medium", timeStyle: "short", timeZone: "Asia/Kuala_Lumpur" }).format(new Date(value)) : "—";
 
+  const stopped = isDoNotContact(prospect);
   const nextStep =
-    isToAudit(prospect) ? "Audit this business before sending anything."
+    stopped ? "They asked us to stop. Do not message this business again."
+    : prospect.status === "lost" && !prospect.lost_reason ? "Lost, but no reason recorded. Pick one under What happened."
+    : isToAudit(prospect) ? "Audit this business before sending anything."
     : prospect.status === "not_contacted" && !isReadyToMessage(prospect) ? "Audited, but no clear problem found. Low priority, or mark it not fit."
     : prospect.status === "not_contacted" && !prospect.draft_first ? "Ready to message. Ask Claude to write the message."
     : prospect.status === "not_contacted" ? "Ready. Send the first message, then tap Mark sent."
@@ -89,7 +92,7 @@ export default async function ProspectDetailPage({ params }: { params: Promise<{
                 </div>
                 <Link href={`/internal/prospects/${prospect.id}/edit`} className="inline-flex items-center gap-1.5 rounded-2xl bg-neutral-100 px-4 py-3 font-sans text-xs font-bold dark:bg-neutral-800"><Pencil className="h-3.5 w-3.5" />Edit</Link>
               </div>
-              {nextStep && <p className={`mt-5 rounded-2xl px-4 py-3 font-sans text-sm font-semibold ${due ? "bg-red-50 text-red-800 dark:bg-red-950 dark:text-red-200" : "bg-amber-50 text-amber-900 dark:bg-amber-950 dark:text-amber-100"}`}>{nextStep}</p>}
+              {nextStep && <p className={`mt-5 rounded-2xl px-4 py-3 font-sans text-sm font-semibold ${due || stopped ? "bg-red-50 text-red-800 dark:bg-red-950 dark:text-red-200" : "bg-amber-50 text-amber-900 dark:bg-amber-950 dark:text-amber-100"}`}>{nextStep}</p>}
               <div className="mt-6 grid grid-cols-2 gap-4 border-t border-neutral-100 pt-5 dark:border-neutral-800 sm:grid-cols-4">
                 <div><span className={smallLabel}>Phone</span><strong className="mt-1 block font-sans text-xs">{prospect.phone || "—"}{prospect.phone && !prospect.whatsapp ? " (landline)" : ""}</strong></div>
                 <div><span className={smallLabel}>Google reviews</span><strong className="mt-1 block font-sans text-xs tabular-nums">{prospect.google_reviews != null ? prospect.google_reviews.toLocaleString("en-MY") : "—"}</strong></div>
@@ -111,7 +114,7 @@ export default async function ProspectDetailPage({ params }: { params: Promise<{
               <p className="mt-3 font-sans text-sm text-neutral-500 dark:text-neutral-400">No message written yet. In Claude Code, type <code className="rounded bg-neutral-100 px-1.5 py-0.5 font-mono text-xs dark:bg-neutral-800">/outreach-message {prospect.business_name}</code>.</p>
             ) : (
               <>
-                <p className="mt-1 font-sans text-xs text-neutral-500 dark:text-neutral-400">The button opens WhatsApp with the text filled in. You still press send yourself.</p>
+                <p className="mt-1 font-sans text-xs text-neutral-500 dark:text-neutral-400">The button opens WhatsApp with the text filled in. You still press send yourself.{prospect.message_variant ? ` Message version: ${prospect.message_variant}.` : ""}</p>
                 <Draft title="First message" text={prospect.draft_first} link={whatsappLink(prospect.whatsapp, prospect.draft_first)} language={prospect.draft_language} />
                 <Draft title="Follow-up, day 4" text={prospect.draft_followup} link={whatsappLink(prospect.whatsapp, prospect.draft_followup)} language={prospect.draft_language} />
                 {!prospect.whatsapp && <p className="mt-3 font-sans text-xs text-neutral-500 dark:text-neutral-400">This number is a landline, so there is no WhatsApp button. Call, or use their contact form.</p>}
@@ -190,6 +193,28 @@ export default async function ProspectDetailPage({ params }: { params: Promise<{
               {(prospect.status === "messaged" || prospect.status === "not_contacted") && <ActionButton prospectId={prospect.id} action="replied" tone="plain"><MessageSquareReply className="h-3.5 w-3.5" />They replied</ActionButton>}
               {prospect.status === "not_contacted" && <ActionButton prospectId={prospect.id} action="not_fit" tone="plain">Not a fit</ActionButton>}
             </div>
+            {prospect.status !== "not_contacted" && !stopped && (
+              <form action={setProspectObjection} className="mt-4 border-t border-neutral-100 pt-4 dark:border-neutral-800">
+                <input type="hidden" name="prospectId" value={prospect.id} />
+                <label className={smallLabel}>What held them back?
+                  <select name="objection" defaultValue={prospect.objection || ""} className="mt-1.5 w-full rounded-xl bg-neutral-100 px-3 py-3 font-sans text-sm text-neutral-950 dark:bg-neutral-800 dark:text-neutral-50">
+                    <option value="">Not recorded</option>
+                    {objections.map((objection) => <option key={objection} value={objection}>{objectionLabels[objection]}</option>)}
+                  </select>
+                </label>
+                <button className="mt-2 w-full rounded-xl bg-neutral-100 px-4 py-3 font-sans text-xs font-bold dark:bg-neutral-800">Save objection</button>
+              </form>
+            )}
+            <form action={markProspectLost} className="mt-4 border-t border-neutral-100 pt-4 dark:border-neutral-800">
+              <input type="hidden" name="prospectId" value={prospect.id} />
+              <label className={smallLabel}>Lost? Say why
+                <select name="reason" required defaultValue={prospect.lost_reason || ""} className="mt-1.5 w-full rounded-xl bg-neutral-100 px-3 py-3 font-sans text-sm text-neutral-950 dark:bg-neutral-800 dark:text-neutral-50">
+                  <option value="" disabled>Pick a reason</option>
+                  {lostReasons.map((reason) => <option key={reason} value={reason}>{lostReasonLabels[reason]}</option>)}
+                </select>
+              </label>
+              <button className="mt-2 w-full rounded-xl bg-neutral-100 px-4 py-3 font-sans text-xs font-bold dark:bg-neutral-800">Mark lost</button>
+            </form>
             <form action={setProspectStatus} className="mt-4 border-t border-neutral-100 pt-4 dark:border-neutral-800">
               <input type="hidden" name="prospectId" value={prospect.id} />
               <label className={smallLabel}>Or set the status directly

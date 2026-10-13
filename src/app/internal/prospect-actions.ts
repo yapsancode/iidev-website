@@ -6,7 +6,7 @@ import { z } from "zod";
 import { requireInternalUser } from "@/lib/auth/internal-user";
 import { createProspect, setPreviewPublished, updateProspect } from "@/lib/prospects/data";
 import { prospectCreateSchema, prospectPatchSchema } from "@/lib/prospects/schema";
-import { prospectActions, prospectStatuses } from "@/lib/prospects/types";
+import { lostReasons, objections, prospectActions, prospectStatuses } from "@/lib/prospects/types";
 
 const idSchema = z.uuid();
 
@@ -97,6 +97,25 @@ export async function addProspectNote(formData: FormData) {
     .object({ prospectId: idSchema, note: z.string().trim().min(1).max(4000) })
     .parse({ prospectId: formData.get("prospectId"), note: formData.get("note") });
   await updateProspect(parsed.prospectId, { note: parsed.note }, user.id);
+  refreshProspectPaths(parsed.prospectId);
+}
+
+/** Marks a prospect lost with the reason. "Asked us to stop" closes it for good. */
+export async function markProspectLost(formData: FormData) {
+  const user = await requireInternalUser();
+  const parsed = z
+    .object({ prospectId: idSchema, reason: z.enum(lostReasons) })
+    .parse({ prospectId: formData.get("prospectId"), reason: formData.get("reason") });
+  await updateProspect(parsed.prospectId, { status: "lost", lost_reason: parsed.reason, next_follow_up: null }, user.id);
+  refreshProspectPaths(parsed.prospectId);
+}
+
+export async function setProspectObjection(formData: FormData) {
+  const user = await requireInternalUser();
+  const parsed = z
+    .object({ prospectId: idSchema, objection: z.enum(objections).or(z.literal("")) })
+    .parse({ prospectId: formData.get("prospectId"), objection: formData.get("objection") });
+  await updateProspect(parsed.prospectId, { objection: parsed.objection || null }, user.id);
   refreshProspectPaths(parsed.prospectId);
 }
 
