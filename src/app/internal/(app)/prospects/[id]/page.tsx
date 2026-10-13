@@ -10,6 +10,7 @@ import { previewPath } from "@/lib/prospects/preview";
 import { previewShareMessage } from "@/lib/prospects/preview-copy";
 import { isDoNotContact, isDue, isReadyToMessage, isToAudit, todayInMalaysia, whatsappLink } from "@/lib/prospects/rules";
 import { lostReasonLabels, lostReasons, objectionLabels, objections, prospectEventLabels, prospectStatuses, prospectStatusLabels, websiteStateLabels, type ProspectAction, type ProspectStatus } from "@/lib/prospects/types";
+import { isHealthcare } from "@/lib/sample/clinic";
 import { absoluteUrl } from "@/lib/site-config";
 import { addProspectNote, markProspectLost, runProspectAction, setProspectObjection, setProspectPreview, setProspectStatus } from "../../../prospect-actions";
 
@@ -151,6 +152,11 @@ export default async function ProspectDetailPage({ params }: { params: Promise<{
                       <div><span className={smallLabel}>Last opened</span><strong className="mt-1 block font-sans text-xs">{previewTime(prospect.preview_last_viewed_at)}</strong></div>
                     </div>
                     <p className="mt-2 font-sans text-[11px] text-neutral-400">Your own visits count too. A reload within 30 minutes does not.</p>
+                    {isHealthcare(prospect.category) && (
+                      <p className="mt-3 font-sans text-xs text-neutral-500 dark:text-neutral-400">
+                        {prospect.mockup ? <>The page also links to a sketch of their future website. <a href={`${previewUrl}/sketch`} target="_blank" rel="noreferrer" className="font-bold underline">Open sketch</a></> : "No sketch of their future website yet. Ask Claude to make one after they show interest."}
+                      </p>
+                    )}
                   </>
                 ) : (
                   <p className="mt-4 font-sans text-sm text-neutral-500 dark:text-neutral-400">Read the findings above. If every one is true today, create the link.</p>
