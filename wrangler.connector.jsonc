@@ -17,7 +17,7 @@
     "database_id": "ed440e16-326f-4b69-893b-614e50c7698d"
   }],
   // Sign-ins. Create it once with: npx wrangler kv namespace create OAUTH_KV --config wrangler.connector.jsonc
-  "kv_namespaces": [{ "binding": "OAUTH_KV", "id": "REPLACE_WITH_KV_NAMESPACE_ID" }],
+  "kv_namespaces": [{ "binding": "OAUTH_KV", "id": "f8f7037c13644670a865bb49eae0b8ab" }],
   "vars": { "CONNECTOR_URL": "https://mcp.iidevstudio.com/mcp" },
   "observability": { "enabled": true }
 }
