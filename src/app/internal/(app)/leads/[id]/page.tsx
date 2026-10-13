@@ -18,7 +18,7 @@ const nextActionLabels: Record<string, string> = {
 const eventLabels: Record<string, string> = {
   lead_captured: "Lead captured",
   ai_processing_started: "AI analysis started",
-  ai_processing_completed: "Summary saved",
+  ai_processing_completed: "Summary saved via Claude",
   ai_processing_failed: "AI analysis failed",
   telegram_sent: "Telegram alert sent",
   telegram_failed: "Telegram alert failed",

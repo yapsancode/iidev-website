@@ -14,7 +14,7 @@ import {
 import { isPreviewVisible, newPreviewToken, parsePreviewFindings, shouldCountView } from "./preview";
 import type { ProspectCreateInput, ProspectPatchInput } from "./schema";
 import { countByStatus, replyRate, sentInLastDays, weeklyActivity } from "./stats";
-import type { ProspectEvent, ProspectEventType, ProspectRecord, ProspectView } from "./types";
+import type { EventActor, ProspectEvent, ProspectEventType, ProspectRecord, ProspectView } from "./types";
 
 /** Columns a create or update may write. SQL column names only ever come from this list. */
 const WRITABLE_COLUMNS = [
@@ -98,8 +98,9 @@ function toColumn(value: string | number | boolean | null): string | number | nu
   return typeof value === "boolean" ? (value ? 1 : 0) : value;
 }
 
-function eventStatement(db: D1Database, prospectId: string, actor: string, event: PendingEvent) {
-  const metadata = serialize(event.metadata || {});
+function eventStatement(db: D1Database, prospectId: string, who: EventActor, event: PendingEvent) {
+  const actor = typeof who === "string" ? who : who.id;
+  const metadata = serialize(typeof who === "string" ? event.metadata || {} : { ...event.metadata, via: who.via });
   if (!event.happenedOn) {
     return db
       .prepare("INSERT INTO prospect_events(prospect_id,actor,event_type,metadata) VALUES(?,?,?,?)")
@@ -163,7 +164,7 @@ export async function getProspect(id: string): Promise<{ prospect: ProspectRecor
 
 export async function createProspect(
   input: ProspectCreateInput,
-  actor: string,
+  actor: EventActor,
   eventType: ProspectEventType = "created",
 ): Promise<ProspectRecord> {
   const db = await getDb();
@@ -192,7 +193,7 @@ export async function createProspect(
 export async function updateProspect(
   id: string,
   input: ProspectPatchInput,
-  actor: string,
+  actor: EventActor,
   today: string = todayInMalaysia(),
 ): Promise<ProspectRecord | null> {
   const db = await getDb();

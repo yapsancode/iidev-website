@@ -93,6 +93,12 @@ export interface ProspectRecord {
   last_activity_at: string;
 }
 
+/**
+ * Who made a change. A plain id is a founder working in the dashboard (or "claude" for the sales API).
+ * The object form is a founder who made the change through the Claude app.
+ */
+export type EventActor = string | { id: string; via: "claude" };
+
 export interface ProspectEvent {
   id: number;
   prospect_id: string;

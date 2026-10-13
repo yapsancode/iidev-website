@@ -98,13 +98,16 @@ async function findProspect(wanted: string): Promise<ProspectRecord> {
   });
 }
 
+/** The founder is the actor, and the timeline also shows the change came through Claude. */
+const viaClaude = (context: ToolContext) => ({ id: context.founder.id, via: "claude" as const });
+
 /** Applies a change through the website's own rules, under the founder's name. */
 async function change(wanted: string, patch: ProspectPatchInput, context: ToolContext) {
   const prospect = await findProspect(wanted);
   const input = prospectPatchSchema.parse(patch);
   let saved: ProspectRecord | null;
   try {
-    saved = await updateProspect(prospect.id, input, context.founder.id, context.today ?? todayInMalaysia());
+    saved = await updateProspect(prospect.id, input, viaClaude(context), context.today ?? todayInMalaysia());
   } catch {
     throw new ToolError("Nothing was saved. Another prospect may already use this business name and phone.");
   }
@@ -118,7 +121,8 @@ async function founderNames(): Promise<Map<string, string>> {
 }
 
 function timelineLine(event: ProspectEvent, names: Map<string, string>) {
-  const metadata = event.metadata as { from?: keyof typeof prospectStatusLabels; to?: keyof typeof prospectStatusLabels; body?: string; fields?: string[] };
+  const person = names.get(event.actor) || "Founder";
+  const metadata = event.metadata as { via?: string; from?: keyof typeof prospectStatusLabels; to?: keyof typeof prospectStatusLabels; body?: string; fields?: string[] };
   const detail =
     event.event_type === "status_changed" && metadata.to
       ? `${metadata.from ? prospectStatusLabels[metadata.from] : "?"} to ${prospectStatusLabels[metadata.to]}`
@@ -131,7 +135,14 @@ function timelineLine(event: ProspectEvent, names: Map<string, string>) {
     date: toMalaysiaDate(event.created_at),
     what: prospectEventLabels[event.event_type] || event.event_type,
     detail,
-    by: event.actor === "claude" ? "Claude Code" : names.get(event.actor) || "Founder",
+    by:
+      event.actor === "claude"
+        ? "Claude Code"
+        : event.actor === "prospect"
+          ? "The prospect"
+          : metadata.via === "claude"
+            ? `${person}, via Claude`
+            : person,
   });
 }
 
@@ -289,7 +300,7 @@ const createProspectTool = defineTool({
   async run(args, context) {
     const input = prospectCreateSchema.parse({ ...args, source: "claude" });
     try {
-      const prospect = await createProspect(input, context.founder.id);
+      const prospect = await createProspect(input, viaClaude(context));
       return { saved: true, saved_by: context.founder.full_name, prospect: prospectLine(briefProspect(prospect)) };
     } catch {
       throw new ToolError("Nothing was saved. A prospect with this business name and phone already exists. Call search_prospects to find it.");
