@@ -1,3 +1,4 @@
+import type { Mockup } from "../sample/clinic";
 import type { PreviewFinding } from "./preview";
 
 export const prospectStatuses = [
@@ -93,6 +94,8 @@ export interface ProspectRecord {
   message_variant: string | null;
   objection: Objection | null;
   preview_findings: PreviewFinding[] | null;
+  /** Details for the sketch of their future website. Null means no sketch. */
+  mockup: Mockup | null;
   preview_token: string | null;
   preview_views: number;
   preview_first_viewed_at: string | null;

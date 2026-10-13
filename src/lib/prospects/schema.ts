@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { mockupSchema } from "../sample/clinic";
 import { previewFindingsSchema } from "./preview";
 import { isValidDateString } from "./rules";
 import { draftLanguages, lostReasons, objections, prospectActions, prospectPriorities, prospectStatuses, websiteStates } from "./types";
@@ -58,6 +59,8 @@ const fields = {
   objection: z.enum(objections).nullable().optional(),
   /** What the prospect reads on their preview page. Null clears it. */
   preview_findings: previewFindingsSchema.nullable().optional(),
+  /** Details for the sketch of their future website. An empty object uses the sample's placeholders. Null removes the sketch. */
+  mockup: mockupSchema.nullable().optional(),
   source: z.string().trim().min(1).max(40).optional(),
 };
 
