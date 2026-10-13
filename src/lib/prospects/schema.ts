@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { previewFindingsSchema } from "./preview";
 import { isValidDateString } from "./rules";
 import { draftLanguages, prospectActions, prospectPriorities, prospectStatuses, websiteStates } from "./types";
 
@@ -49,6 +50,8 @@ const fields = {
   last_contact: optionalDate,
   next_follow_up: optionalDate,
   notes: optionalText(8000),
+  /** What the prospect reads on their preview page. Null clears it. */
+  preview_findings: previewFindingsSchema.nullable().optional(),
   source: z.string().trim().min(1).max(40).optional(),
 };
 
