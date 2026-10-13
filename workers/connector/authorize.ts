@@ -83,14 +83,21 @@ ${loopback}
 async function signedInFounder(request: Request, deps: AuthorizeDeps): Promise<InternalUser | null> {
   let email: string | null = deps.devEmail || null;
   if (!email) {
-    if (!deps.access.teamDomain || !deps.access.audience) return null;
-    const verify = deps.verifyToken || verifyAccessToken;
-    email = await verify(request.headers.get("cf-access-jwt-assertion"), {
-      teamDomain: deps.access.teamDomain,
-      audience: deps.access.audience,
-    });
+    const teamDomain = deps.access.teamDomain?.trim();
+    const audience = deps.access.audience?.trim();
+    if (!teamDomain || !audience) return refused("CF_ACCESS_TEAM_DOMAIN or CF_ACCESS_AUD is not set");
+    const token = request.headers.get("cf-access-jwt-assertion");
+    if (!token) return refused("no Cloudflare Access token on the request");
+    email = await (deps.verifyToken || verifyAccessToken)(token, { teamDomain, audience });
+    if (!email) return refused("the Access token did not match CF_ACCESS_TEAM_DOMAIN and CF_ACCESS_AUD");
   }
-  return findActiveInternalUser(deps.db, email);
+  return (await findActiveInternalUser(deps.db, email)) || refused("the signed-in email is not an active founder");
+}
+
+/** Says in the Worker log which check failed. Never logs the token, the email or a setting's value. */
+function refused(reason: string): null {
+  console.warn(`Sign-in refused: ${reason}.`);
+  return null;
 }
 
 /** Errors the OAuth library raises for a bad request. Matched by shape, so tests need no Workers runtime. */

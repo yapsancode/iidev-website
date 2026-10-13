@@ -110,6 +110,10 @@ function deps(oauth: ReturnType<typeof fakeOauth>, signedInAs: string | null, ex
   };
 }
 
+function get(): Request {
+  return new Request(authorizeUrl, { headers: { "cf-access-jwt-assertion": "token" } });
+}
+
 function post(decision: string): Request {
   return new Request(authorizeUrl, {
     method: "POST",
@@ -121,15 +125,30 @@ function post(decision: string): Request {
 describe("the sign-in page", () => {
   it("refuses a visitor with no Cloudflare Access login, before reading the request", async () => {
     const oauth = fakeOauth();
-    const response = await handleAuthorize(new Request(authorizeUrl), deps(oauth, null));
+    const response = await handleAuthorize(get(), deps(oauth, null));
     expect(response.status).toBe(403);
     expect(oauth.parseAuthRequest).not.toHaveBeenCalled();
+  });
+
+  it("refuses a request that carries no Access token at all", async () => {
+    const settings = deps(fakeOauth(), "founder@example.com");
+    const response = await handleAuthorize(new Request(authorizeUrl), settings);
+    expect(response.status).toBe(403);
+    expect(settings.verifyToken).not.toHaveBeenCalled();
+  });
+
+  it("ignores stray spaces around the Access settings", async () => {
+    const settings = deps(fakeOauth(), "founder@example.com", { access: { teamDomain: ` ${access.teamDomain}
+`, audience: ` ${access.audience}
+` } });
+    expect((await handleAuthorize(get(), settings)).status).toBe(200);
+    expect(settings.verifyToken).toHaveBeenCalledWith("token", access);
   });
 
   it("stays locked when Cloudflare Access is not configured", async () => {
     const oauth = fakeOauth();
     const verifyToken = vi.fn().mockResolvedValue("founder@example.com");
-    const response = await handleAuthorize(new Request(authorizeUrl), deps(oauth, null, { access: {}, verifyToken }));
+    const response = await handleAuthorize(get(), deps(oauth, null, { access: {}, verifyToken }));
     expect(response.status).toBe(403);
     expect(verifyToken).not.toHaveBeenCalled();
   });
@@ -142,19 +161,19 @@ describe("the sign-in page", () => {
   });
 
   it("refuses an email that passed Access but is not a founder", async () => {
-    const response = await handleAuthorize(new Request(authorizeUrl), deps(fakeOauth(), "stranger@example.com"));
+    const response = await handleAuthorize(get(), deps(fakeOauth(), "stranger@example.com"));
     expect(response.status).toBe(403);
   });
 
   it("refuses a founder who was switched off", async () => {
     const oauth = fakeOauth();
-    expect((await handleAuthorize(new Request(authorizeUrl), deps(oauth, "left@example.com"))).status).toBe(403);
+    expect((await handleAuthorize(get(), deps(oauth, "left@example.com"))).status).toBe(403);
     expect((await handleAuthorize(post("approve"), deps(oauth, "left@example.com"))).status).toBe(403);
     expect(oauth.completeAuthorization).not.toHaveBeenCalled();
   });
 
   it("shows a founder the question, with the app's name made safe", async () => {
-    const response = await handleAuthorize(new Request(authorizeUrl), deps(fakeOauth(), "founder@example.com"));
+    const response = await handleAuthorize(get(), deps(fakeOauth(), "founder@example.com"));
     const html = await response.text();
     expect(response.status).toBe(200);
     expect(response.headers.get("Set-Cookie")).toContain("__Host-oauth-consent");
@@ -166,7 +185,7 @@ describe("the sign-in page", () => {
 
   it("refuses a client that wants the answer sent somewhere other than Claude", async () => {
     const oauth = fakeOauth({ ...oauthRequest, redirectUri: "https://evil.example/callback" });
-    const response = await handleAuthorize(new Request(authorizeUrl), deps(oauth, "founder@example.com"));
+    const response = await handleAuthorize(get(), deps(oauth, "founder@example.com"));
     expect(response.status).toBe(400);
     expect(oauth.beginConsent).not.toHaveBeenCalled();
   });
@@ -197,14 +216,14 @@ describe("the sign-in page", () => {
     const oauth = fakeOauth();
     const broken = Object.assign(new Error("bad"), { name: "AuthorizationError" });
     oauth.parseAuthRequest.mockRejectedValue(broken);
-    const response = await handleAuthorize(new Request(authorizeUrl), deps(oauth, "founder@example.com"));
+    const response = await handleAuthorize(get(), deps(oauth, "founder@example.com"));
     expect(response.status).toBe(400);
     expect(response.headers.get("Location")).toBeNull();
   });
 
   it("uses the local test email only when the caller hands it over", async () => {
     const oauth = fakeOauth();
-    const response = await handleAuthorize(new Request(authorizeUrl), deps(oauth, null, { access: {}, devEmail: "founder@example.com" }));
+    const response = await handleAuthorize(get(), deps(oauth, null, { access: {}, devEmail: "founder@example.com" }));
     expect(response.status).toBe(200);
   });
 });
