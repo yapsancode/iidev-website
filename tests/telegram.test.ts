@@ -92,6 +92,31 @@ describe("Telegram lead alerts", () => {
     expect(payload.text).toContain("https://www.iidevstudio.com/internal/leads/08b4535a-d0f2-4ad8-b916-e0b3ca123456");
   });
 
+  it("sends a new enquiry as the visitor wrote it, with no score, when it has no summary yet", async () => {
+    process.env.TELEGRAM_BOT_TOKEN = "test-token";
+    process.env.TELEGRAM_CHAT_ID = "-100123";
+    const fetchMock = vi.fn().mockResolvedValue(new Response("ok", { status: 200 }));
+    vi.stubGlobal("fetch", fetchMock);
+    const fresh: LeadRecord = {
+      ...lead,
+      raw_enquiry: `Need a <site> for my clinic. ${"x".repeat(900)}`,
+      processing_status: "pending",
+      priority: "needs_review",
+      lead_score: null,
+      score_breakdown: null,
+      ai_extraction: null,
+    };
+
+    await sendLeadTelegramAlert(fresh);
+    const text = JSON.parse(fetchMock.mock.calls[0][1].body as string).text as string;
+
+    expect(text).toContain("NEW ENQUIRY");
+    expect(text).toContain("Need a &lt;site&gt; for my clinic.");
+    expect(text).toContain("Not summarised yet");
+    expect(text).not.toContain("Score:");
+    expect(text.length).toBeLessThan(1200);
+  });
+
   it("returns a bounded error when Telegram rejects the alert", async () => {
     process.env.TELEGRAM_BOT_TOKEN = "test-token";
     process.env.TELEGRAM_CHAT_ID = "-100123";

@@ -4,7 +4,7 @@ import { after } from "next/server";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { requireInternalUser } from "@/lib/auth/internal-user";
-import { processLead, resendTelegramAlert } from "@/lib/leads/processing";
+import { resendTelegramAlert } from "@/lib/leads/processing";
 import { leadStatuses } from "@/lib/leads/types";
 import { getDb } from "@/lib/cloudflare/env";
 import { serialize } from "@/lib/cloudflare/rows";
@@ -51,14 +51,6 @@ export async function addLeadNote(formData: FormData) {
   await (await getDb()).prepare("INSERT INTO lead_notes(id,lead_id,author_id,body) VALUES(?,?,?,?)").bind(crypto.randomUUID(),parsed.leadId,user.id,parsed.body).run();
   await addFounderEvent(parsed.leadId, user.id, "note_added", {});
   refreshLeadPaths(parsed.leadId);
-}
-
-export async function retryLeadProcessing(formData: FormData) {
-  const user = await requireInternalUser();
-  const leadId = idSchema.parse(formData.get("leadId"));
-  await addFounderEvent(leadId, user.id, "ai_retry_requested", {});
-  after(() => processLead(leadId));
-  refreshLeadPaths(leadId);
 }
 
 export async function resendLeadTelegram(formData: FormData) {

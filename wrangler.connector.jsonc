@@ -1,0 +1,23 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  // The Claude connector: lets a signed-in founder read and update sales data from the Claude app.
+  // A separate Worker, so a mistake here cannot break the public website.
+  "name": "iidev-claude-connector",
+  "main": "workers/connector/index.ts",
+  "compatibility_date": "2026-08-31",
+  // global_fetch_strictly_public: needed before the OAuth library will read Claude's metadata document.
+  "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
+  // Only the custom domain answers, so the Cloudflare Access login on /authorize cannot be skipped.
+  "workers_dev": false,
+  "preview_urls": false,
+  "routes": [{ "pattern": "mcp.iidevstudio.com", "custom_domain": true }],
+  "d1_databases": [{
+    "binding": "DB",
+    "database_name": "iidev-leads",
+    "database_id": "ed440e16-326f-4b69-893b-614e50c7698d"
+  }],
+  // Sign-ins. Create it once with: npx wrangler kv namespace create OAUTH_KV --config wrangler.connector.jsonc
+  "kv_namespaces": [{ "binding": "OAUTH_KV", "id": "f8f7037c13644670a865bb49eae0b8ab" }],
+  "vars": { "CONNECTOR_URL": "https://mcp.iidevstudio.com/mcp" },
+  "observability": { "enabled": true }
+}
