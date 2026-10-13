@@ -209,8 +209,11 @@ describe("changing prospects", () => {
     expect(await prospectRow("Klinik Replied")).toMatchObject({ status: "audit_booked" });
   });
 
-  it("adds a note without touching anything else", async () => {
+  it("adds a note without touching anything else, and the timeline says it came through Claude", async () => {
     await call("add_prospect_note", { prospect: "Klinik To Audit 0", note: "Owner is Dr Tan" });
+    const { data } = await call("get_prospect", { prospect: "Klinik To Audit 0" });
+    expect(data.timeline.shown).toContainEqual({ date: expect.any(String), what: "Note added", detail: "Owner is Dr Tan", by: "Founder One, via Claude" });
+    expect(data.timeline.shown).toContainEqual({ date: expect.any(String), what: "Prospect added", by: "Founder One" });
     expect(await prospectRow("Klinik To Audit 0")).toMatchObject({ status: "not_contacted" });
     expect(await eventsOf("Klinik To Audit 0")).toContainEqual({ event_type: "note_added", actor: "founder-one" });
   });
@@ -251,6 +254,10 @@ describe("changing prospects", () => {
     expect(first.data).toMatchObject({ saved: true, prospect: { name: "Physio Baru", status: "Not contacted", has_whatsapp: true } });
     expect(await prospectRow("Physio Baru")).toMatchObject({ source: "claude", whatsapp: "+60198765432" });
     expect(await eventsOf("Physio Baru")).toEqual([{ event_type: "created", actor: "founder-one" }]);
+    const created = await db
+      .prepare("SELECT e.metadata FROM prospect_events e JOIN prospects p ON p.id=e.prospect_id WHERE p.business_name='Physio Baru'")
+      .first<{ metadata: string }>();
+    expect(JSON.parse(created!.metadata)).toEqual({ via: "claude" });
     const again = await call("create_prospect", { business_name: "physio baru", phone: "019-876 5432" });
     expect(again.isError).toBe(true);
     expect(again.text).toContain("already exists");

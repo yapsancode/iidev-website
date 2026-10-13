@@ -228,7 +228,7 @@ export default async function ProspectDetailPage({ params }: { params: Promise<{
                     <div className="min-w-0">
                       <strong className="block font-sans text-xs">{prospectEventLabels[event.event_type] || event.event_type.replaceAll("_", " ")}</strong>
                       {detail && <p className="mt-1 whitespace-pre-wrap break-words font-sans text-xs text-neutral-600 dark:text-neutral-300">{detail}</p>}
-                      <time className="mt-1 block font-sans text-[9px] text-neutral-400">{new Intl.DateTimeFormat("en-MY", { dateStyle: "medium", timeStyle: "short", timeZone: "Asia/Kuala_Lumpur" }).format(new Date(event.created_at))} · {event.actor === "claude" ? "Claude" : event.actor === "prospect" ? "Prospect" : "Founder"}</time>
+                      <time className="mt-1 block font-sans text-[9px] text-neutral-400">{new Intl.DateTimeFormat("en-MY", { dateStyle: "medium", timeStyle: "short", timeZone: "Asia/Kuala_Lumpur" }).format(new Date(event.created_at))} · {event.actor === "claude" ? "Claude" : event.actor === "prospect" ? "Prospect" : event.metadata.via === "claude" ? "Founder, via Claude" : "Founder"}</time>
                     </div>
                   </div>
                 );
