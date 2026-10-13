@@ -11,6 +11,7 @@ import {
   todayInMalaysia,
   toMalaysianMobile,
 } from "./rules";
+import { isPreviewVisible, newPreviewToken, parsePreviewFindings, shouldCountView } from "./preview";
 import type { ProspectCreateInput, ProspectPatchInput } from "./schema";
 import { countByStatus, replyRate, sentInLastDays, weeklyActivity } from "./stats";
 import type { ProspectEvent, ProspectEventType, ProspectRecord, ProspectView } from "./types";
@@ -39,6 +40,7 @@ const WRITABLE_COLUMNS = [
   "last_contact",
   "next_follow_up",
   "notes",
+  "preview_findings",
   "source",
 ] as const;
 type WritableColumn = (typeof WRITABLE_COLUMNS)[number];
@@ -61,7 +63,18 @@ interface PendingEvent {
 }
 
 function hydrateProspect(row: Record<string, unknown>): ProspectRecord {
-  return { ...row, has_gbp: row.has_gbp == null ? null : Boolean(row.has_gbp) } as ProspectRecord;
+  return {
+    ...row,
+    has_gbp: row.has_gbp == null ? null : Boolean(row.has_gbp),
+    preview_findings: parsePreviewFindings(row.preview_findings),
+    preview_views: Number(row.preview_views ?? 0),
+  } as ProspectRecord;
+}
+
+/** The value as the database stores it, so "did this change?" compares like with like. */
+function storedValue(value: unknown): string | number | boolean | null {
+  if (value == null) return null;
+  return typeof value === "object" ? JSON.stringify(value) : (value as string | number | boolean);
 }
 
 function hydrateEvent(row: Record<string, unknown>): ProspectEvent {
@@ -158,7 +171,7 @@ export async function createProspect(
   const values: ColumnValues = {};
   for (const column of WRITABLE_COLUMNS) {
     const value = input[column as keyof ProspectCreateInput];
-    if (value !== undefined) values[column] = value as string | number | boolean | null;
+    if (value !== undefined) values[column] = storedValue(value);
   }
   values.whatsapp = toMalaysianMobile(input.whatsapp) ?? toMalaysianMobile(input.phone);
   const columns = Object.keys(values) as WritableColumn[];
@@ -191,7 +204,7 @@ export async function updateProspect(
   const wanted: ColumnValues = {};
   for (const column of WRITABLE_COLUMNS) {
     const value = (fields as Record<string, unknown>)[column];
-    if (value !== undefined) wanted[column] = value as string | number | boolean | null;
+    if (value !== undefined) wanted[column] = storedValue(value);
   }
   if (whatsapp !== undefined || fields.phone !== undefined) {
     const phone = fields.phone !== undefined ? fields.phone : current.phone;
@@ -201,7 +214,7 @@ export async function updateProspect(
   if (outcome) Object.assign(wanted, outcome.patch);
 
   const changed = (Object.keys(wanted) as WritableColumn[]).filter(
-    (column) => wanted[column] !== (current as unknown as Record<string, unknown>)[column],
+    (column) => wanted[column] !== storedValue((current as unknown as Record<string, unknown>)[column]),
   );
 
   const events: PendingEvent[] = [];
@@ -230,6 +243,57 @@ export async function updateProspect(
   );
   await db.batch(statements);
   return (await getProspect(id))!.prospect;
+}
+
+/** Creates the private link (or removes it). Only a founder does this, after reading the findings. */
+export async function setPreviewPublished(id: string, published: boolean, actor: string): Promise<ProspectRecord | null> {
+  const db = await getDb();
+  const existing = await getProspect(id);
+  if (!existing) return null;
+  const current = existing.prospect;
+  if (published === Boolean(current.preview_token)) return current;
+  if (published && !current.preview_findings?.length) return current;
+  const now = new Date().toISOString();
+  await db.batch([
+    db
+      .prepare(
+        "UPDATE prospects SET preview_token=?,preview_views=0,preview_first_viewed_at=NULL,preview_last_viewed_at=NULL,updated_at=? WHERE id=?",
+      )
+      .bind(published ? newPreviewToken() : null, now, id),
+    eventStatement(db, id, actor, { type: published ? "preview_published" : "preview_removed" }),
+  ]);
+  return (await getProspect(id))!.prospect;
+}
+
+/** The prospect behind a preview link, or null when the link is unknown or switched off. */
+export async function getProspectByPreviewToken(token: string): Promise<ProspectRecord | null> {
+  const row = await (await getDb())
+    .prepare("SELECT * FROM prospects WHERE preview_token=?")
+    .bind(token)
+    .first<Record<string, unknown>>();
+  if (!row) return null;
+  const prospect = hydrateProspect(row);
+  return isPreviewVisible(prospect) ? prospect : null;
+}
+
+/** Counts one view: a number and two times, nothing about the visitor. Reloads within the gap are ignored. */
+export async function recordPreviewView(token: string, now: Date = new Date()): Promise<boolean> {
+  const prospect = await getProspectByPreviewToken(token);
+  if (!prospect || !shouldCountView(prospect.preview_last_viewed_at, now)) return false;
+  const db = await getDb();
+  const at = now.toISOString();
+  const statements = [
+    db
+      .prepare(
+        "UPDATE prospects SET preview_views=preview_views+1,preview_first_viewed_at=coalesce(preview_first_viewed_at,?),preview_last_viewed_at=? WHERE id=?",
+      )
+      .bind(at, at, prospect.id),
+  ];
+  if (!prospect.preview_first_viewed_at) {
+    statements.push(eventStatement(db, prospect.id, "prospect", { type: "preview_viewed" }));
+  }
+  await db.batch(statements);
+  return true;
 }
 
 /** Adds new prospects and updates existing ones, matched on business name + phone. Safe to run twice. */

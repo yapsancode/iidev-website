@@ -6,9 +6,12 @@ import { CopyButton } from "@/components/internal/CopyButton";
 import { formatDay, ProspectPriorityBadge, ProspectStatusBadge, WebsiteStateBadge } from "@/components/internal/ProspectBits";
 import { requireInternalUser } from "@/lib/auth/internal-user";
 import { getProspect } from "@/lib/prospects/data";
+import { previewPath } from "@/lib/prospects/preview";
+import { previewShareMessage } from "@/lib/prospects/preview-copy";
 import { isDue, isReadyToMessage, isToAudit, todayInMalaysia, whatsappLink } from "@/lib/prospects/rules";
 import { prospectEventLabels, prospectStatuses, prospectStatusLabels, websiteStateLabels, type ProspectAction, type ProspectStatus } from "@/lib/prospects/types";
-import { addProspectNote, runProspectAction, setProspectStatus } from "../../../prospect-actions";
+import { absoluteUrl } from "@/lib/site-config";
+import { addProspectNote, runProspectAction, setProspectPreview, setProspectStatus } from "../../../prospect-actions";
 
 export const metadata: Metadata = { title: "Prospect" };
 
@@ -52,6 +55,12 @@ export default async function ProspectDetailPage({ params }: { params: Promise<{
   const today = todayInMalaysia();
   const due = isDue(prospect, today);
   const plainWhatsapp = whatsappLink(prospect.whatsapp);
+  const previewLink = previewPath(prospect);
+  const previewUrl = previewLink ? absoluteUrl(previewLink) : null;
+  const previewMessage = previewUrl ? previewShareMessage(prospect.draft_language, prospect.business_name, previewUrl) : null;
+  const previewWhatsapp = previewMessage ? whatsappLink(prospect.whatsapp, previewMessage) : null;
+  const previewTime = (value: string | null) =>
+    value ? new Intl.DateTimeFormat("en-MY", { dateStyle: "medium", timeStyle: "short", timeZone: "Asia/Kuala_Lumpur" }).format(new Date(value)) : "—";
 
   const nextStep =
     isToAudit(prospect) ? "Audit this business before sending anything."
@@ -111,6 +120,48 @@ export default async function ProspectDetailPage({ params }: { params: Promise<{
           </section>
 
           <section className={card}>
+            <h2 className="font-sans text-lg font-bold">Preview page</h2>
+            <p className="mt-1 font-sans text-xs text-neutral-500 dark:text-neutral-400">A private page for this business. Send the link only after they say yes. Never in the first message.</p>
+            {!prospect.preview_findings?.length ? (
+              <p className="mt-3 font-sans text-sm text-neutral-500 dark:text-neutral-400">No findings written for the page yet. In Claude Code, type <code className="rounded bg-neutral-100 px-1.5 py-0.5 font-mono text-xs dark:bg-neutral-800">/prospect-audit {prospect.business_name}</code>.</p>
+            ) : (
+              <>
+                <ol className="mt-4 space-y-3">
+                  {prospect.preview_findings.map((finding, index) => (
+                    <li key={index} className="rounded-2xl bg-neutral-50 p-4 dark:bg-neutral-800">
+                      <p className="font-sans text-sm font-semibold leading-relaxed">{index + 1}. {finding.seen}</p>
+                      <p className="mt-1 font-sans text-xs leading-relaxed text-neutral-500 dark:text-neutral-400">Check it yourself: {finding.check}</p>
+                    </li>
+                  ))}
+                </ol>
+                {previewUrl ? (
+                  <>
+                    <p className="mt-4 break-all rounded-xl bg-neutral-100 px-3 py-2.5 font-mono text-xs dark:bg-neutral-800">{previewUrl}</p>
+                    <div className="mt-3 flex flex-wrap gap-2">
+                      {previewWhatsapp && <a href={previewWhatsapp} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1.5 rounded-xl bg-[#ef6552] px-3 py-2.5 font-sans text-xs font-bold text-white"><MessageCircle className="h-3.5 w-3.5" />Open WhatsApp with the link</a>}
+                      <CopyButton text={previewUrl} label="Copy link" />
+                      <a href={previewUrl} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1.5 rounded-xl bg-neutral-100 px-3 py-2.5 font-sans text-xs font-bold dark:bg-neutral-800"><ExternalLink className="h-3.5 w-3.5" />Open page</a>
+                    </div>
+                    <div className="mt-4 grid grid-cols-3 gap-4">
+                      <div><span className={smallLabel}>Times opened</span><strong className="mt-1 block font-sans text-xs tabular-nums">{prospect.preview_views}</strong></div>
+                      <div><span className={smallLabel}>First opened</span><strong className="mt-1 block font-sans text-xs">{previewTime(prospect.preview_first_viewed_at)}</strong></div>
+                      <div><span className={smallLabel}>Last opened</span><strong className="mt-1 block font-sans text-xs">{previewTime(prospect.preview_last_viewed_at)}</strong></div>
+                    </div>
+                    <p className="mt-2 font-sans text-[11px] text-neutral-400">Your own visits count too. A reload within 30 minutes does not.</p>
+                  </>
+                ) : (
+                  <p className="mt-4 font-sans text-sm text-neutral-500 dark:text-neutral-400">Read the findings above. If every one is true today, create the link.</p>
+                )}
+                <form action={setProspectPreview} className="mt-4">
+                  <input type="hidden" name="prospectId" value={prospect.id} />
+                  <input type="hidden" name="publish" value={previewUrl ? "no" : "yes"} />
+                  <button className={`rounded-xl px-4 py-3 font-sans text-xs font-bold ${previewUrl ? "bg-neutral-100 dark:bg-neutral-800" : "bg-emerald-600 text-white"}`}>{previewUrl ? "Remove the link" : "Create the private link"}</button>
+                </form>
+              </>
+            )}
+          </section>
+
+          <section className={card}>
             <div className="flex items-end justify-between gap-3"><h2 className="font-sans text-lg font-bold">Audit</h2><span className="font-sans text-[11px] text-neutral-400">{prospect.audit_date ? `Checked ${formatDay(prospect.audit_date)}` : "Not audited"}</span></div>
             {!prospect.audit_date ? (
               <p className="mt-3 font-sans text-sm text-neutral-500 dark:text-neutral-400">In Claude Code, type <code className="rounded bg-neutral-100 px-1.5 py-0.5 font-mono text-xs dark:bg-neutral-800">/prospect-audit {prospect.business_name}</code>.</p>
@@ -164,7 +215,7 @@ export default async function ProspectDetailPage({ params }: { params: Promise<{
             <div className="mt-4 space-y-4">
               {events.map((event) => {
                 const metadata = event.metadata as { from?: ProspectStatus; to?: ProspectStatus; body?: string; fields?: string[]; imported?: boolean };
-                const Icon = event.event_type === "note_added" ? StickyNote : event.event_type.includes("sent") ? Send : event.event_type === "reply_logged" ? MessageSquareReply : event.event_type === "status_changed" ? Check : Clock3;
+                const Icon = event.event_type === "note_added" ? StickyNote : event.event_type.includes("sent") ? Send : event.event_type === "reply_logged" ? MessageSquareReply : event.event_type === "status_changed" ? Check : event.event_type.startsWith("preview_") ? ExternalLink : Clock3;
                 const detail =
                   event.event_type === "status_changed" && metadata.to ? `${metadata.from ? prospectStatusLabels[metadata.from] : "?"} to ${prospectStatusLabels[metadata.to]}`
                   : event.event_type === "note_added" ? metadata.body
@@ -177,7 +228,7 @@ export default async function ProspectDetailPage({ params }: { params: Promise<{
                     <div className="min-w-0">
                       <strong className="block font-sans text-xs">{prospectEventLabels[event.event_type] || event.event_type.replaceAll("_", " ")}</strong>
                       {detail && <p className="mt-1 whitespace-pre-wrap break-words font-sans text-xs text-neutral-600 dark:text-neutral-300">{detail}</p>}
-                      <time className="mt-1 block font-sans text-[9px] text-neutral-400">{new Intl.DateTimeFormat("en-MY", { dateStyle: "medium", timeStyle: "short", timeZone: "Asia/Kuala_Lumpur" }).format(new Date(event.created_at))} · {event.actor === "claude" ? "Claude" : "Founder"}</time>
+                      <time className="mt-1 block font-sans text-[9px] text-neutral-400">{new Intl.DateTimeFormat("en-MY", { dateStyle: "medium", timeStyle: "short", timeZone: "Asia/Kuala_Lumpur" }).format(new Date(event.created_at))} · {event.actor === "claude" ? "Claude" : event.actor === "prospect" ? "Prospect" : "Founder"}</time>
                     </div>
                   </div>
                 );
