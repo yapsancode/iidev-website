@@ -2,14 +2,9 @@ import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { getDb } from "@/lib/cloudflare/env";
 import { verifyAccessToken } from "./access-jwt";
+import { findActiveInternalUser, type InternalUser } from "./founder";
 
-export interface InternalUser {
-  id: string;
-  email: string;
-  full_name: string;
-  role: "founder" | "admin";
-  active: number;
-}
+export type { InternalUser };
 
 /**
  * Who is signed in, as an email address.
@@ -31,7 +26,7 @@ export async function getInternalUser(): Promise<InternalUser | null> {
   const email = await signedInEmail();
   if (!email) return null;
   try {
-    return await (await getDb()).prepare("SELECT id,email,full_name,role,active FROM internal_users WHERE lower(email)=lower(?) AND active=1").bind(email).first<InternalUser>();
+    return await findActiveInternalUser(await getDb(), email);
   } catch {
     return null;
   }

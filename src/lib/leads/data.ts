@@ -50,3 +50,11 @@ export async function getInsightsData(){
   const demand=new Map<string,number>(); records.forEach(l=>l.ai_extraction?.requestedServices.forEach(s=>demand.set(s,(demand.get(s)||0)+1)));
   return {total:records.length,averageScore:scored.length?Math.round(scored.reduce((s,l)=>s+(l.lead_score||0),0)/scored.length):null,aiReliability:completed.length?Math.round(completed.filter(l=>l.processing_status==="complete").length/completed.length*100):null,averageResponseMinutes:responseMinutes.length?Math.round(responseMinutes.reduce((a,b)=>a+b,0)/responseMinutes.length):null,missedFollowUps:records.filter(l=>l.status==="new"&&Date.now()-new Date(l.created_at).getTime()>259200000).length,serviceDemand:[...demand.entries()].sort((a,b)=>b[1]-a[1]),records};
 }
+
+/** Open enquiries nobody has answered yet, and how many of the open ones have no summary. */
+export async function countEnquiriesWaiting(): Promise<{ new_enquiries: number; not_summarised: number }> {
+  const row = await (await getDb())
+    .prepare("SELECT SUM(status='new') new_enquiries, SUM(ai_extraction IS NULL) not_summarised FROM leads WHERE status NOT IN ('won','lost','not_fit')")
+    .first<{ new_enquiries: number | null; not_summarised: number | null }>();
+  return { new_enquiries: row?.new_enquiries ?? 0, not_summarised: row?.not_summarised ?? 0 };
+}

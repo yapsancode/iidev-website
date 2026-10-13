@@ -1,0 +1,21 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  // Local testing only (npm run dev:connector). Never deployed: it has no public address.
+  // Same Worker as wrangler.connector.jsonc, but it answers on this computer and skips the Cloudflare Access login.
+  "name": "iidev-claude-connector-dev",
+  "main": "workers/connector/index.ts",
+  "compatibility_date": "2026-08-31",
+  "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
+  "workers_dev": false,
+  "d1_databases": [{
+    "binding": "DB",
+    "database_name": "iidev-leads",
+    "database_id": "ed440e16-326f-4b69-893b-614e50c7698d"
+  }],
+  "kv_namespaces": [{ "binding": "OAUTH_KV", "id": "local-only" }],
+  "vars": {
+    "CONNECTOR_URL": "http://127.0.0.1:8788/mcp",
+    // Must match a founder in the local database. Ignored unless the address above is a localhost one.
+    "DEV_FOUNDER_EMAIL": "dev-founder@example.com"
+  }
+}

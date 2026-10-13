@@ -2,7 +2,7 @@ import { after } from "next/server";
 import { NextResponse, type NextRequest } from "next/server";
 import { leadSubmissionSchema, normalizeWhatsapp } from "@/lib/leads/schema";
 import { hashIp, isAllowedOrigin } from "@/lib/leads/security";
-import { processLead } from "@/lib/leads/processing";
+import { notifyNewLead } from "@/lib/leads/processing";
 import { buildWhatsAppUrl } from "@/lib/leads/whatsapp";
 import { getDb } from "@/lib/cloudflare/env";
 import { serialize } from "@/lib/cloudflare/rows";
@@ -70,7 +70,7 @@ export async function POST(request: NextRequest) {
   }
 
   await db.prepare("INSERT INTO lead_events(lead_id,event_type,metadata) VALUES(?,?,?)").bind(leadId,"lead_captured",serialize({sourcePage:parsed.data.sourcePage||null,serviceContext:parsed.data.serviceContext||null})).run();
-  after(() => processLead(leadId));
+  after(() => notifyNewLead(leadId));
 
   return NextResponse.json({ leadId, whatsappUrl: fallbackWhatsappUrl }, { status: 201 });
 }
