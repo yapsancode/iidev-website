@@ -4,7 +4,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 import { requireInternalUser } from "@/lib/auth/internal-user";
-import { createProspect, updateProspect } from "@/lib/prospects/data";
+import { createProspect, setPreviewPublished, updateProspect } from "@/lib/prospects/data";
 import { prospectCreateSchema, prospectPatchSchema } from "@/lib/prospects/schema";
 import { prospectActions, prospectStatuses } from "@/lib/prospects/types";
 
@@ -97,6 +97,16 @@ export async function addProspectNote(formData: FormData) {
     .object({ prospectId: idSchema, note: z.string().trim().min(1).max(4000) })
     .parse({ prospectId: formData.get("prospectId"), note: formData.get("note") });
   await updateProspect(parsed.prospectId, { note: parsed.note }, user.id);
+  refreshProspectPaths(parsed.prospectId);
+}
+
+/** Creates or removes the private preview link. The founder reads the findings first. */
+export async function setProspectPreview(formData: FormData) {
+  const user = await requireInternalUser();
+  const parsed = z
+    .object({ prospectId: idSchema, publish: z.enum(["yes", "no"]) })
+    .parse({ prospectId: formData.get("prospectId"), publish: formData.get("publish") });
+  await setPreviewPublished(parsed.prospectId, parsed.publish === "yes", user.id);
   refreshProspectPaths(parsed.prospectId);
 }
 

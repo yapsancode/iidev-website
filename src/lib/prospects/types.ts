@@ -1,3 +1,5 @@
+import type { PreviewFinding } from "./preview";
+
 export const prospectStatuses = [
   "not_contacted",
   "messaged",
@@ -43,6 +45,9 @@ export const prospectEventTypes = [
   "note_added",
   "draft_saved",
   "details_updated",
+  "preview_published",
+  "preview_removed",
+  "preview_viewed",
 ] as const;
 
 export type ProspectStatus = (typeof prospectStatuses)[number];
@@ -77,6 +82,11 @@ export interface ProspectRecord {
   last_contact: string | null;
   next_follow_up: string | null;
   notes: string | null;
+  preview_findings: PreviewFinding[] | null;
+  preview_token: string | null;
+  preview_views: number;
+  preview_first_viewed_at: string | null;
+  preview_last_viewed_at: string | null;
   source: string;
   created_at: string;
   updated_at: string;
@@ -131,6 +141,9 @@ export const prospectEventLabels: Record<string, string> = {
   note_added: "Note added",
   draft_saved: "Message draft saved",
   details_updated: "Details updated",
+  preview_published: "Preview link created",
+  preview_removed: "Preview link removed",
+  preview_viewed: "They opened the preview page",
 };
 
 export const closedProspectStatuses: ProspectStatus[] = ["won", "lost", "not_fit"];
