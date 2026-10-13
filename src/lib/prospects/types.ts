@@ -31,6 +31,11 @@ export const prospectCategories = [
   "Other",
 ] as const;
 
+/** Why a prospect ended as Lost. "asked_to_stop" also means: never contact again. */
+export const lostReasons = ["no_reply", "not_interested", "asked_to_stop", "has_agency", "price", "not_now", "other"] as const;
+/** The main thing that held a prospect back, as heard in their reply. */
+export const objections = ["price", "has_website", "facebook_enough", "has_agency", "no_time", "not_now", "trust", "other"] as const;
+
 export const prospectViews = ["all", "to_audit", "ready", "due", "replied", "in_progress", "closed"] as const;
 export const prospectActions = ["mark_sent", "follow_up_sent", "replied", "not_fit"] as const;
 
@@ -54,6 +59,8 @@ export type ProspectStatus = (typeof prospectStatuses)[number];
 export type ProspectPriority = (typeof prospectPriorities)[number];
 export type WebsiteState = (typeof websiteStates)[number];
 export type DraftLanguage = (typeof draftLanguages)[number];
+export type LostReason = (typeof lostReasons)[number];
+export type Objection = (typeof objections)[number];
 export type ProspectView = (typeof prospectViews)[number];
 export type ProspectAction = (typeof prospectActions)[number];
 export type ProspectEventType = (typeof prospectEventTypes)[number];
@@ -82,6 +89,9 @@ export interface ProspectRecord {
   last_contact: string | null;
   next_follow_up: string | null;
   notes: string | null;
+  lost_reason: LostReason | null;
+  message_variant: string | null;
+  objection: Objection | null;
   preview_findings: PreviewFinding[] | null;
   preview_token: string | null;
   preview_views: number;
@@ -112,6 +122,27 @@ export const prospectStatusLabels: Record<ProspectStatus, string> = {
   won: "Won",
   lost: "Lost",
   not_fit: "Not fit",
+};
+
+export const lostReasonLabels: Record<LostReason, string> = {
+  no_reply: "No reply",
+  not_interested: "Not interested",
+  asked_to_stop: "Asked us to stop",
+  has_agency: "Already has someone",
+  price: "Price",
+  not_now: "Not now",
+  other: "Other",
+};
+
+export const objectionLabels: Record<Objection, string> = {
+  price: "Price",
+  has_website: "Already has a website",
+  facebook_enough: "Facebook or Instagram is enough",
+  has_agency: "Already has someone",
+  no_time: "No time",
+  not_now: "Not now",
+  trust: "Does not know us",
+  other: "Other",
 };
 
 export const websiteStateLabels: Record<WebsiteState, string> = {

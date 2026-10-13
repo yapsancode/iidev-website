@@ -7,6 +7,10 @@ import { prospectCreateSchema, prospectPatchSchema, type ProspectPatchInput } fr
 import { briefProspect, buildPipelineSummary, type ProspectBrief } from "../../src/lib/prospects/summary";
 import {
   draftLanguages,
+  lostReasonLabels,
+  lostReasons,
+  objectionLabels,
+  objections,
   prospectActions,
   prospectEventLabels,
   prospectPriorities,
@@ -80,6 +84,12 @@ function prospectDetails(prospect: ProspectRecord) {
     draft_first: prospect.draft_first,
     draft_followup: prospect.draft_followup,
     notes: prospect.notes,
+    lost_reason: prospect.lost_reason ? lostReasonLabels[prospect.lost_reason] : null,
+    objection_heard: prospect.objection ? objectionLabels[prospect.objection] : null,
+    message_version: prospect.message_variant,
+    preview_page_findings: prospect.preview_findings,
+    preview_link_created: Boolean(prospect.preview_token),
+    preview_times_opened: prospect.preview_token ? prospect.preview_views : null,
     source: prospect.source,
   });
 }
@@ -204,10 +214,11 @@ const logProspectAction = defineTool({
   input: z.object({
     prospect: prospectInput,
     action: z.enum(prospectActions),
+    objection: z.enum(objections).optional().describe(`With "replied": the main thing holding them back, if they said one. ${objections.map((value) => `${value} (${objectionLabels[value]})`).join(", ")}.`),
     note: noteInput.optional().describe("Optional note for the timeline."),
   }),
   kind: "change",
-  run: ({ prospect, action, note }, context) => change(prospect, { action, note }, context),
+  run: ({ prospect, action, objection, note }, context) => change(prospect, { action, objection, note }, context),
 });
 
 const updateProspectStatus = defineTool({
@@ -217,10 +228,14 @@ const updateProspectStatus = defineTool({
   input: z.object({
     prospect: prospectInput,
     status: z.enum(prospectStatuses),
+    lost_reason: z.enum(lostReasons).optional().describe(`Give this when the status is lost. ${lostReasons.map((value) => `${value} (${lostReasonLabels[value]})`).join(", ")}. asked_to_stop also means the business is never contacted again.`),
     note: noteInput.optional().describe("Optional note for the timeline, for example why."),
   }),
   kind: "change",
-  run: ({ prospect, status, note }, context) => change(prospect, { status, note }, context),
+  run({ prospect, status, lost_reason, note }, context) {
+    if (status === "lost" && !lost_reason) throw new ToolError("Nothing was saved. Give lost_reason when the status is lost.");
+    return change(prospect, { status, lost_reason: status === "lost" ? lost_reason : undefined, note }, context);
+  },
 });
 
 const addProspectNote = defineTool({
@@ -241,11 +256,12 @@ const saveProspectDraft = defineTool({
     draft_first: z.string().trim().min(1).max(2000).optional().describe("The first message."),
     draft_followup: z.string().trim().min(1).max(2000).optional().describe("The follow-up, sent about 4 days later if there is no reply."),
     language: z.enum(draftLanguages).optional().describe("ms for Bahasa Melayu, en for English."),
+    message_version: z.string().trim().min(1).max(40).optional().describe('Short label of the first-message version, for example "v2-no-price". Used to compare reply rates.'),
   }),
   kind: "change",
-  run({ prospect, draft_first, draft_followup, language }, context) {
+  run({ prospect, draft_first, draft_followup, language, message_version }, context) {
     if (!draft_first && !draft_followup) throw new ToolError("Nothing was saved. Give draft_first, draft_followup, or both.");
-    return change(prospect, { draft_first, draft_followup, draft_language: language }, context);
+    return change(prospect, { draft_first, draft_followup, draft_language: language, message_variant: message_version }, context);
   },
 });
 
@@ -264,10 +280,16 @@ const saveProspectAudit = defineTool({
     has_google_listing: z.boolean().optional(),
     google_reviews: z.number().int().min(0).optional().describe("Number of Google reviews seen today."),
     audit_date: dateInput.optional().describe("Defaults to today in Malaysia."),
+    page_findings: z
+      .array(z.object({ seen: z.string().trim().min(1).max(400), check: z.string().trim().min(1).max(300) }))
+      .min(1)
+      .max(3)
+      .optional()
+      .describe("The findings as the business owner will read them on their private preview page, top finding first. seen: what a customer sees, in plain words, with no fix and no price. check: how the owner can check it themselves. Only findings checked today. The founder creates the link by hand."),
   }),
   kind: "change",
-  run({ prospect, has_google_listing, audit_date, ...fields }, context) {
-    return change(prospect, { ...fields, has_gbp: has_google_listing, audit_date: audit_date ?? context.today ?? todayInMalaysia() }, context);
+  run({ prospect, has_google_listing, audit_date, page_findings, ...fields }, context) {
+    return change(prospect, { ...fields, preview_findings: page_findings, has_gbp: has_google_listing, audit_date: audit_date ?? context.today ?? todayInMalaysia() }, context);
   },
 });
 

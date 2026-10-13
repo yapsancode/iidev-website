@@ -158,3 +158,46 @@ export function categoryByStage(prospects: Pick<ProspectRecord, "status" | "cate
     return { category: row.category, total: row.total, stages };
   });
 }
+
+export interface GroupReplyRate extends ReplyRate {
+  label: string;
+}
+
+/**
+ * Reply rate split by something about the prospect: message version, category, language.
+ * Counted per business. Largest group first.
+ */
+export function replyRateBy<Row extends { id: string }>(
+  prospects: Row[],
+  events: EventLike[],
+  labelOf: (prospect: Row) => string | null | undefined,
+): GroupReplyRate[] {
+  const messaged = new Set<string>();
+  const replied = new Set<string>();
+  for (const event of events) {
+    if (event.event_type === "message_sent") messaged.add(event.prospect_id);
+    if (event.event_type === "reply_logged") replied.add(event.prospect_id);
+  }
+  const groups = new Map<string, { messaged: number; replied: number }>();
+  for (const prospect of prospects) {
+    if (!messaged.has(prospect.id)) continue;
+    const label = labelOf(prospect) || "Not recorded";
+    const group = groups.get(label) || { messaged: 0, replied: 0 };
+    group.messaged += 1;
+    if (replied.has(prospect.id)) group.replied += 1;
+    groups.set(label, group);
+  }
+  return [...groups.entries()]
+    .map(([label, group]) => ({ label, ...group, percent: Math.round((group.replied / group.messaged) * 100) }))
+    .sort((a, b) => b.messaged - a.messaged || a.label.localeCompare(b.label));
+}
+
+/** How many prospects carry each value of a field, largest first. Empty values are left out. */
+export function countByField<Row>(rows: Row[], valueOf: (row: Row) => string | null | undefined): { value: string; count: number }[] {
+  const counts = new Map<string, number>();
+  for (const row of rows) {
+    const value = valueOf(row);
+    if (value) counts.set(value, (counts.get(value) || 0) + 1);
+  }
+  return [...counts.entries()].map(([value, count]) => ({ value, count })).sort((a, b) => b.count - a.count || a.value.localeCompare(b.value));
+}
