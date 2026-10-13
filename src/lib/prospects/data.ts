@@ -1,4 +1,5 @@
 import { getDb } from "@/lib/cloudflare/env";
+import { parseMockup } from "@/lib/sample/clinic";
 import { serialize } from "@/lib/cloudflare/rows";
 import {
   compareForAudit,
@@ -45,6 +46,7 @@ const WRITABLE_COLUMNS = [
   "message_variant",
   "objection",
   "preview_findings",
+  "mockup",
   "source",
 ] as const;
 type WritableColumn = (typeof WRITABLE_COLUMNS)[number];
@@ -71,6 +73,7 @@ function hydrateProspect(row: Record<string, unknown>): ProspectRecord {
     ...row,
     has_gbp: row.has_gbp == null ? null : Boolean(row.has_gbp),
     preview_findings: parsePreviewFindings(row.preview_findings),
+    mockup: parseMockup(row.mockup),
     preview_views: Number(row.preview_views ?? 0),
   } as ProspectRecord;
 }

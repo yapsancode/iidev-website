@@ -24,6 +24,11 @@ export interface PreviewCopy {
   /** Shown to every other kind of business. */
   proofOther: string[];
   cardLine: (count: number) => string;
+  sampleTitle: string;
+  sampleBody: string;
+  sampleLink: string;
+  sketchBody: string;
+  sketchLink: string;
   cardPrivate: string;
   offerTitle: string;
   offerLead: string;
@@ -90,6 +95,11 @@ const en: PreviewCopy = {
   ],
   cardLine: (count) => (count === 1 ? "One thing a customer sees today" : `${count} things a customer sees today`),
   cardPrivate: "Private page",
+  sampleTitle: "See what we mean",
+  sampleBody: "A sample clinic website, with a short note on why each part is there. The clinic in it is made up.",
+  sampleLink: "Open the sample website",
+  sketchBody: "We also made a quick sketch with your clinic's name on it. It is not your final website. Pictures and words are placeholders.",
+  sketchLink: "Open your sketch",
   offerTitle: "The next step: a full written audit",
   offerLead: "RM 500. Credited back in full if you start a project with us within 30 days.",
   offerPoints: [
@@ -167,6 +177,11 @@ const ms: PreviewCopy = {
   ],
   cardLine: (count) => `${count} perkara yang pelanggan nampak hari ini`,
   cardPrivate: "Halaman peribadi",
+  sampleTitle: "Tengok apa yang kami maksudkan",
+  sampleBody: "Website klinik contoh, dengan nota ringkas kenapa setiap bahagian ada di situ. Klinik di dalamnya rekaan sahaja.",
+  sampleLink: "Buka website contoh",
+  sketchBody: "Kami juga buat lakaran ringkas dengan nama klinik anda. Ini bukan website sebenar anda. Gambar dan ayat ialah contoh sahaja.",
+  sketchLink: "Buka lakaran anda",
   offerTitle: "Langkah seterusnya: audit bertulis penuh",
   offerLead: "RM 500. Dikreditkan semula sepenuhnya jika anda mulakan projek dengan kami dalam 30 hari.",
   offerPoints: [
