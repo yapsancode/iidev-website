@@ -1,26 +1,31 @@
 import React from 'react';
-import CTA from '@/components/sections/CTA';
-import Footer from '@/components/sections/Footer';
-import { Hero } from '@/components/sections/Hero';
-import { Navbar } from '@/components/sections/Navbar';
-import Portfolio from '@/components/sections/Portfolio';
-import FAQ from '@/components/sections/FAQ';
-import WhyChooseUs from '@/components/sections/WhyChooseUs';
-import ProcessTimeline from '@/components/sections/ProcessTimeline';
+import '@/components/home/home.css';
+import { SiteMotion } from '@/components/site/SiteMotion';
+import {
+  HomeContact,
+  HomeFaq,
+  HomeFooter,
+  HomeFounders,
+  HomeHero,
+  HomePrice,
+  HomeProcess,
+  HomeWork,
+} from '@/components/home/sections';
 
 const App: React.FC = () => {
   return (
-    <div className="min-h-screen flex flex-col font-sans overflow-x-clip">
-      <Navbar />
-      <main id="main" className="grow">
-        <section id="home"><Hero /></section>
-        <section id="why-us"><WhyChooseUs /></section>
-        <section id="process"><ProcessTimeline /></section>
-        <section id="portfolio"><Portfolio /></section>
-        <section id="faq"><FAQ /></section>
-        <section id="demo"><CTA /></section>
+    <div className="site home">
+      <HomeHero />
+      <main id="main">
+        <HomeWork />
+        <HomeFounders />
+        <HomePrice />
+        <HomeProcess />
+        <HomeFaq />
+        <HomeContact />
       </main>
-      <Footer />
+      <HomeFooter />
+      <SiteMotion />
     </div>
   );
 };

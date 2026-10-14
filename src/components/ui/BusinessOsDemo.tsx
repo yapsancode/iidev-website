@@ -22,7 +22,6 @@ import {
   Wrench,
   type LucideIcon,
 } from "lucide-react";
-import { CARD_FRAME, LABEL } from "@/lib/styles";
 import { cn } from "@/lib/utils";
 import {
   BUSINESS_IDS,
@@ -149,19 +148,16 @@ export function BusinessOsDemo() {
       </div>
 
       <div
-        className={cn(
-          CARD_FRAME,
-          "mt-4 bg-neutral-100 bg-[radial-gradient(rgba(0,0,0,0.16)_1px,transparent_1px)] bg-size-[14px_14px] dark:bg-neutral-800 dark:bg-[radial-gradient(rgba(255,255,255,0.16)_1px,transparent_1px)]",
-        )}
+        className="mt-4 bg-(--surface)"
       >
-        <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-1 border-b-2 border-black bg-emerald-300 px-4 py-2 text-black dark:border-white">
-          <p className="py-1 text-sm leading-snug">
-            <span className="font-bold">Try this:</span> {preset.hint}
+        <div className="on-dark flex flex-wrap items-center justify-between gap-x-4 gap-y-1 bg-(--ink) px-4 py-2 text-(--paper)">
+          <p className="py-1 text-base leading-snug">
+            <span className="font-medium">Try this:</span> {preset.hint}
           </p>
           <button
             type="button"
             onClick={() => start(state.business)}
-            className={cn(LABEL, "inline-flex min-h-11 shrink-0 items-center gap-1.5 underline-offset-4 hover:underline")}
+            className="inline-flex min-h-11 shrink-0 items-center gap-1.5 text-base font-medium underline-offset-4 hover:underline"
           >
             <RotateCcw className="h-3.5 w-3.5" aria-hidden="true" />
             Start again
@@ -179,10 +175,10 @@ export function BusinessOsDemo() {
 function Choice({ legend, children }: { legend: string; children: ReactNode }) {
   return (
     <fieldset className="min-w-0">
-      <legend className={cn(LABEL, "mb-2 text-neutral-600 dark:text-neutral-300")}>
+      <legend className="mb-2 text-(length:--step-small) text-(--muted)">
         {legend}
       </legend>
-      <div className="inline-flex border-2 border-black dark:border-white">{children}</div>
+      <div className="inline-flex gap-1">{children}</div>
     </fieldset>
   );
 }
@@ -204,11 +200,10 @@ function ChoiceButton({
       aria-pressed={pressed}
       onClick={onClick}
       className={cn(
-        LABEL,
-        "inline-flex min-h-11 items-center gap-1.5 border-black px-3 not-first:border-l-2 dark:border-white",
+        "inline-flex min-h-11 items-center gap-1.5 px-3 text-base font-medium transition-colors",
         pressed
-          ? "bg-black text-white dark:bg-white dark:text-black"
-          : "bg-white text-black hover:bg-emerald-300 dark:bg-neutral-900 dark:text-white dark:hover:bg-emerald-400 dark:hover:text-black",
+          ? "bg-(--ink) text-(--paper)"
+          : "bg-(--surface) text-(--ink) hover:bg-(--paper)",
       )}
     >
       <Icon className="hidden h-4 w-4 sm:block" aria-hidden="true" />
@@ -230,7 +225,7 @@ function PhoneFrame(props: ScreenProps) {
   const { preset, tab, todayChanged, openTab } = props;
 
   return (
-    <div className="mx-auto w-full max-w-80 overflow-clip rounded-[2.25rem] border-10 border-black bg-neutral-50 text-neutral-900 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] dark:shadow-[6px_6px_0px_0px_rgba(255,255,255,1)]">
+    <div className="mx-auto w-full max-w-80 overflow-clip rounded-[2.25rem] border-10 border-black bg-neutral-50 text-neutral-900">
       <div className="flex items-center justify-between gap-2 border-b border-neutral-200 bg-white px-4 py-3">
         <p className="truncate text-sm font-bold">{preset.title}</p>
         <SampleTag />
@@ -275,8 +270,8 @@ function ComputerFrame(props: ScreenProps) {
   // to icons instead of the whole screen shrinking until nobody can read it.
   return (
     <div className="@container mx-auto max-w-160">
-      <div className="overflow-clip border-2 border-black bg-neutral-50 text-neutral-900 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] dark:shadow-[6px_6px_0px_0px_rgba(255,255,255,1)]">
-        <div className="flex items-center gap-2 border-b-2 border-black bg-neutral-100 px-3 py-2">
+      <div className="overflow-clip bg-neutral-50 text-neutral-900">
+        <div className="flex items-center gap-2 border-b border-neutral-200 bg-neutral-100 px-3 py-2">
           <span className="h-2.5 w-2.5 rounded-full bg-red-400" />
           <span className="h-2.5 w-2.5 rounded-full bg-yellow-400" />
           <span className="h-2.5 w-2.5 rounded-full bg-green-400" />

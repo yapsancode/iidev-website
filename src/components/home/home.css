@@ -1,0 +1,828 @@
+/* ---------------------------------------------------------------------------
+   Sections that only the home page has. The shared look of the public site
+   (colours, type, button, top bar, footer) is in components/site/site.css;
+   the home page root carries both classes: `site home`.
+
+   The idea: a sentence is the layout. Something real sits inside the sentence
+   where a word would be (a search box, a price, a blank to fill in).
+   --------------------------------------------------------------------------- */
+
+/* --------------------------------------------------------------------- Hero */
+
+.home .hero {
+  display: flex;
+  min-height: 100svh;
+  flex-direction: column;
+}
+
+.home .hero-body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  justify-content: center;
+  gap: clamp(36px, 5vw, 72px);
+  padding-block: clamp(24px, 4vw, 64px) clamp(48px, 7vw, 110px);
+}
+
+.home .hero-sentence {
+  font-size: var(--step-display);
+}
+
+.home .lines .line {
+  display: block;
+  overflow: hidden;
+  padding-bottom: 0.1em;
+  margin-bottom: -0.1em;
+}
+
+.home .lines [data-line] {
+  display: block;
+}
+
+/* The search box sits in the sentence where the search itself would be said.
+   It is one cap-height tall and scales with the headline. */
+.home .slot {
+  display: inline-block;
+  overflow: hidden;
+  width: 17em;
+  height: 3.5em;
+  margin-left: 0.6em;
+  background: var(--paper);
+  font-family: var(--font-general-sans), ui-sans-serif, system-ui, sans-serif;
+  font-size: 0.2em;
+  letter-spacing: 0;
+  line-height: 1.2;
+  vertical-align: baseline;
+}
+
+.home .slot-inner {
+  display: flex;
+  height: 100%;
+}
+
+.home .slot input {
+  min-width: 0;
+  flex: 1;
+  padding: 0 0 0 1em;
+  background: transparent;
+  color: var(--ink);
+  font: inherit;
+  outline-offset: -3px;
+}
+
+.home .slot input::placeholder {
+  color: var(--muted);
+  opacity: 1;
+}
+
+.home .slot button {
+  display: grid;
+  width: 3.5em;
+  flex: none;
+  place-items: center;
+  background: var(--ink);
+  color: var(--paper);
+  cursor: pointer;
+  outline-offset: -3px;
+  transition: background-color var(--t-hover) ease;
+}
+
+.home .slot button:hover {
+  background: var(--accent);
+}
+
+.home .slot button:active svg {
+  transform: scale(0.88);
+}
+
+.home .slot svg {
+  width: 1.25em;
+  height: 1.25em;
+  transition: transform var(--t-press) var(--ease-out);
+}
+
+.home .hero-foot {
+  display: grid;
+  gap: 20px var(--gap);
+}
+
+.home .hero-foot p {
+  max-width: 46ch;
+}
+
+.home .hero-hint {
+  color: var(--muted);
+}
+
+@media (min-width: 900px) {
+  .home .hero-foot {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+  }
+
+  .home .hero-foot > :first-child {
+    grid-column: 1 / span 5;
+  }
+
+  .home .hero-foot > :last-child {
+    grid-column: 8 / span 5;
+  }
+}
+
+/* Below 900px the box takes a line of its own between the two halves. */
+@media (max-width: 899px) {
+  .home .slot {
+    display: block;
+    width: 100%;
+    height: 56px;
+    margin: 0.22em 0 0.16em;
+    font-size: 1.125rem;
+  }
+
+  .home .slot button {
+    width: 56px;
+  }
+}
+
+/* --------------------------------------------------------------------- Work
+   Each project is a picture on a flat stage with a short caption under it.
+   The size of the stage says how much the project counts: the client site
+   takes the full width, two more share a line, the last is a quiet row. */
+
+.home .work {
+  display: grid;
+  gap: clamp(64px, 8vw, 120px) var(--gap);
+  padding-bottom: var(--section);
+}
+
+.home .project-visual {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  aspect-ratio: 4 / 3;
+  background: var(--surface);
+}
+
+/* A screenshot stands on the stage and runs off its bottom edge. */
+.home .shot {
+  position: absolute;
+  display: block;
+}
+
+.home .shot img {
+  width: 100%;
+  height: auto;
+}
+
+/* The recording lies exactly over its screenshot and fades in once it plays. */
+.home .shot-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 500ms ease;
+}
+
+.home .shot-video[data-on] {
+  opacity: 1;
+}
+
+.home .project-lead .project-visual {
+  aspect-ratio: 16 / 9;
+  max-height: 88svh;
+  background: var(--ink);
+}
+
+.home .project-lead .shot-desk {
+  top: 10%;
+  left: 6%;
+  width: 62%;
+}
+
+.home .project-lead .shot-phone {
+  top: 20%;
+  right: 7%;
+  width: 17%;
+}
+
+.home .project-wide .shot-desk {
+  top: 10%;
+  left: 8%;
+  width: 84%;
+}
+
+.home .project-tall .project-visual {
+  aspect-ratio: 4 / 5;
+}
+
+.home .project-tall .shot-phone {
+  top: 9%;
+  left: 22%;
+  width: 56%;
+}
+
+.home .project-row .project-visual {
+  aspect-ratio: 1908 / 875;
+}
+
+.home .project-row .shot {
+  inset: 0;
+  width: 100%;
+}
+
+.home .project-text {
+  margin-top: 24px;
+}
+
+.home .project-title {
+  margin-bottom: 0.45em;
+  font-size: clamp(1.875rem, 1.2rem + 2.2vw, 3rem);
+}
+
+.home .project-lead .project-title {
+  font-size: var(--step-head);
+}
+
+.home .project-row .project-title {
+  font-size: var(--step-lead);
+}
+
+.home .project-body p {
+  max-width: 44ch;
+}
+
+.home .project-body strong {
+  font-weight: 600;
+}
+
+.home .project-links {
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: 28px;
+  margin-top: 0.5em;
+}
+
+.home .project-links .link {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  font-weight: 500;
+}
+
+@media (min-width: 900px) {
+  .home .work {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+  }
+
+  .home .project-lead,
+  .home .project-row {
+    grid-column: 1 / -1;
+  }
+
+  .home .project-wide {
+    grid-column: 1 / span 7;
+  }
+
+  .home .project-tall {
+    grid-column: 8 / span 5;
+  }
+
+  .home .project-lead .project-text,
+  .home .project-row {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: var(--gap);
+  }
+
+  .home .project-lead .project-title {
+    grid-column: 1 / span 6;
+    margin-bottom: 0;
+  }
+
+  .home .project-lead .project-body {
+    grid-column: 8 / span 5;
+  }
+
+  .home .project-lead .project-text {
+    align-items: start;
+  }
+
+  .home .project-row {
+    align-items: center;
+  }
+
+  .home .project-row .project-visual {
+    grid-column: 1 / span 3;
+  }
+
+  .home .project-row .project-text {
+    display: grid;
+    grid-column: 5 / span 8;
+    grid-template-columns: repeat(8, minmax(0, 1fr));
+    column-gap: var(--gap);
+    align-items: start;
+    margin-top: 0;
+  }
+
+  .home .project-row .project-title {
+    grid-column: 1 / span 3;
+    margin-bottom: 0;
+  }
+
+  .home .project-row .project-body {
+    grid-column: 4 / span 5;
+  }
+}
+
+@media (max-width: 899px) {
+  /* On a phone the stages run edge to edge. The quiet row stays inside. */
+  .home .project-visual {
+    margin-inline: calc(var(--m) * -1);
+  }
+
+  .home .project-lead .project-visual {
+    aspect-ratio: 3 / 2;
+  }
+
+  .home .project-lead .shot-desk {
+    left: 5%;
+    width: 60%;
+  }
+
+  .home .project-lead .shot-phone {
+    top: 13%;
+    right: 5%;
+    width: 26%;
+  }
+
+  .home .project-tall .project-visual {
+    aspect-ratio: 1;
+  }
+
+  .home .project-tall .shot-phone {
+    left: 27%;
+    width: 46%;
+  }
+
+  .home .project-row .project-visual {
+    margin-inline: 0;
+  }
+}
+
+/* Pointing at a stage lifts the page inside it, so more of it shows. */
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .home .shot {
+    transition: transform 700ms var(--ease-out);
+  }
+
+  .home .project-visual:hover .shot,
+  .home .project-visual:focus-visible .shot {
+    transform: translateY(-3%);
+  }
+
+  .home .project-row .project-visual:hover .shot,
+  .home .project-row .project-visual:focus-visible .shot {
+    transform: scale(1.03);
+  }
+}
+
+/* ----------------------------------------------------------------- Founders */
+
+.home .founders {
+  padding-block: 0 var(--section);
+  row-gap: 40px;
+}
+
+.home .founders-facts {
+  display: grid;
+  align-content: start;
+  gap: 18px;
+  font-size: var(--step-small);
+  line-height: 1.45;
+}
+
+.home .founders-facts dt {
+  color: var(--muted);
+}
+
+.home .founders-text {
+  font-size: var(--step-lead);
+  line-height: 1.22;
+}
+
+.home .founders-text p + p {
+  margin-top: 1.22em;
+  color: var(--muted);
+}
+
+.home .founders-portrait {
+  position: relative;
+  float: left;
+  overflow: hidden;
+  width: 3.66em;
+  height: 3.66em;
+  margin: 0.08em 0.5em 0 0;
+  background: var(--surface);
+}
+
+.home .founders-portrait img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 22%;
+}
+
+@media (min-width: 900px) {
+  .home .founders-facts {
+    grid-column: 1 / span 2;
+  }
+
+  .home .founders-text {
+    grid-column: 3 / span 9;
+  }
+}
+
+@media (max-width: 899px) {
+  .home .founders > * {
+    grid-column: 1 / -1;
+  }
+
+  .home .founders-facts {
+    order: 2;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  .home .founders-portrait {
+    width: 4.9em;
+    height: 4.9em;
+  }
+}
+
+/* -------------------------------------------------------------------- Price */
+
+.home .price {
+  display: flex;
+  min-height: 82svh;
+  flex-direction: column;
+  justify-content: center;
+  gap: clamp(40px, 4.5vw, 64px);
+  padding-block: clamp(72px, 9vw, 130px);
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+
+.home .price-sentence {
+  font-size: var(--step-display);
+}
+
+.home .price-sentence > span {
+  display: block;
+}
+
+/* The figure is an object in the line, not a styled word. */
+.home .price-figure {
+  display: inline-block;
+  padding: 0.06em 0.15em 0.02em;
+  background: var(--ink);
+  white-space: nowrap;
+}
+
+.home .price-foot {
+  display: grid;
+  gap: 28px var(--gap);
+  align-items: end;
+}
+
+.home .price-foot p {
+  max-width: 50ch;
+  font-size: var(--step-lead);
+  line-height: 1.25;
+}
+
+@media (min-width: 900px) {
+  .home .price-foot {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+  }
+
+  .home .price-foot p {
+    grid-column: 1 / span 7;
+  }
+
+  .home .price-foot .btn {
+    grid-column: 10 / span 3;
+  }
+}
+
+/* ------------------------------------------------------------------ Process */
+
+/* The four steps are flat panels that stack: each one sticks near the top and
+   the next slides over it. Each panel stops one strip lower than the one
+   before, and the strip is exactly its heading, so the steps already passed
+   stay readable as a list. ProcessStack sets --p (0 to 1) while a panel is
+   being covered. */
+.home .process {
+  --pad: clamp(24px, 3vw, 44px);
+  --head: clamp(1.875rem, 1rem + 3.4vw, 4.25rem);
+  --strip: calc(var(--pad) + var(--head) + 16px);
+  --panel: clamp(280px, 48svh, 460px);
+  padding-block: var(--section);
+}
+
+.home .process li {
+  position: sticky;
+  top: calc(16px + var(--n) * var(--strip));
+  display: grid;
+  grid-template-rows: auto 1fr;
+  gap: 24px var(--gap);
+  /* Earlier panels run longer underneath, so all bottoms line up when the
+     stack is stuck and the whole stack leaves together, strips intact. */
+  --below: calc((3 - var(--n)) * var(--strip));
+  min-height: calc(var(--panel) + var(--below));
+  padding: var(--pad) var(--pad) calc(var(--pad) + var(--below));
+  background: var(--surface);
+  transform: scale(calc(1 - 0.04 * var(--p, 0)));
+  transform-origin: center top;
+  filter: brightness(calc(1 - 0.12 * var(--p, 0)));
+}
+
+.home .process li + li {
+  margin-top: 24px;
+}
+
+.home .process li:nth-child(2) {
+  background: var(--paper);
+}
+
+.home .process li:nth-child(3) {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+.home .process li:nth-child(4) {
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+
+.home .process h3 {
+  font-size: var(--head);
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.home .process p {
+  max-width: 36ch;
+  align-self: end;
+  color: var(--muted);
+}
+
+.home .process li:nth-child(n + 3) p {
+  color: inherit;
+}
+
+@media (min-width: 900px) {
+  .home .process li {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+  }
+
+  .home .process h3 {
+    grid-column: 1 / -1;
+  }
+
+  .home .process p {
+    grid-column: 8 / span 5;
+  }
+}
+
+/* ---------------------------------------------------------------- Questions */
+
+.home .faq {
+  padding-bottom: var(--section);
+}
+
+.home .faq-heading {
+  margin-bottom: clamp(48px, 5.5vw, 80px);
+  font-size: var(--step-head);
+}
+
+.home .faq-list {
+  display: grid;
+  gap: clamp(4px, 1vw, 12px);
+}
+
+.home .faq-item {
+  margin-inline: -24px;
+  padding: 12px 24px;
+  transition: background-color var(--t-hover) ease;
+}
+
+.home .faq-item[open] {
+  padding-block: 24px;
+  background: var(--surface);
+}
+
+.home .faq-item summary {
+  display: flex;
+  min-height: 44px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  font-size: clamp(1.1875rem, 1rem + 0.6vw, 1.5rem);
+  line-height: 1.25;
+  list-style: none;
+  cursor: pointer;
+}
+
+.home .faq-item summary::-webkit-details-marker {
+  display: none;
+}
+
+.home .faq-item summary:hover {
+  color: var(--accent);
+}
+
+/* A chevron made of two short strokes. */
+.home .faq-chevron {
+  position: relative;
+  width: 18px;
+  height: 12px;
+  flex: none;
+  transition: transform 240ms var(--ease-out);
+}
+
+.home .faq-chevron::before,
+.home .faq-chevron::after {
+  content: "";
+  position: absolute;
+  top: 5px;
+  width: 11px;
+  height: 2px;
+  background: currentColor;
+}
+
+.home .faq-chevron::before {
+  left: 0;
+  transform: rotate(40deg);
+}
+
+.home .faq-chevron::after {
+  right: 0;
+  transform: rotate(-40deg);
+}
+
+.home .faq-item[open] .faq-chevron {
+  transform: rotate(180deg);
+}
+
+.home .faq-item p {
+  max-width: 52ch;
+  margin-top: 14px;
+}
+
+@media (min-width: 900px) {
+  .home .faq-list {
+    grid-column: 5 / span 8;
+  }
+}
+
+@media (max-width: 899px) {
+  .home .faq-list {
+    grid-column: 1 / -1;
+  }
+
+  .home .faq-item {
+    margin-inline: calc(var(--m) * -1);
+    padding-inline: var(--m);
+  }
+}
+
+/* ------------------------------------------------- The sentence with a blank */
+
+.home .blank {
+  padding-bottom: var(--section);
+}
+
+.home .blank-sentence {
+  font-size: var(--step-head);
+  line-height: 1.16;
+}
+
+.home .blank-sentence > span {
+  display: block;
+}
+
+.home .blank-sentence input,
+.home .blank-sentence button {
+  height: 1.06em;
+  font: inherit;
+  letter-spacing: inherit;
+  line-height: 1;
+  vertical-align: baseline;
+}
+
+.home .blank-sentence input {
+  width: 9.5em;
+  max-width: 100%;
+  padding: 0 0.16em;
+  background: var(--surface);
+  color: var(--ink);
+}
+
+.home .blank-sentence input::placeholder {
+  color: var(--muted);
+  opacity: 1;
+}
+
+.home .blank-sentence button {
+  padding: 0 0.2em;
+  background: var(--accent);
+  color: var(--accent-ink);
+  cursor: pointer;
+  transition:
+    transform var(--t-press) var(--ease-out),
+    background-color var(--t-hover) ease;
+}
+
+.home .blank-sentence button:hover {
+  background: var(--ink);
+}
+
+.home .blank-sentence button:active {
+  transform: scale(0.97);
+}
+
+.home .blank-note {
+  max-width: 48ch;
+  margin-top: 28px;
+  color: var(--muted);
+}
+
+@media (max-width: 899px) {
+  .home .blank-sentence input {
+    display: block;
+    width: 100%;
+    height: 1.5em;
+    margin-block: 0.18em;
+  }
+}
+
+/* ------------------------------------------------------------------- Footer */
+
+/* On the home page the footer is a screen of its own. */
+.home .foot {
+  min-height: 100svh;
+}
+
+/* ------------------------------------------------------------------- Motion
+   Every rule below is an extra on a finished static page. Without JavaScript,
+   or with reduced motion, everything is simply visible. The reveal of parts as
+   they scroll in is shared (site.css); these are the home page's own moves. */
+
+@keyframes home-line-up {
+  from { transform: translateY(105%); }
+}
+
+@keyframes home-rise {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+}
+
+@keyframes home-float {
+  from { translate: 0 10px; }
+  to { translate: 0 -10px; }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  /* The one loud moment: each line of the headline rises from its baseline. */
+  .home .hero .lines [data-line] {
+    animation: home-line-up 900ms var(--ease-out) backwards;
+    animation-delay: calc(var(--i, 0) * 110ms + 150ms);
+  }
+
+  .home [data-rise] {
+    animation: home-rise 800ms var(--ease-out) backwards;
+    animation-delay: calc(var(--i, 0) * 90ms + 520ms);
+  }
+
+  .home .process [data-reveal="armed"] {
+    transform: translateX(-32px);
+  }
+
+  .home .project-visual[data-reveal="armed"] {
+    transform: none;
+    clip-path: inset(0 100% 0 0);
+  }
+
+  .home .project-visual[data-reveal] {
+    clip-path: inset(0);
+    transition: clip-path 1100ms var(--ease-out);
+  }
+
+  /* The phone on the featured stage floats, slowly and all the time. */
+  .home .project-lead .shot-phone {
+    animation: home-float 5.5s ease-in-out infinite alternate;
+  }
+}
