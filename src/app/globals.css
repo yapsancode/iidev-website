@@ -3,6 +3,24 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/* The founder dashboard (/internal). Values live in app/internal/internal.css,
+   scoped to `.internal-os`, so these utilities mean nothing outside it. */
+@theme inline {
+  --color-os-ground: var(--os-ground);
+  --color-os-paper: var(--os-paper);
+  --color-os-well: var(--os-well);
+  --color-os-line: var(--os-line);
+  --color-os-ink: var(--os-ink);
+  --color-os-muted: var(--os-muted);
+  --color-os-accent: var(--os-accent);
+  --color-os-accent-soft: var(--os-accent-soft);
+  --color-os-on-accent: var(--os-on-accent);
+  --color-os-alert: var(--os-alert);
+  --color-os-alert-soft: var(--os-alert-soft);
+  --font-os: var(--font-general-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-os-display: var(--font-gambarino), Georgia, serif;
+}
+
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);

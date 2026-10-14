@@ -1,3 +1,4 @@
+import { buttonClass, fieldClass, labelClass } from "@/components/internal/ui";
 import { toMalaysianMobile } from "@/lib/prospects/rules";
 import {
   prospectCategories,
@@ -9,9 +10,8 @@ import {
   type ProspectRecord,
 } from "@/lib/prospects/types";
 
-const inputClass = "mt-1.5 w-full rounded-xl bg-neutral-100 px-3 py-3 font-sans text-sm outline-none focus:ring-2 focus:ring-emerald-500 dark:bg-neutral-800";
-const labelClass = "block font-sans text-[11px] font-semibold text-neutral-500 dark:text-neutral-400";
-const sectionClass = "rounded-[2rem] bg-white p-5 shadow-sm dark:bg-neutral-900 sm:p-7";
+const inputClass = fieldClass;
+const sectionClass = "bg-os-paper p-4 sm:p-6";
 
 /** Shared by "Add prospect" and "Edit prospect". Plain form fields, so it works without JavaScript. */
 export function ProspectForm({
@@ -33,12 +33,12 @@ export function ProspectForm({
   const separateWhatsapp = prospect?.whatsapp && prospect.whatsapp !== toMalaysianMobile(prospect.phone) ? prospect.whatsapp : "";
 
   return (
-    <form action={action} className="mt-6 space-y-5">
+    <form action={action} className="mt-6 grid gap-4">
       {prospect && <input type="hidden" name="prospectId" value={prospect.id} />}
-      {error && <p role="alert" className="rounded-2xl bg-red-50 px-4 py-3 font-sans text-sm text-red-800 dark:bg-red-950 dark:text-red-200">{error}</p>}
+      {error && <p role="alert" className="bg-os-alert-soft px-4 py-3 text-sm text-os-alert">{error}</p>}
 
       <section className={sectionClass}>
-        <h2 className="font-sans text-lg font-bold">The business</h2>
+        <h2 className="text-base font-medium">The business</h2>
         <div className="mt-4 grid gap-4 sm:grid-cols-2">
           <label className={`${labelClass} sm:col-span-2`}>Business name<input name="business_name" required maxLength={160} defaultValue={text(prospect?.business_name)} className={inputClass} /></label>
           <label className={labelClass}>Type<select name="category" defaultValue={prospect?.category || "Other"} className={inputClass}>{categories.map((category) => <option key={category}>{category}</option>)}</select></label>
@@ -52,8 +52,8 @@ export function ProspectForm({
       </section>
 
       <section className={sectionClass}>
-        <h2 className="font-sans text-lg font-bold">Audit</h2>
-        <p className="mt-1 font-sans text-xs text-neutral-500 dark:text-neutral-400">Only what was actually checked. Leave a field empty if it was not checked.</p>
+        <h2 className="text-base font-medium">Audit</h2>
+        <p className="mt-1 text-[13px] text-os-muted">Only what was actually checked. Leave a field empty if it was not checked.</p>
         <div className="mt-4 grid gap-4 sm:grid-cols-2">
           <label className={`${labelClass} sm:col-span-2`}>Website<input name="website" type="url" maxLength={500} defaultValue={text(prospect?.website)} className={inputClass} placeholder="https://" /></label>
           <label className={labelClass}>Website state<select name="website_state" defaultValue={prospect?.website_state || ""} className={inputClass}><option value="">Not checked</option>{websiteStates.map((state) => <option key={state} value={state}>{websiteStateLabels[state]}</option>)}</select></label>
@@ -67,7 +67,7 @@ export function ProspectForm({
       </section>
 
       <section className={sectionClass}>
-        <h2 className="font-sans text-lg font-bold">Messages and follow-up</h2>
+        <h2 className="text-base font-medium">Messages and follow-up</h2>
         <div className="mt-4 grid gap-4 sm:grid-cols-2">
           <label className={`${labelClass} sm:col-span-2`}>First message<textarea name="draft_first" rows={6} maxLength={2000} defaultValue={text(prospect?.draft_first)} className={inputClass} /></label>
           <label className={`${labelClass} sm:col-span-2`}>Follow-up message<textarea name="draft_followup" rows={4} maxLength={2000} defaultValue={text(prospect?.draft_followup)} className={inputClass} /></label>
@@ -79,7 +79,7 @@ export function ProspectForm({
         </div>
       </section>
 
-      <button className="w-full rounded-2xl bg-neutral-950 px-5 py-4 font-sans text-sm font-bold text-white dark:bg-white dark:text-neutral-950 sm:w-auto">{submitLabel}</button>
+      <div><button className={buttonClass("primary", { full: true }) + " sm:w-auto sm:px-8"}>{submitLabel}</button></div>
     </form>
   );
 }

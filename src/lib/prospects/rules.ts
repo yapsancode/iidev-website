@@ -138,6 +138,22 @@ export function outcomeForAction(action: ProspectAction, today: string): ActionO
   }
 }
 
+export type StatusMove = { action: ProspectAction } | { status: ProspectStatus } | null;
+
+/**
+ * How a status change from the board or the status menu is saved, so it records
+ * the same things as the one-tap buttons: a first message sets the follow-up date and
+ * counts as a send, a reply counts as a reply. Lost is not handled here, because it
+ * needs a reason. Null means nothing to change.
+ */
+export function moveForStatus(current: ProspectStatus, target: ProspectStatus): StatusMove {
+  if (current === target) return null;
+  if (target === "messaged" && current === "not_contacted") return { action: "mark_sent" };
+  if (target === "replied" && (current === "messaged" || current === "not_contacted")) return { action: "replied" };
+  if (target === "not_fit") return { action: "not_fit" };
+  return { status: target };
+}
+
 /**
  * Malaysian mobile number in E.164 (+601…), or null for landlines and anything unrecognised.
  * Only mobiles can receive WhatsApp, so only mobiles get a wa.me link.

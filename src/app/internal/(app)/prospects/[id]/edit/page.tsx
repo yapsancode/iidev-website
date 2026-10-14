@@ -23,8 +23,8 @@ export default async function EditProspectPage({
   const error = typeof query.error === "string" ? query.error : undefined;
   return (
     <>
-      <Link href={`/internal/prospects/${id}`} className="inline-flex items-center gap-2 font-sans text-xs font-bold text-neutral-500 hover:text-neutral-950 dark:hover:text-white"><ArrowLeft className="h-4 w-4" />Back to {found.prospect.business_name}</Link>
-      <h1 className="mt-5 font-sans text-3xl font-bold tracking-tight">Edit prospect</h1>
+      <Link href={`/internal/prospects/${id}`} className="inline-flex min-h-10 items-center gap-2 text-[13px] text-os-muted hover:text-os-ink"><ArrowLeft className="h-4 w-4" strokeWidth={1.75} aria-hidden />Back to {found.prospect.business_name}</Link>
+      <h1 className="mt-2 font-os-display text-[2.5rem] leading-[0.95] tracking-[-0.02em] sm:text-5xl">Edit prospect</h1>
       <ProspectForm action={saveProspect} prospect={found.prospect} error={error} submitLabel="Save changes" />
     </>
   );

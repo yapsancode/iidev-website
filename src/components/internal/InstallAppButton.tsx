@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { Download } from "lucide-react";
+import { buttonClass } from "@/components/internal/ui";
 
 interface InstallPromptEvent extends Event {
   prompt: () => Promise<void>;
@@ -16,6 +17,20 @@ export function InstallAppButton() {
     window.addEventListener("beforeinstallprompt", handler);
     return () => window.removeEventListener("beforeinstallprompt", handler);
   }, []);
-  if (installed) return <p className="font-sans text-xs text-emerald-700 dark:text-emerald-300">Installed on this device.</p>;
-  return <button type="button" disabled={!prompt} onClick={async () => { if (!prompt) return; await prompt.prompt(); const choice = await prompt.userChoice; if (choice.outcome === "accepted") setInstalled(true); setPrompt(null); }} className="inline-flex items-center gap-2 rounded-xl bg-neutral-950 px-4 py-3 font-sans text-xs font-bold text-white disabled:cursor-not-allowed disabled:opacity-40 dark:bg-white dark:text-neutral-950"><Download className="h-4 w-4" />{prompt ? "Install app" : "Use browser menu to install"}</button>;
+  if (installed) return <p className="text-sm">Installed on this device.</p>;
+  if (!prompt) return <p className="text-sm text-os-muted">In your browser menu, choose &ldquo;Add to Home Screen&rdquo; or &ldquo;Install app&rdquo;.</p>;
+  return (
+    <button
+      type="button"
+      onClick={async () => {
+        await prompt.prompt();
+        const choice = await prompt.userChoice;
+        if (choice.outcome === "accepted") setInstalled(true);
+        setPrompt(null);
+      }}
+      className={buttonClass("secondary")}
+    >
+      <Download className="h-4 w-4" strokeWidth={1.75} aria-hidden />Install app
+    </button>
+  );
 }
