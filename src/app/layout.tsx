@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import localFont from "next/font/local";
 import "./globals.css";
 import {
   BRAND_NAME,
@@ -18,6 +19,23 @@ const inter = Inter({
   subsets: ["latin"],
   display: "swap",
   variable: "--font-inter",
+});
+
+// Home page faces (see components/home/home.css). Self-hosted, from Fontshare.
+const gambarino = localFont({
+  src: "../fonts/Gambarino-Regular.woff2",
+  weight: "400",
+  display: "swap",
+  variable: "--font-gambarino",
+});
+
+const generalSans = localFont({
+  src: [
+    { path: "../fonts/GeneralSans-Regular.woff2", weight: "400" },
+    { path: "../fonts/GeneralSans-Medium.woff2", weight: "500" },
+  ],
+  display: "swap",
+  variable: "--font-general-sans",
 });
 
 export const metadata: Metadata = {
@@ -146,7 +164,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en-MY" suppressHydrationWarning className={`${inter.variable} scroll-smooth`}>
+    <html lang="en-MY" suppressHydrationWarning className={`${inter.variable} ${gambarino.variable} ${generalSans.variable} scroll-smooth`}>
       <head>
         {/* Organization / Brand schema */}
         <script

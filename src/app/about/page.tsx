@@ -1,14 +1,11 @@
 import React from "react";
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ArrowRight, Check } from "lucide-react";
-import { Navbar } from "@/components/sections/Navbar";
-import Footer from "@/components/sections/Footer";
+import { ArrowRight } from "lucide-react";
 import Team from "@/components/sections/Team";
 import { BookingButton } from "@/components/modal/BookingButton";
+import { SitePage, order } from "@/components/site/chrome";
 import { ORGANIZATION_ID, SITE_URL, absoluteUrl } from "@/lib/site-config";
-import { BADGE, CARD_WHITE, PRIMARY_BUTTON } from "@/lib/styles";
-import { cn } from "@/lib/utils";
 
 export const metadata: Metadata = {
   title: "About — A Founder-Led Web & SEO Studio in Malaysia",
@@ -71,40 +68,61 @@ const jsonLd = {
 
 export default function AboutPage() {
   return (
-    <div className="min-h-screen flex flex-col font-sans overflow-x-clip">
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
-      <Navbar />
-      <main id="main" className="grow bg-[#FAFAFA] dark:bg-neutral-900">
-        {/* Intro */}
-        <div className="max-w-3xl mx-auto px-6 pt-36 pb-16">
-          <div className={cn(BADGE, "mb-6")}>About us</div>
-          <h1 className="text-5xl md:text-6xl font-bold tracking-tight text-neutral-900 dark:text-white mb-8">
-            About IIDev Studio
-          </h1>
-          <p className="text-neutral-600 dark:text-neutral-300 text-lg leading-relaxed mb-6">
-            IIDev Studio is a Malaysian web design and SEO studio. We build fast,
-            search-ready websites for local service businesses — clinics,
-            restaurants, consultants, contractors, and retailers — that need a
-            website which actually brings in customers, not one that just sits
-            there looking nice.
+    <SitePage
+      current="/about"
+      jsonLd={jsonLd}
+      invite={
+        <>
+          <h2 className="display" data-reveal>
+            Let&apos;s see if we&apos;re a fit.
+          </h2>
+          <p data-reveal style={order(1)}>
+            Book a free 15-minute discovery call — no pitch, no pressure. Just a
+            straight conversation about your business and whether we can help.
           </p>
-          <p className="text-neutral-600 dark:text-neutral-300 text-lg leading-relaxed">
-            We&apos;re a two-person, founder-led team, and we keep it that way on
-            purpose. When you work with us, you deal directly with the people
-            writing your code and shaping your strategy — never an account
-            manager passing notes to a team you&apos;ll never meet.
+          <BookingButton className="btn">Book a Free Call</BookingButton>
+          <p className="foot-aside">
+            <Link href="/#faq" className="link link-line">
+              Got questions first? Read the FAQ →
+            </Link>
           </p>
+        </>
+      }
+    >
+      {/* Intro */}
+      <header className="wrap page-head">
+        <div>
+          <p className="page-kicker">About us</p>
+          <h1 className="display page-title">About IIDev Studio</h1>
         </div>
+        <div className="page-foot">
+          <div className="page-lead">
+            <p>
+              IIDev Studio is a Malaysian web design and SEO studio. We build
+              fast, search-ready websites for local service businesses —
+              clinics, restaurants, consultants, contractors, and retailers —
+              that need a website which actually brings in customers, not one
+              that just sits there looking nice.
+            </p>
+            <p>
+              We&apos;re a two-person, founder-led team, and we keep it that way
+              on purpose. When you work with us, you deal directly with the
+              people writing your code and shaping your strategy — never an
+              account manager passing notes to a team you&apos;ll never meet.
+            </p>
+          </div>
+        </div>
+      </header>
 
-        {/* What we do */}
-        <div className="max-w-3xl mx-auto px-6 pb-16">
-          <h2 className="text-3xl font-bold tracking-tight text-neutral-900 dark:text-white mb-5">
+      {/* What we do */}
+      <section className="wrap cols part">
+        <div className="part-head">
+          <h2 className="display" data-reveal>
             What we do
           </h2>
-          <p className="text-neutral-600 dark:text-neutral-300 leading-relaxed mb-6">
+        </div>
+        <div className="part-body" data-reveal style={order(1)}>
+          <p>
             At our core, we do three things well: get your business online
             properly, get it found on Google, and keep it growing month after
             month. Whether you&apos;re starting from nothing or fixing a site that
@@ -113,71 +131,48 @@ export default function AboutPage() {
             you&apos;re online and growing, we build the systems to run it day to
             day — customers, invoicing, and inventory, all in one place.
           </p>
-          <Link
-            href="/services"
-            className="inline-flex min-h-11 items-center gap-2 text-sm font-bold text-indigo-600 hover:text-indigo-500 dark:text-indigo-400 transition-colors"
-          >
+          <Link href="/services" className="link link-line">
             See how we can help
-            <ArrowRight className="h-4 w-4" />
+            <ArrowRight className="h-4 w-4" aria-hidden="true" />
           </Link>
         </div>
+      </section>
 
-        {/* What we believe */}
-        <div className="max-w-3xl mx-auto px-6 pb-16">
-          <h2 className="text-3xl font-bold tracking-tight text-neutral-900 dark:text-white mb-6">
+      {/* What we believe */}
+      <section className="wrap cols part">
+        <div className="part-head">
+          <h2 className="display" data-reveal>
             What we believe
           </h2>
-          <ul className={cn(CARD_WHITE, "space-y-4 p-6 md:p-8")}>
-            {beliefs.map((item) => (
-              <li key={item} className="flex items-start gap-3">
-                <Check className="h-5 w-5 text-emerald-600 dark:text-emerald-400 mt-0.5 shrink-0" aria-hidden="true" />
-                <span className="text-neutral-700 dark:text-neutral-300 leading-relaxed">
-                  {item}
-                </span>
-              </li>
-            ))}
-          </ul>
         </div>
+        <ul className="part-body points">
+          {beliefs.map((item, index) => (
+            <li key={item} data-reveal style={order(index)}>
+              {item}
+            </li>
+          ))}
+        </ul>
+      </section>
 
-        {/* Who we work with */}
-        <div className="max-w-3xl mx-auto px-6 pb-20">
-          <h2 className="text-3xl font-bold tracking-tight text-neutral-900 dark:text-white mb-5">
+      {/* Who we work with */}
+      <section className="wrap cols part">
+        <div className="part-head">
+          <h2 className="display" data-reveal>
             Who we work with
           </h2>
-          <p className="text-neutral-600 dark:text-neutral-300 leading-relaxed">
+        </div>
+        <div className="part-body" data-reveal style={order(1)}>
+          <p>
             We focus on Malaysian service businesses, because we understand the
             local market, the customers, and how they search. That said, we&apos;re
             open to working with clients further afield when the project is a
             good fit.
           </p>
         </div>
+      </section>
 
-        {/* Founders */}
-        <Team />
-
-        {/* CTA */}
-        <div className="max-w-3xl mx-auto px-6 pt-4 pb-24">
-          <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-neutral-900 dark:text-white mb-4">
-            Let&apos;s see if we&apos;re a fit.
-          </h2>
-          <p className="text-neutral-600 dark:text-neutral-300 leading-relaxed mb-8 max-w-xl">
-            Book a free 15-minute discovery call — no pitch, no pressure. Just a
-            straight conversation about your business and whether we can help.
-          </p>
-          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
-            <BookingButton className={PRIMARY_BUTTON}>
-              Book a Free Call
-            </BookingButton>
-            <Link
-              href="/#faq"
-              className="inline-flex min-h-11 items-center text-sm text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white transition-colors"
-            >
-              Got questions first? Read the FAQ →
-            </Link>
-          </div>
-        </div>
-      </main>
-      <Footer />
-    </div>
+      {/* Founders */}
+      <Team />
+    </SitePage>
   );
 }

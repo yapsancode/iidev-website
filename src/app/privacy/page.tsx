@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
-import Link from "next/link";
-import { BRAND_NAME, CONTACT_EMAIL } from "@/lib/site-config";
+import { SitePage } from "@/components/site/chrome";
+import { CONTACT_EMAIL } from "@/lib/site-config";
 
 export const metadata: Metadata = {
   title: "Privacy Notice",
@@ -37,14 +37,42 @@ const sections = [
 
 export default function PrivacyPage() {
   return (
-    <main className="min-h-screen bg-[#f4f1e8] px-5 py-14 text-neutral-950 dark:bg-neutral-950 dark:text-white sm:py-20">
-      <article className="mx-auto max-w-3xl border-2 border-black bg-white p-6 shadow-[8px_8px_0_#10b981] dark:border-white dark:bg-neutral-900 sm:p-10">
-        <Link href="/" className="font-mono text-xs font-bold uppercase text-emerald-700 underline dark:text-emerald-400">← {BRAND_NAME}</Link>
-        <h1 className="mt-7 font-sans text-4xl font-extrabold tracking-tight">Privacy Notice<br /><span className="text-emerald-600">Notis Privasi</span></h1>
-        <p className="mt-5 font-sans text-sm leading-relaxed text-neutral-600 dark:text-neutral-300">Effective 30 August 2026 · Berkuat kuasa 30 Ogos 2026</p>
-        <div className="mt-9 space-y-9">{sections.map((section) => <section key={section.en}><h2 className="font-sans text-xl font-bold">{section.en}<span className="mt-1 block text-base text-emerald-700 dark:text-emerald-400">{section.ms}</span></h2><p className="mt-3 font-sans text-sm leading-relaxed text-neutral-700 dark:text-neutral-300">{section.bodyEn}</p><p lang="ms" className="mt-3 font-sans text-sm leading-relaxed text-neutral-500 dark:text-neutral-400">{section.bodyMs}</p></section>)}</div>
-        <div className="mt-10 border-t border-neutral-200 pt-6 font-sans text-sm dark:border-neutral-700"><strong>Contact / Hubungi</strong><a href={`mailto:${CONTACT_EMAIL}`} className="mt-2 block text-emerald-700 underline dark:text-emerald-400">{CONTACT_EMAIL}</a></div>
-      </article>
-    </main>
+    <SitePage>
+      <header className="wrap page-head">
+        <h1 className="display page-title">
+          Privacy Notice
+          <span className="page-title-second">Notis Privasi</span>
+        </h1>
+        <p className="muted">Effective 30 August 2026 · Berkuat kuasa 30 Ogos 2026</p>
+      </header>
+
+      {sections.map((section) => (
+        <section key={section.en} className="wrap cols part">
+          <div className="part-head">
+            <h2 className="display is-small">
+              {section.en}
+              <span className="page-title-second">{section.ms}</span>
+            </h2>
+          </div>
+          <div className="part-body legal">
+            <p>{section.bodyEn}</p>
+            <p lang="ms" className="muted">
+              {section.bodyMs}
+            </p>
+          </div>
+        </section>
+      ))}
+
+      <section className="wrap cols part">
+        <div className="part-head">
+          <h2 className="display is-small">Contact / Hubungi</h2>
+        </div>
+        <div className="part-body">
+          <a href={`mailto:${CONTACT_EMAIL}`} className="link link-line">
+            {CONTACT_EMAIL}
+          </a>
+        </div>
+      </section>
+    </SitePage>
   );
 }

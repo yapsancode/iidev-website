@@ -3,8 +3,8 @@
  * animation runs each time the user enters a services page.
  *
  * CSS-only on purpose: the server HTML is never hidden while JavaScript loads.
- * Opacity-only as well: transform/filter/blur would make this wrapper the
- * containing block for the `position: fixed` Navbar and break its scroll behavior.
+ * Opacity-only as well: a transform or filter here would become the containing
+ * block for anything `position: fixed` inside the page (the skip link).
  */
 export default function ServicesTemplate({
   children,

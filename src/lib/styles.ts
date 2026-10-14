@@ -1,5 +1,6 @@
-// Shared look of the public site: hard black borders, square corners, offset
-// shadows. Compose with cn() from "@/lib/utils" when a spot needs a tweak.
+// The earlier look: hard black borders, square corners, offset shadows. Only
+// the prospect preview pages (/p) still use it. The public site's look is in
+// components/site/site.css. Compose with cn() from "@/lib/utils".
 
 /** The one main action button ("Book a Free Call"). */
 export const PRIMARY_BUTTON =

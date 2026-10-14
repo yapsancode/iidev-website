@@ -1,0 +1,1093 @@
+/* ---------------------------------------------------------------------------
+   The look of the public site (October 2026 redesign). Everything here lives
+   under `.site`, so /internal, /p and the sample pages keep their own styles.
+   Sections that only the home page has are in components/home/home.css.
+
+   House rules: one ground, one ink, one accent. Square corners. No borders,
+   no shadows, no gradients. Surfaces differ by a step in tone.
+   --------------------------------------------------------------------------- */
+
+.site {
+  --bg: #eef0f3;
+  --surface: #e2e5ea;
+  --paper: #ffffff;
+  --ink: #0b0c0e;
+  --muted: #5d6470;
+  --accent: #1f2de6;
+  --accent-ink: #ffffff;
+  --alert: #a3201a;
+
+  --m: clamp(20px, 2.2vw, 32px);
+  --gap: clamp(16px, 1.7vw, 24px);
+  --section: clamp(96px, 12vw, 190px);
+
+  --step-small: clamp(0.8125rem, 0.79rem + 0.1vw, 0.875rem);
+  --step-body: clamp(1.0625rem, 1rem + 0.25vw, 1.1875rem);
+  --step-mid: clamp(1.1875rem, 1rem + 0.6vw, 1.5rem);
+  --step-lead: clamp(1.375rem, 1rem + 1.3vw, 2rem);
+  --step-head: clamp(2.125rem, 1.2rem + 3.6vw, 4.5rem);
+  --step-title: clamp(2.75rem, 1rem + 6.4vw, 7.25rem);
+  --step-display: clamp(2.9rem, 9.4vw, 9.4rem);
+
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --t-press: 140ms;
+  --t-hover: 180ms;
+
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-general-sans), ui-sans-serif, system-ui, sans-serif;
+  font-size: var(--step-body);
+  line-height: 1.5;
+  overflow-x: clip;
+}
+
+/* A whole page: the footer always reaches the bottom of the screen. */
+.site.page {
+  display: flex;
+  min-height: 100svh;
+  flex-direction: column;
+}
+
+.site.page > main {
+  flex: 1;
+}
+
+.site ::selection {
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+
+.site :focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 3px;
+}
+
+.site .on-dark :focus-visible,
+.site .on-accent :focus-visible {
+  outline-color: #ffffff;
+}
+
+.site .display {
+  font-family: var(--font-gambarino), Georgia, serif;
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  line-height: 0.96;
+  text-wrap: balance;
+}
+
+.site .wrap {
+  padding-inline: var(--m);
+}
+
+/* Twelve columns. Not named `grid`: that would override Tailwind's own
+   `grid` inside components that set their columns with utilities. */
+.site .cols {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: var(--gap);
+}
+
+.site .muted {
+  color: var(--muted);
+}
+
+/* Keyboard users can jump past the top bar. Hidden until it has focus. */
+.site .skip {
+  position: fixed;
+  top: 16px;
+  left: 16px;
+  z-index: 60;
+  padding: 12px 16px;
+  background: var(--paper);
+  color: var(--ink);
+  font-weight: 500;
+}
+
+.site .skip:not(:focus) {
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  padding: 0;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* Links in running text. */
+.site .link {
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.22em;
+  transition: color var(--t-hover) ease;
+}
+
+.site .link:hover {
+  color: var(--accent);
+}
+
+.site .on-dark .link:hover,
+.site .on-accent .link:hover {
+  color: inherit;
+  text-decoration-thickness: 4px;
+}
+
+/* A link that stands on its own line and is easy to tap. */
+.site .link-line {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  gap: 0.4em;
+  font-weight: 500;
+}
+
+/* The one button shape: flat, square, one colour. */
+.site .btn {
+  display: inline-flex;
+  min-height: 48px;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5em;
+  padding: 0 1.4em;
+  background: var(--accent);
+  color: var(--accent-ink);
+  font-size: var(--step-body);
+  font-weight: 500;
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    transform var(--t-press) var(--ease-out),
+    background-color var(--t-hover) ease;
+}
+
+.site .btn:hover {
+  background: var(--ink);
+}
+
+.site .btn:active {
+  transform: scale(0.97);
+}
+
+.site .on-accent .btn {
+  background: var(--paper);
+  color: var(--ink);
+}
+
+.site .on-accent .btn:hover {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+.site .on-dark .btn:hover {
+  background: var(--paper);
+  color: var(--ink);
+}
+
+/* A figure (a price) shown as an object in the line, not a styled word. */
+.site .figure {
+  display: inline-block;
+  padding: 0.1em 0.22em 0.06em;
+  background: var(--ink);
+  color: var(--paper);
+}
+
+/* ------------------------------------------------------------------ Top bar */
+
+.site .bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px 24px;
+  padding-block: var(--m);
+}
+
+.site .bar-name {
+  font-weight: 500;
+}
+
+.site .bar-links {
+  display: flex;
+  gap: clamp(14px, 2.4vw, 36px);
+}
+
+.site .bar-links a {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  transition: color var(--t-hover) ease;
+}
+
+.site .bar-links a:hover {
+  color: var(--accent);
+}
+
+.site .bar-links a[aria-current="page"] {
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.3em;
+}
+
+@media (max-width: 767px) {
+  .site .bar-links {
+    order: 3;
+    width: 100%;
+    justify-content: space-between;
+    gap: 8px;
+    font-size: 1rem;
+  }
+}
+
+/* ---------------------------------------------------------------- Page head
+   The opening of every page except the home page: a title at poster size,
+   then one supporting paragraph on the left and the next step on the right. */
+
+.site .page-head {
+  display: grid;
+  gap: clamp(32px, 4.5vw, 64px);
+  padding-block: clamp(32px, 6vw, 96px) var(--section);
+}
+
+.site .page-back {
+  margin-bottom: clamp(12px, 2vw, 28px);
+}
+
+.site .page-back svg {
+  width: 1em;
+  height: 1em;
+  transition: transform var(--t-hover) var(--ease-out);
+}
+
+.site .page-back:hover svg {
+  transform: translateX(-3px);
+}
+
+.site .page-kicker {
+  margin-bottom: 14px;
+  color: var(--muted);
+}
+
+.site .page-title {
+  font-size: var(--step-title);
+}
+
+/* The price reads as the second line of the title. */
+.site .page-price {
+  width: fit-content;
+  margin-top: 0.32em;
+  font-size: var(--step-head);
+  line-height: 1.08;
+}
+
+.site .page-title-second {
+  display: block;
+  color: var(--muted);
+}
+
+.site .page-foot {
+  display: grid;
+  gap: 28px var(--gap);
+  align-items: end;
+}
+
+.site .page-lead {
+  max-width: 34em;
+  font-size: var(--step-mid);
+  line-height: 1.36;
+}
+
+.site .page-lead p + p {
+  margin-top: 1em;
+  color: var(--muted);
+}
+
+@media (min-width: 900px) {
+  .site .page-foot {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+  }
+
+  .site .page-lead {
+    grid-column: 1 / span 7;
+  }
+
+  .site .page-action {
+    grid-column: 10 / span 3;
+  }
+
+  .site .page-action .btn {
+    width: 100%;
+  }
+}
+
+@media (max-width: 899px) {
+  .site .page-action .btn {
+    width: 100%;
+  }
+}
+
+/* -------------------------------------------------------------------- Parts
+   A short statement on the left, what backs it up on the right. */
+
+.site .part {
+  row-gap: 28px;
+  padding-bottom: var(--section);
+}
+
+.site .part-head h2 {
+  font-size: var(--step-head);
+}
+
+.site .part-head h2.is-small {
+  font-size: clamp(1.75rem, 1.2rem + 1.8vw, 2.75rem);
+  line-height: 1.04;
+}
+
+.site .part-head p {
+  max-width: 30ch;
+  margin-top: 18px;
+  color: var(--muted);
+}
+
+.site .part-body > p {
+  max-width: 56ch;
+}
+
+.site .part-body > p + p {
+  margin-top: 1em;
+}
+
+.site .part-body .link-line {
+  margin-top: 0.8em;
+}
+
+.site .part-wide {
+  margin-top: clamp(8px, 2vw, 28px);
+}
+
+@media (min-width: 900px) {
+  .site .part-head {
+    grid-column: 1 / span 4;
+  }
+
+  .site .part-body {
+    grid-column: 6 / span 7;
+  }
+
+  .site .part-wide {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 899px) {
+  .site .part > * {
+    grid-column: 1 / -1;
+  }
+}
+
+/* A list of promises. Each one starts at a small square of the accent. */
+.site .points {
+  display: grid;
+  gap: clamp(18px, 2vw, 28px);
+  font-size: var(--step-mid);
+  line-height: 1.3;
+}
+
+.site .points li {
+  position: relative;
+  max-width: 40ch;
+  padding-left: 1.5em;
+}
+
+.site .points li::before {
+  content: "";
+  position: absolute;
+  top: 0.42em;
+  left: 0;
+  width: 0.5em;
+  height: 0.5em;
+  background: var(--accent);
+}
+
+/* -------------------------------------------------------------------- Bands
+   A full-width change of tone that carries one thought. */
+
+.site .band {
+  row-gap: 24px;
+  padding-block: clamp(64px, 8vw, 128px);
+  background: var(--surface);
+}
+
+.site .band.on-accent {
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+
+.site .band h2 {
+  font-size: var(--step-head);
+}
+
+.site .band p {
+  max-width: 34em;
+  font-size: var(--step-mid);
+  line-height: 1.36;
+}
+
+@media (min-width: 900px) {
+  .site .band h2 {
+    grid-column: 1 / span 4;
+  }
+
+  .site .band p {
+    grid-column: 6 / span 7;
+  }
+}
+
+@media (max-width: 899px) {
+  .site .band > * {
+    grid-column: 1 / -1;
+  }
+}
+
+/* ---------------------------------------------------- Services: the ladder
+   One row for each service, smallest first. The whole row is the link. */
+
+.site .ladder {
+  display: grid;
+  gap: 4px;
+  padding-bottom: var(--section);
+}
+
+.site .rung {
+  display: grid;
+  gap: 18px var(--gap);
+  padding: clamp(28px, 3.4vw, 52px) var(--m);
+  transition:
+    background-color var(--t-hover) ease,
+    color var(--t-hover) ease;
+}
+
+.site .rung:hover {
+  background: var(--surface);
+}
+
+.site .rung.is-start {
+  background: var(--surface);
+}
+
+.site .rung.is-start:hover {
+  background: var(--paper);
+}
+
+.site .rung.on-accent {
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+
+.site .rung.on-accent:hover {
+  background: var(--ink);
+}
+
+.site .rung-kind {
+  color: var(--muted);
+}
+
+.site .rung.on-accent .rung-kind {
+  color: inherit;
+}
+
+.site .rung-title {
+  font-size: var(--step-head);
+}
+
+.site .rung-title > span {
+  display: inline-block;
+}
+
+.site .rung-text {
+  max-width: 46ch;
+  margin-top: 16px;
+}
+
+.site .rung-side {
+  display: grid;
+  align-content: space-between;
+  gap: 10px;
+}
+
+.site .rung-price {
+  width: fit-content;
+  font-size: var(--step-mid);
+  font-weight: 500;
+  line-height: 1.25;
+}
+
+.site .rung-more {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  gap: 0.4em;
+  font-weight: 500;
+}
+
+.site .rung-more svg {
+  width: 1em;
+  height: 1em;
+  transition: transform var(--t-hover) var(--ease-out);
+}
+
+.site .rung:hover .rung-more {
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.22em;
+}
+
+.site .rung:hover .rung-more svg {
+  transform: translateX(4px);
+}
+
+@media (min-width: 900px) {
+  .site .rung {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+  }
+
+  .site .rung-kind {
+    grid-column: 1 / span 2;
+    padding-top: 0.5em;
+  }
+
+  .site .rung-main {
+    grid-column: 3 / span 6;
+  }
+
+  .site .rung-side {
+    grid-column: 10 / span 3;
+    padding-top: 0.35em;
+  }
+}
+
+/* --------------------------------------------- Business OS: what we can build */
+
+.site .modules {
+  display: grid;
+  gap: 4px;
+}
+
+.site .module {
+  display: grid;
+  align-content: start;
+  gap: 8px;
+  padding: clamp(20px, 2vw, 28px);
+  background: var(--surface);
+}
+
+.site .module.is-core {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+/* Not for sale yet, so it sits back on the page ground. */
+.site .module.is-later {
+  background: transparent;
+  color: var(--muted);
+}
+
+.site .module h3 {
+  font-size: var(--step-mid);
+  font-weight: 500;
+  line-height: 1.2;
+}
+
+.site .module-note {
+  font-size: var(--step-small);
+  font-weight: 500;
+}
+
+.site .module:not(.is-core):not(.is-later) .module-note {
+  color: var(--accent);
+}
+
+.site .module-price {
+  margin-top: 6px;
+  font-weight: 500;
+}
+
+.site .module.is-later .module-price {
+  font-weight: 400;
+}
+
+.site .module-terms {
+  display: grid;
+  gap: 1em;
+  margin-top: 28px;
+}
+
+.site .module-terms p {
+  max-width: 56ch;
+}
+
+.site .demo-foot {
+  display: grid;
+  gap: 1em;
+  margin-top: 28px;
+}
+
+.site .demo-foot p {
+  max-width: 56ch;
+}
+
+@media (min-width: 640px) {
+  .site .modules {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .site .module.is-core {
+    grid-column: 1 / -1;
+  }
+
+  .site .module.is-core p {
+    max-width: 56ch;
+  }
+}
+
+/* ----------------------------------------------------------- About: founders */
+
+.site .people {
+  display: grid;
+  gap: 40px var(--gap);
+}
+
+.site .person-photo {
+  position: relative;
+  display: grid;
+  overflow: hidden;
+  aspect-ratio: 4 / 5;
+  margin-bottom: 20px;
+  place-items: center;
+  background: var(--surface);
+}
+
+.site .person-photo img {
+  object-fit: cover;
+}
+
+.site .person-initials {
+  font-size: clamp(4rem, 9vw, 8rem);
+  user-select: none;
+}
+
+.site .person h3 {
+  font-size: clamp(1.75rem, 1.2rem + 1.8vw, 2.75rem);
+  line-height: 1.04;
+}
+
+.site .person-role {
+  margin-top: 6px;
+}
+
+.site .person dl {
+  margin-top: 18px;
+}
+
+.site .person dt {
+  color: var(--muted);
+  font-size: var(--step-small);
+}
+
+@media (min-width: 560px) {
+  .site .people {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* -------------------------------------------------------- Privacy and 404 */
+
+.site .legal {
+  display: grid;
+  gap: 1em;
+}
+
+.site .legal p {
+  max-width: 62ch;
+}
+
+.site .notfound {
+  display: grid;
+  align-content: center;
+  gap: clamp(24px, 3vw, 40px);
+  min-height: 62svh;
+  padding-block: clamp(48px, 8vw, 120px);
+}
+
+.site .notfound p {
+  max-width: 40ch;
+  font-size: var(--step-mid);
+  line-height: 1.36;
+}
+
+.site .notfound-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px 28px;
+}
+
+/* ------------------------------------------------------------------- Footer */
+
+.site .foot {
+  position: relative;
+  display: flex;
+  overflow: hidden;
+  flex-direction: column;
+  padding-top: clamp(64px, 8vw, 120px);
+  background: var(--ink);
+  color: var(--paper);
+}
+
+.site .foot-top {
+  row-gap: 48px;
+}
+
+.site .foot-invite h2 {
+  margin-bottom: 0.35em;
+  font-size: var(--step-head);
+}
+
+.site .foot-invite p {
+  max-width: 40ch;
+  margin-bottom: 28px;
+}
+
+/* With no heading, the first line of the invitation carries the weight. */
+.site .foot-invite > p:first-child {
+  max-width: 30ch;
+  font-size: var(--step-lead);
+  line-height: 1.22;
+}
+
+.site .foot-invite .foot-aside {
+  margin: 16px 0 0;
+}
+
+.site .foot-links {
+  display: grid;
+  align-content: start;
+}
+
+.site .foot-links a {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+}
+
+.site .foot-links a:hover {
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.22em;
+}
+
+.site .foot-legal {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 6px 24px;
+  margin-top: auto;
+  padding-top: 64px;
+  font-size: var(--step-small);
+}
+
+/* The name closes the page, larger than the screen can hold. */
+.site .foot-name {
+  margin-bottom: -0.24em;
+  font-size: 27vw;
+  line-height: 0.9;
+  white-space: nowrap;
+  user-select: none;
+}
+
+@media (min-width: 900px) {
+  .site .foot-invite {
+    grid-column: 1 / span 7;
+  }
+
+  .site .foot-links {
+    grid-column: 10 / span 3;
+  }
+
+  /* Pages with no invitation spread the links across the row instead. */
+  .site .foot-top.is-bare .foot-links {
+    grid-column: 1 / -1;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    column-gap: var(--gap);
+  }
+}
+
+@media (max-width: 899px) {
+  .site .foot-top > * {
+    grid-column: 1 / -1;
+  }
+
+  .site .foot-invite .btn {
+    width: 100%;
+  }
+
+  .site .foot-name {
+    font-size: 34vw;
+  }
+}
+
+/* ------------------------------------------------------------- Booking form
+   Opens over any page (see BookingModal). It is added to the end of <body>,
+   so it carries the `site` class itself. */
+
+.site.booking {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 12px;
+  background: rgb(11 12 14 / 0.72);
+}
+
+.site .booking-center {
+  display: flex;
+  min-height: 100%;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+.site .booking-panel {
+  width: 100%;
+  max-width: 44rem;
+  padding: clamp(20px, 3vw, 36px);
+  background: var(--bg);
+}
+
+.site .booking-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.site .booking-kicker {
+  margin-bottom: 8px;
+  color: var(--muted);
+  font-size: var(--step-small);
+}
+
+.site .booking-title {
+  font-size: clamp(2rem, 1.4rem + 2.4vw, 3rem);
+}
+
+.site .booking-desc {
+  max-width: 40ch;
+  margin-top: 12px;
+  color: var(--muted);
+  font-size: 1rem;
+  line-height: 1.45;
+}
+
+.site .booking-close {
+  display: grid;
+  width: 44px;
+  height: 44px;
+  flex: none;
+  place-items: center;
+  background: var(--surface);
+  cursor: pointer;
+  transition:
+    background-color var(--t-hover) ease,
+    color var(--t-hover) ease;
+}
+
+.site .booking-close:hover {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+.site .booking-close:disabled {
+  opacity: 0.5;
+}
+
+.site .booking-close svg {
+  width: 20px;
+  height: 20px;
+}
+
+.site .booking-about {
+  margin-bottom: 20px;
+  font-weight: 500;
+}
+
+.site .booking-fields,
+.site .booking-optional {
+  display: grid;
+  gap: 16px;
+}
+
+.site .booking-label {
+  display: block;
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.site .booking-label .muted {
+  font-weight: 400;
+}
+
+.site .booking-field {
+  display: block;
+  width: 100%;
+  min-height: 48px;
+  margin-top: 8px;
+  padding: 12px 14px;
+  border-radius: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font: inherit;
+  font-size: 1rem;
+  font-weight: 400;
+}
+
+.site .booking-field:focus-visible {
+  outline-offset: 0;
+}
+
+.site .booking-field::placeholder {
+  color: var(--muted);
+  opacity: 1;
+}
+
+.site textarea.booking-field {
+  resize: vertical;
+}
+
+.site .booking-more {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  justify-self: start;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.site .booking-optional.is-folded {
+  display: none;
+}
+
+.site .booking-consent {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-top: 20px;
+  color: var(--muted);
+  font-size: var(--step-small);
+  line-height: 1.5;
+  cursor: pointer;
+}
+
+.site .booking-consent input {
+  width: 20px;
+  height: 20px;
+  flex: none;
+  margin-top: 1px;
+  accent-color: var(--accent);
+}
+
+.site .booking-consent a {
+  color: var(--ink);
+  font-weight: 500;
+}
+
+.site .booking-error {
+  display: flex;
+  gap: 10px;
+  margin-top: 16px;
+  padding: 14px;
+  background: var(--paper);
+  color: var(--alert);
+  font-size: 1rem;
+}
+
+.site .booking-error svg {
+  width: 18px;
+  height: 18px;
+  flex: none;
+  margin-top: 3px;
+}
+
+.site .booking-submit {
+  width: 100%;
+  min-height: 56px;
+  margin-top: 20px;
+}
+
+.site .booking-submit:disabled {
+  opacity: 0.7;
+  cursor: wait;
+}
+
+.site .booking-fallback {
+  display: flex;
+  min-height: 44px;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4em;
+  margin-top: 12px;
+  font-size: 1rem;
+}
+
+.site .booking-fallback svg {
+  width: 16px;
+  height: 16px;
+}
+
+@media (min-width: 640px) {
+  .site.booking {
+    padding: 24px;
+  }
+
+  .site .booking-center {
+    align-items: center;
+  }
+
+  .site .booking-fields,
+  .site .booking-optional {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .site .booking-span,
+  .site .booking-optional {
+    grid-column: 1 / -1;
+  }
+
+  .site .booking-more {
+    display: none;
+  }
+
+  /* Wide screens have room for every field from the start. */
+  .site .booking-optional.is-folded {
+    display: grid;
+  }
+}
+
+/* ------------------------------------------------------------------- Motion
+   Every rule below is an extra on a finished static page. Without JavaScript,
+   or with reduced motion, everything is simply visible. */
+
+@media (prefers-reduced-motion: no-preference) {
+  /* Parts of a section arrive in reading order. SiteMotion arms only the
+     parts that are still below the screen, then lets them in once. */
+  .site [data-reveal] {
+    transition:
+      opacity 700ms var(--ease-out),
+      transform 900ms var(--ease-out);
+    transition-delay: calc(var(--i, 0) * 80ms);
+  }
+
+  .site [data-reveal="armed"] {
+    opacity: 0;
+    transform: translateY(26px);
+  }
+}
