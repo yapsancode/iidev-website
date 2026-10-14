@@ -5,7 +5,9 @@ import { BookingButton } from "@/components/modal/BookingButton";
 import { SiteBar, SiteFooter, SkipLink, order } from "@/components/site/chrome";
 import { BRAND_NAME, WHATSAPP_DISPLAY, WHATSAPP_URL } from "@/lib/site-config";
 import { BlankSentence } from "./BlankSentence";
+import { ProcessStack } from "./ProcessStack";
 import { SEARCH_FORM_ID, SearchSlot } from "./SearchSlot";
+import { StageVideo } from "./StageVideo";
 
 /* --------------------------------------------------------------------- Hero */
 
@@ -62,6 +64,8 @@ interface Shot {
   size: [number, number];
   alt: string;
   sizes: string;
+  /** A silent recording of the same page scrolling, played over the picture. */
+  video?: string;
 }
 
 interface ProjectLink {
@@ -96,6 +100,7 @@ const PROJECTS: Project[] = [
         size: [1180, 1000],
         alt: "Home page of the Klinik Mekar website, with buttons to book an appointment, find doctors and call for an emergency",
         sizes: "(max-width: 899px) 62vw, 60vw",
+        video: "/videos/work/klinik-mekar-desktop.mp4",
       },
       {
         kind: "phone",
@@ -103,6 +108,7 @@ const PROJECTS: Project[] = [
         size: [500, 1000],
         alt: "The Klinik Mekar website on a phone",
         sizes: "(max-width: 899px) 26vw, 17vw",
+        video: "/videos/work/klinik-mekar-phone.mp4",
       },
     ],
   },
@@ -119,6 +125,7 @@ const PROJECTS: Project[] = [
         size: [1180, 1000],
         alt: "Home page of KerjaKit: See which jobs deserve your attention",
         sizes: "(max-width: 899px) 86vw, 48vw",
+        video: "/videos/work/kerjakit-desktop.mp4",
       },
     ],
   },
@@ -138,12 +145,14 @@ const PROJECTS: Project[] = [
         size: [500, 1000],
         alt: "The Senja Dental concept on a phone: Open till 10pm, with a note that it is a concept project and not a real clinic",
         sizes: "(max-width: 899px) 46vw, 22vw",
+        video: "/videos/work/senja-dental-phone.mp4",
       },
     ],
   },
   {
     layout: "row",
     title: "Locum Connect",
+    kind: "Our own project.",
     text: "A platform where Malaysian doctors find locum shifts, gathered into one list they can filter and search.",
     links: [{ href: "https://locum-connect.com/", label: "Visit locum-connect.com" }],
     shots: [
@@ -180,16 +189,17 @@ export function HomeWork() {
               data-reveal
             >
               {project.shots.map((shot) => (
-                <Image
-                  key={shot.src}
-                  src={shot.src}
-                  width={shot.size[0]}
-                  height={shot.size[1]}
-                  sizes={shot.sizes}
-                  alt={shot.alt}
-                  className={`shot shot-${shot.kind}`}
-                  priority={index === 0}
-                />
+                <span key={shot.src} className={`shot shot-${shot.kind}`}>
+                  <Image
+                    src={shot.src}
+                    width={shot.size[0]}
+                    height={shot.size[1]}
+                    sizes={shot.sizes}
+                    alt={shot.alt}
+                    priority={index === 0}
+                  />
+                  {shot.video && <StageVideo src={shot.video} />}
+                </span>
               ))}
             </Link>
 
@@ -340,6 +350,7 @@ export function HomeProcess() {
           </li>
         ))}
       </ol>
+      <ProcessStack />
     </section>
   );
 }

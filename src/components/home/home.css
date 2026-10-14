@@ -165,8 +165,27 @@
 /* A screenshot stands on the stage and runs off its bottom edge. */
 .home .shot {
   position: absolute;
-  max-width: none;
+  display: block;
+}
+
+.home .shot img {
+  width: 100%;
   height: auto;
+}
+
+/* The recording lies exactly over its screenshot and fades in once it plays. */
+.home .shot-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 500ms ease;
+}
+
+.home .shot-video[data-on] {
+  opacity: 1;
 }
 
 .home .project-lead .project-visual {
@@ -498,34 +517,81 @@
 
 /* ------------------------------------------------------------------ Process */
 
+/* The four steps are flat panels that stack: each one sticks near the top and
+   the next slides over it. Each panel stops one strip lower than the one
+   before, and the strip is exactly its heading, so the steps already passed
+   stay readable as a list. ProcessStack sets --p (0 to 1) while a panel is
+   being covered. */
 .home .process {
-  display: grid;
-  gap: clamp(40px, 4vw, 56px);
+  --pad: clamp(24px, 3vw, 44px);
+  --head: clamp(1.875rem, 1rem + 3.4vw, 4.25rem);
+  --strip: calc(var(--pad) + var(--head) + 16px);
+  --panel: clamp(280px, 48svh, 460px);
   padding-block: var(--section);
 }
 
 .home .process li {
-  margin-left: calc(var(--n) * 6vw);
+  position: sticky;
+  top: calc(16px + var(--n) * var(--strip));
+  display: grid;
+  grid-template-rows: auto 1fr;
+  gap: 24px var(--gap);
+  /* Earlier panels run longer underneath, so all bottoms line up when the
+     stack is stuck and the whole stack leaves together, strips intact. */
+  --below: calc((3 - var(--n)) * var(--strip));
+  min-height: calc(var(--panel) + var(--below));
+  padding: var(--pad) var(--pad) calc(var(--pad) + var(--below));
+  background: var(--surface);
+  transform: scale(calc(1 - 0.04 * var(--p, 0)));
+  transform-origin: center top;
+  filter: brightness(calc(1 - 0.12 * var(--p, 0)));
+}
+
+.home .process li + li {
+  margin-top: 24px;
+}
+
+.home .process li:nth-child(2) {
+  background: var(--paper);
+}
+
+.home .process li:nth-child(3) {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+.home .process li:nth-child(4) {
+  background: var(--accent);
+  color: var(--accent-ink);
 }
 
 .home .process h3 {
-  font-size: var(--step-head);
+  font-size: var(--head);
   line-height: 1;
+  white-space: nowrap;
 }
 
 .home .process p {
   max-width: 36ch;
-  margin-top: 12px;
+  align-self: end;
   color: var(--muted);
 }
 
-.home .process li:last-child h3 {
-  color: var(--accent);
+.home .process li:nth-child(n + 3) p {
+  color: inherit;
 }
 
 @media (min-width: 900px) {
   .home .process li {
-    margin-left: calc(var(--n) * (100% + var(--gap)) / 6);
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+  }
+
+  .home .process h3 {
+    grid-column: 1 / -1;
+  }
+
+  .home .process p {
+    grid-column: 8 / span 5;
   }
 }
 
@@ -724,9 +790,9 @@
   }
 }
 
-@keyframes home-drift {
-  from { transform: translateY(9%); }
-  to { transform: translateY(-9%); }
+@keyframes home-float {
+  from { translate: 0 10px; }
+  to { translate: 0 -10px; }
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -755,11 +821,8 @@
     transition: clip-path 1100ms var(--ease-out);
   }
 
-  /* The phone on the featured stage drifts slowly as it crosses the screen. */
-  @supports (animation-timeline: view()) {
-    .home .project-lead .shot-phone {
-      animation: home-drift linear both;
-      animation-timeline: view();
-    }
+  /* The phone on the featured stage floats, slowly and all the time. */
+  .home .project-lead .shot-phone {
+    animation: home-float 5.5s ease-in-out infinite alternate;
   }
 }
