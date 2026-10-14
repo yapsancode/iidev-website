@@ -1,7 +1,9 @@
 import { getDb } from "@/lib/cloudflare/env";
+import { parseMockup } from "@/lib/sample/clinic";
 import { serialize } from "@/lib/cloudflare/rows";
 import {
   compareForAudit,
+  isDoNotContact,
   isDue,
   isGoneQuiet,
   isReadyToMessage,
@@ -40,7 +42,11 @@ const WRITABLE_COLUMNS = [
   "last_contact",
   "next_follow_up",
   "notes",
+  "lost_reason",
+  "message_variant",
+  "objection",
   "preview_findings",
+  "mockup",
   "source",
 ] as const;
 type WritableColumn = (typeof WRITABLE_COLUMNS)[number];
@@ -67,6 +73,7 @@ function hydrateProspect(row: Record<string, unknown>): ProspectRecord {
     ...row,
     has_gbp: row.has_gbp == null ? null : Boolean(row.has_gbp),
     preview_findings: parsePreviewFindings(row.preview_findings),
+    mockup: parseMockup(row.mockup),
     preview_views: Number(row.preview_views ?? 0),
   } as ProspectRecord;
 }
@@ -211,8 +218,23 @@ export async function updateProspect(
     const phone = fields.phone !== undefined ? fields.phone : current.phone;
     wanted.whatsapp = toMalaysianMobile(whatsapp) ?? toMalaysianMobile(phone);
   }
-  const outcome = action ? outcomeForAction(action, today) : null;
+  let outcome = action ? outcomeForAction(action, today) : null;
+  if (wanted.lost_reason === "asked_to_stop") {
+    // Asking us to stop closes the prospect, whatever else was sent with it.
+    outcome = null;
+    wanted.status = "lost";
+    wanted.next_follow_up = null;
+  } else if (isDoNotContact(current) && wanted.lost_reason === undefined) {
+    // Still closed: no action, no reopening and no new drafts until a founder changes the reason.
+    outcome = null;
+    delete wanted.status;
+    delete wanted.next_follow_up;
+    delete wanted.draft_first;
+    delete wanted.draft_followup;
+  }
   if (outcome) Object.assign(wanted, outcome.patch);
+  const nextStatus = wanted.status ?? current.status;
+  if (nextStatus !== "lost" && current.lost_reason && wanted.lost_reason === undefined) wanted.lost_reason = null;
 
   const changed = (Object.keys(wanted) as WritableColumn[]).filter(
     (column) => wanted[column] !== storedValue((current as unknown as Record<string, unknown>)[column]),
@@ -222,7 +244,17 @@ export async function updateProspect(
   if (changed.includes("status")) {
     events.push({ type: "status_changed", metadata: { from: current.status, to: wanted.status } });
   }
-  if (outcome?.event) events.push({ type: outcome.event });
+  if (outcome?.event === "message_sent") {
+    events.push({
+      type: "message_sent",
+      metadata: {
+        variant: wanted.message_variant ?? current.message_variant,
+        language: wanted.draft_language ?? current.draft_language,
+      },
+    });
+  } else if (outcome?.event) {
+    events.push({ type: outcome.event, metadata: wanted.objection ? { objection: wanted.objection } : {} });
+  }
   if (changed.includes("audit_date") && wanted.audit_date) events.push({ type: "audited" });
   if (
     (changed.includes("draft_first") && wanted.draft_first) ||
@@ -306,9 +338,13 @@ export async function importProspects(
   const summary = { created: 0, updated: 0, unchanged: 0 };
   for (const input of inputs) {
     const match = await db
-      .prepare("SELECT id,updated_at FROM prospects WHERE lower(business_name)=lower(?) AND ifnull(phone,'')=?")
+      .prepare("SELECT id,updated_at,lost_reason FROM prospects WHERE lower(business_name)=lower(?) AND ifnull(phone,'')=?")
       .bind(input.business_name, input.phone ?? "")
-      .first<{ id: string; updated_at: string }>();
+      .first<{ id: string; updated_at: string; lost_reason: string | null }>();
+    if (match?.lost_reason === "asked_to_stop") {
+      summary.unchanged += 1;
+      continue;
+    }
     if (!match) {
       await createProspect(input, actor, "imported");
       summary.created += 1;

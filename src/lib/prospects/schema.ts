@@ -1,7 +1,8 @@
 import { z } from "zod";
+import { mockupSchema } from "../sample/clinic";
 import { previewFindingsSchema } from "./preview";
 import { isValidDateString } from "./rules";
-import { draftLanguages, prospectActions, prospectPriorities, prospectStatuses, websiteStates } from "./types";
+import { draftLanguages, lostReasons, objections, prospectActions, prospectPriorities, prospectStatuses, websiteStates } from "./types";
 
 /** Trimmed text where an empty string means "no value". */
 function optionalText(max: number) {
@@ -50,8 +51,16 @@ const fields = {
   last_contact: optionalDate,
   next_follow_up: optionalDate,
   notes: optionalText(8000),
+  /** Why it was lost. "asked_to_stop" also closes the prospect for good. */
+  lost_reason: z.enum(lostReasons).nullable().optional(),
+  /** Short label of the first-message version, so reply rates can be compared. */
+  message_variant: optionalText(40),
+  /** The main objection heard in their reply. */
+  objection: z.enum(objections).nullable().optional(),
   /** What the prospect reads on their preview page. Null clears it. */
   preview_findings: previewFindingsSchema.nullable().optional(),
+  /** Details for the sketch of their future website. An empty object uses the sample's placeholders. Null removes the sketch. */
+  mockup: mockupSchema.nullable().optional(),
   source: z.string().trim().min(1).max(40).optional(),
 };
 

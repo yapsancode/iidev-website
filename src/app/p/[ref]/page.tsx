@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Check, MessageCircle } from "lucide-react";
 import { ViewBeacon } from "@/components/preview/ViewBeacon";
 import { getProspectByPreviewToken } from "@/lib/prospects/data";
 import { PREVIEW_VIEW_DELAY_MS, tokenFromRef } from "@/lib/prospects/preview";
-import { previewCopy } from "@/lib/prospects/preview-copy";
+import { previewCopy, previewProof } from "@/lib/prospects/preview-copy";
+import { isHealthcare } from "@/lib/sample/clinic";
 import { BRAND_NAME, WHATSAPP_DISPLAY, WHATSAPP_URL } from "@/lib/site-config";
 import { CARD_ACCENT, CARD_DARK, CARD_WHITE, LABEL, PRIMARY_BUTTON } from "@/lib/styles";
 import { cn } from "@/lib/utils";
@@ -112,8 +114,32 @@ export default async function PreviewPage({ params }: Props) {
 
         <section className={cn(CARD_ACCENT, "mt-12 p-5")}>
           <h2 className="font-bold">{copy.proofTitle}</h2>
-          <p className="mt-2 leading-relaxed text-black/80">{copy.proof}</p>
+          {previewProof(copy, prospect.category).map((line) => (
+            <p key={line} className="mt-2 leading-relaxed text-black/80">{line}</p>
+          ))}
         </section>
+
+        {isHealthcare(prospect.category) && (
+          <section className="mt-12">
+            <h2 className={heading}>{copy.sampleTitle}</h2>
+            <p className={cn(body, "mt-3")}>{copy.sampleBody}</p>
+            <p className="mt-3">
+              <Link href={`/sample/clinic${prospect.draft_language === "ms" ? "?lang=ms" : ""}`} className="font-bold text-indigo-700 underline underline-offset-4 dark:text-indigo-300">
+                {copy.sampleLink}
+              </Link>
+            </p>
+            {prospect.mockup && (
+              <>
+                <p className={cn(body, "mt-5")}>{copy.sketchBody}</p>
+                <p className="mt-3">
+                  <Link href={`/p/${(await params).ref}/sketch`} className="font-bold text-indigo-700 underline underline-offset-4 dark:text-indigo-300">
+                    {copy.sketchLink}
+                  </Link>
+                </p>
+              </>
+            )}
+          </section>
+        )}
 
         <section className={cn(CARD_DARK, "mt-12 p-6")}>
           <h2 className="text-xl font-bold">{copy.offerTitle}</h2>

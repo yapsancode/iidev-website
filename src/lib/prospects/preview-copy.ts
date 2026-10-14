@@ -19,7 +19,17 @@ export interface PreviewCopy {
   questionsTitle: string;
   questions: { q: string; a: string }[];
   proofTitle: string;
-  proof: string;
+  /** Shown to clinics, dental and physio. */
+  proofHealthcare: string[];
+  /** Shown to every other kind of business. */
+  proofOther: string[];
+  cardLine: (count: number) => string;
+  sampleTitle: string;
+  sampleBody: string;
+  sampleLink: string;
+  sketchBody: string;
+  sketchLink: string;
+  cardPrivate: string;
   offerTitle: string;
   offerLead: string;
   offerPoints: string[];
@@ -76,7 +86,20 @@ const en: PreviewCopy = {
     },
   ],
   proofTitle: "Work we can show",
-  proof: "A 24-hour clinic in Serdang. We built its website in October 2025: 7 pages, and WhatsApp booking with a ready-written message.",
+  proofHealthcare: [
+    "A 24-hour clinic in Serdang. We built its website in October 2025: 7 pages, and WhatsApp booking with a ready-written message.",
+  ],
+  proofOther: [
+    "A website for a 24-hour clinic in Serdang, built in October 2025: 7 pages, and WhatsApp booking with a ready-written message.",
+    "KerjaKit, our own AI resume product, with more than 40 registered users.",
+  ],
+  cardLine: (count) => (count === 1 ? "One thing a customer sees today" : `${count} things a customer sees today`),
+  cardPrivate: "Private page",
+  sampleTitle: "See what we mean",
+  sampleBody: "A sample clinic website, with a short note on why each part is there. The clinic in it is made up.",
+  sampleLink: "Open the sample website",
+  sketchBody: "We also made a quick sketch with your clinic's name on it. It is not your final website. Pictures and words are placeholders.",
+  sketchLink: "Open your sketch",
   offerTitle: "The next step: a full written audit",
   offerLead: "RM 500. Credited back in full if you start a project with us within 30 days.",
   offerPoints: [
@@ -145,7 +168,20 @@ const ms: PreviewCopy = {
     },
   ],
   proofTitle: "Kerja yang boleh kami tunjuk",
-  proof: "Sebuah klinik 24 jam di Serdang. Kami bina website klinik itu pada Oktober 2025: 7 halaman, dan booking WhatsApp dengan mesej yang sudah siap ditulis.",
+  proofHealthcare: [
+    "Sebuah klinik 24 jam di Serdang. Kami bina website klinik itu pada Oktober 2025: 7 halaman, dan booking WhatsApp dengan mesej yang sudah siap ditulis.",
+  ],
+  proofOther: [
+    "Website untuk sebuah klinik 24 jam di Serdang, dibina pada Oktober 2025: 7 halaman, dan booking WhatsApp dengan mesej yang sudah siap ditulis.",
+    "KerjaKit, produk resume AI kami sendiri, dengan lebih 40 pengguna berdaftar.",
+  ],
+  cardLine: (count) => `${count} perkara yang pelanggan nampak hari ini`,
+  cardPrivate: "Halaman peribadi",
+  sampleTitle: "Tengok apa yang kami maksudkan",
+  sampleBody: "Website klinik contoh, dengan nota ringkas kenapa setiap bahagian ada di situ. Klinik di dalamnya rekaan sahaja.",
+  sampleLink: "Buka website contoh",
+  sketchBody: "Kami juga buat lakaran ringkas dengan nama klinik anda. Ini bukan website sebenar anda. Gambar dan ayat ialah contoh sahaja.",
+  sketchLink: "Buka lakaran anda",
   offerTitle: "Langkah seterusnya: audit bertulis penuh",
   offerLead: "RM 500. Dikreditkan semula sepenuhnya jika anda mulakan projek dengan kami dalam 30 hari.",
   offerPoints: [
@@ -166,6 +202,13 @@ const ms: PreviewCopy = {
   ],
   stop: "Tidak mahu dihubungi lagi? Balas \"tidak\" di WhatsApp dan kami tidak akan mesej lagi.",
 };
+
+const HEALTHCARE_CATEGORIES = ["clinic", "dental", "physio"];
+
+/** Proof that fits the business: clinics see the clinic, others also see our own product. */
+export function previewProof(copy: PreviewCopy, category: string | null): string[] {
+  return HEALTHCARE_CATEGORIES.includes((category || "").toLowerCase()) ? copy.proofHealthcare : copy.proofOther;
+}
 
 export function previewCopy(language: DraftLanguage | null): PreviewCopy {
   return language === "ms" ? ms : en;
