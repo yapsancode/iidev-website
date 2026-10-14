@@ -149,7 +149,7 @@ function timelineLine(event: ProspectEvent, names: Map<string, string>) {
       event.actor === "claude"
         ? "Claude Code"
         : event.actor === "prospect"
-          ? "The prospect"
+          ? "Someone with the link, which can be a founder"
           : metadata.via === "claude"
             ? `${person}, via Claude`
             : person,

@@ -1,40 +1,249 @@
+import type { Metadata } from "next";
 import Link from "next/link";
-import { ArrowRight, Clock3, MessageCircle, ShieldCheck, Sparkles } from "lucide-react";
+import { CommandCopy } from "@/components/internal/CopyButton";
+import { formatDay, formatMoment } from "@/components/internal/ProspectBits";
+import { EmptyNote, LinkRow, PageHeader, RowList, Section, Tag } from "@/components/internal/ui";
 import { requireInternalUser } from "@/lib/auth/internal-user";
-import { getDashboardData } from "@/lib/leads/data";
-import { budgetLabels } from "@/lib/leads/types";
-import { EmptyState } from "@/components/internal/EmptyState";
-import { PriorityBadge } from "@/components/internal/PriorityBadge";
-import { OutboundToday } from "@/components/internal/OutboundToday";
+import { countEnquiriesWaiting, listLeads } from "@/lib/leads/data";
 import { getOutboundOverview } from "@/lib/prospects/data";
+import { draftProblems } from "@/lib/prospects/draft-check";
+import { daysBetween } from "@/lib/prospects/stage";
+import { sentInLastDays } from "@/lib/prospects/stats";
+import { inProgressProspectStatuses, objectionLabels, prospectStatusLabels, type ProspectRecord } from "@/lib/prospects/types";
 
-export default async function InternalHomePage() {
-  const [user, dashboard, outbound] = await Promise.all([requireInternalUser(), getDashboardData(), getOutboundOverview()]);
-  const today = new Intl.DateTimeFormat("en-MY", { timeZone: "Asia/Kuala_Lumpur", weekday: "short", day: "numeric", month: "short" }).format(new Date());
-  const firstName = user.full_name.split(" ")[0];
-  const health = dashboard.openCount === 0 ? null : Math.max(0, Math.min(100, Math.round(100 - dashboard.needsReviewCount * 15 - dashboard.missedFollowUps * 20)));
+export const metadata: Metadata = { title: "Today" };
+
+/** The plan is 8 to 10 personalised messages a day (CLAUDE.md, Outreach rules). */
+const DAILY_TARGET = 8;
+const AUDIT_BATCH = 5;
+
+const nextForInProgress: Partial<Record<ProspectRecord["status"], string>> = {
+  audit_booked: "Do the audit, then mark it done.",
+  audit_done: "Send the proposal.",
+  proposal: "Ask for a decision on the proposal.",
+};
+
+function plural(count: number, one: string, many = `${one}s`) {
+  return `${count} ${count === 1 ? one : many}`;
+}
+
+function meta(prospect: ProspectRecord, ...extra: (string | null | false)[]) {
+  return [prospect.category, prospect.area, ...extra].filter(Boolean).join(" · ");
+}
+
+async function enquiryNumbers() {
+  try {
+    const [counts, fresh] = await Promise.all([countEnquiriesWaiting(), listLeads({ status: "new" })]);
+    return { ...counts, fresh: fresh.slice(0, 3) };
+  } catch {
+    return { new_enquiries: 0, not_summarised: 0, fresh: [] };
+  }
+}
+
+export default async function TodayPage() {
+  const [, overview, enquiries] = await Promise.all([requireInternalUser(), getOutboundOverview(), enquiryNumbers()]);
+  const { today } = overview;
+  const sentToday = sentInLastDays(overview.events, today, 1);
+  const readyToSend = overview.ready.filter((prospect) => prospect.draft_first);
+  const needsDraft = overview.ready.filter((prospect) => !prospect.draft_first);
+  const inProgress = overview.prospects.filter((prospect) => inProgressProspectStatuses.includes(prospect.status));
+  const dateLabel = new Intl.DateTimeFormat("en-MY", { timeZone: "Asia/Kuala_Lumpur", weekday: "long", day: "numeric", month: "long" }).format(new Date());
+
+  // The single most useful thing, in the order /pipeline-review uses.
+  const stillToReach = Math.max(0, DAILY_TARGET - sentToday - readyToSend.length - needsDraft.length);
+  const thenAudit = stillToReach > 0 && overview.toAudit.length > 0 ? ` Then audit ${Math.min(stillToReach, overview.toAudit.length)} more.` : "";
+  const first: { text: string; command?: string } =
+    overview.due.length > 0 ? { text: `Send ${plural(overview.due.length, "follow-up")}. They take a few minutes.` }
+    : overview.replied.length > 0 ? { text: overview.replied.length === 1 ? `Answer ${overview.replied[0].business_name}.` : `Answer ${overview.replied.length} replies.` }
+    : readyToSend.length > 0 ? { text: (readyToSend.length === 1 ? `Send ${readyToSend[0].business_name}.` : `Send the ${readyToSend.length} messages that are ready.`) + thenAudit }
+    : needsDraft.length > 0 ? { text: `Ask Claude to write ${plural(needsDraft.length, "message")}.`, command: "/outreach-message all audited" }
+    : overview.toAudit.length > 0 ? { text: `Nothing is due. Audit the next ${Math.min(AUDIT_BATCH, overview.toAudit.length)} and send them.`, command: `/prospect-audit next ${AUDIT_BATCH}` }
+    : { text: "Nothing is due today." };
+
+  const empty: string[] = [];
+  if (overview.due.length === 0) empty.push("no follow-ups due");
+  if (overview.replied.length === 0) empty.push("no replies waiting");
+  if (inProgress.length === 0) empty.push("nothing in progress");
 
   return (
     <>
-      <div><p className="font-sans text-xs text-neutral-500 dark:text-neutral-400">{today}</p><h1 className="mt-1 font-sans text-3xl font-bold tracking-tight sm:text-4xl">Stay in control, {firstName}.</h1><p className="mt-2 font-sans text-sm text-neutral-500 dark:text-neutral-400">What needs your attention across the lead pipeline.</p></div>
+      <PageHeader eyebrow={dateLabel} title="Today" />
 
-      <section className="mt-6 rounded-[2rem] bg-[#0d1712] p-5 text-white shadow-sm sm:p-7">
-        <div className="flex items-start justify-between gap-5"><div><p className="font-sans text-xs text-emerald-200">Pipeline health</p><h2 className="mt-2 font-sans text-2xl font-bold">{dashboard.openCount} active {dashboard.openCount === 1 ? "lead" : "leads"}</h2></div><div className="grid h-16 w-16 place-items-center rounded-full border-[7px] border-[#ef6552] font-sans text-sm font-bold">{health === null ? "—" : `${health}%`}</div></div>
-        <div className="mt-6 grid grid-cols-3 border-t border-white/15 pt-5 text-center"><div className="border-r border-white/15"><strong className="block font-sans text-lg">{dashboard.highPriorityCount}</strong><span className="font-sans text-[10px] text-neutral-400">High priority</span></div><div className="border-r border-white/15"><strong className="block font-sans text-lg">{dashboard.needsReviewCount}</strong><span className="font-sans text-[10px] text-neutral-400">Needs review</span></div><div><strong className="block font-sans text-lg">{dashboard.missedFollowUps}</strong><span className="font-sans text-[10px] text-neutral-400">Missed follow-ups</span></div></div>
-      </section>
+      <div className="mt-6 grid gap-x-10 lg:grid-cols-[minmax(0,1.55fr)_minmax(0,1fr)]">
+        <div>
+          <section aria-label="Do this first" className="bg-os-accent p-5 text-os-on-accent sm:p-6">
+            <p className="text-[13px] opacity-85">Do this first</p>
+            <p className="mt-1 text-pretty text-xl font-medium leading-snug sm:text-2xl">{first.text}</p>
+            {first.command && <div className="mt-4 text-os-ink"><CommandCopy command={first.command} /></div>}
+            <div className="mt-5 flex items-baseline justify-between text-[13px]">
+              <span>Sent today</span>
+              <span className="tabular">{sentToday} of {DAILY_TARGET}</span>
+            </div>
+            <div className="mt-1.5 h-1 bg-os-on-accent/25" role="img" aria-label={`${sentToday} of ${DAILY_TARGET} messages sent today`}>
+              <div className="h-1 bg-os-on-accent" style={{ width: `${Math.min(100, (sentToday / DAILY_TARGET) * 100)}%` }} />
+            </div>
+            <p className="mt-3 text-[13px] opacity-85">
+              {plural(overview.sentLast7Days, "message")} in the last 7 days.{overview.sentLast7Days < DAILY_TARGET && " The plan is 8 to 10 a day."}
+            </p>
+          </section>
 
-      <OutboundToday overview={outbound} />
+          {overview.due.length > 0 && (
+            <Section title="Follow-ups due" count={overview.due.length} hint="Send each one once, then tap Follow-up sent." href="/internal/prospects?view=due">
+              <RowList>
+                {overview.due.map((prospect) => (
+                  <LinkRow
+                    key={prospect.id}
+                    href={`/internal/prospects/${prospect.id}`}
+                    title={prospect.business_name}
+                    meta={meta(prospect, prospect.draft_followup ? null : "no follow-up written")}
+                    detail={prospect.next_follow_up === today ? "Due today" : `Due since ${formatDay(prospect.next_follow_up)}`}
+                    detailTone="alert"
+                  />
+                ))}
+              </RowList>
+            </Section>
+          )}
 
-      <div className="mt-7 flex items-end justify-between"><div><h2 className="font-sans text-lg font-bold">Today’s attention</h2><p className="mt-1 font-sans text-xs text-neutral-500 dark:text-neutral-400">High priority and manual-review leads</p></div><Link href="/internal/leads" className="font-sans text-xs font-bold text-[#e95f4d]">See all</Link></div>
-      {dashboard.recent.length === 0 ? <div className="mt-4"><EmptyState title="No leads yet" description="New website enquiries will appear here after the D1 migration and Worker secrets are configured." /></div> : (
-        <div className="mt-4 grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
-          {dashboard.recent.slice(0, 3).map((lead, index) => <Link key={lead.id} href={`/internal/leads/${lead.id}`} className={`group rounded-[1.6rem] p-5 shadow-sm transition hover:-translate-y-0.5 ${index === 0 && lead.priority === "high" ? "bg-[#ef6552] text-white" : "bg-white dark:bg-neutral-900"}`}><div className="flex items-start justify-between gap-3"><span className={`grid h-10 w-10 place-items-center rounded-2xl ${index === 0 && lead.priority === "high" ? "bg-white/20" : "bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300"}`}><Sparkles className="h-5 w-5" /></span><PriorityBadge priority={lead.priority} score={lead.lead_score} /></div><h3 className="mt-7 font-sans text-lg font-bold">{lead.business_name || lead.full_name}</h3><p className={`mt-2 line-clamp-2 font-sans text-xs leading-relaxed ${index === 0 && lead.priority === "high" ? "text-white/80" : "text-neutral-500 dark:text-neutral-400"}`}>{lead.ai_extraction?.summary || lead.raw_enquiry}</p><div className="mt-5 flex items-center justify-between font-sans text-[10px]"><span>{lead.budget ? budgetLabels[lead.budget] : "Budget not provided"}</span><ArrowRight className="h-4 w-4 transition group-hover:translate-x-1" /></div></Link>)}
+          {overview.replied.length > 0 && (
+            <Section title="Replies waiting" count={overview.replied.length} hint="Answer them. If they want to see what you found, send their private link." href="/internal/prospects?view=replied">
+              <RowList>
+                {overview.replied.map((prospect) => (
+                  <LinkRow
+                    key={prospect.id}
+                    href={`/internal/prospects/${prospect.id}`}
+                    title={prospect.business_name}
+                    meta={meta(prospect)}
+                    detail={`Replied ${formatDay(prospect.last_contact)}${prospect.objection ? ` · ${objectionLabels[prospect.objection]}` : ""}`}
+                    detailTone="accent"
+                  />
+                ))}
+              </RowList>
+            </Section>
+          )}
+
+          <Section title="Ready to send" count={readyToSend.length} hint="Open the Google listing once more, then send." href="/internal/prospects?view=ready">
+            {readyToSend.length === 0 ? (
+              <EmptyNote>{needsDraft.length > 0 ? "Nothing written yet. See below." : "Nothing ready. Audit the next few first."}</EmptyNote>
+            ) : (
+              <RowList>
+                {readyToSend.map((prospect) => {
+                  const problems = draftProblems(prospect.draft_first, "first");
+                  const age = prospect.audit_date ? daysBetween(prospect.audit_date, today) : 0;
+                  return (
+                    <LinkRow
+                      key={prospect.id}
+                      href={`/internal/prospects/${prospect.id}`}
+                      title={prospect.business_name}
+                      meta={meta(prospect, prospect.draft_language === "ms" ? "Bahasa Melayu" : prospect.draft_language === "en" ? "English" : null, !prospect.whatsapp && "landline")}
+                      detail={problems.length > 0 ? `The message breaks ${plural(problems.length, "rule")}. Fix it before sending.` : `Checked ${age === 0 ? "today" : `${formatDay(prospect.audit_date)}, ${plural(age, "day")} ago`}`}
+                      detailTone={problems.length > 0 ? "alert" : "muted"}
+                    />
+                  );
+                })}
+              </RowList>
+            )}
+          </Section>
+
+          {needsDraft.length > 0 && (
+            <Section title="Needs a message" count={needsDraft.length} hint="Audited, with a real problem to open with. Ask Claude to write the message.">
+              <RowList>
+                {needsDraft.slice(0, 5).map((prospect) => (
+                  <LinkRow key={prospect.id} href={`/internal/prospects/${prospect.id}`} title={prospect.business_name} meta={meta(prospect)} detail={prospect.top_finding} />
+                ))}
+              </RowList>
+              <div className="mt-2"><CommandCopy command="/outreach-message all audited" /></div>
+            </Section>
+          )}
+
+          {inProgress.length > 0 && (
+            <Section title="In progress" count={inProgress.length} href="/internal/prospects?view=in_progress">
+              <RowList>
+                {inProgress.map((prospect) => (
+                  <LinkRow
+                    key={prospect.id}
+                    href={`/internal/prospects/${prospect.id}`}
+                    title={prospect.business_name}
+                    meta={meta(prospect)}
+                    aside={<Tag tone="solid">{prospectStatusLabels[prospect.status]}</Tag>}
+                    detail={nextForInProgress[prospect.status]}
+                  />
+                ))}
+              </RowList>
+            </Section>
+          )}
+
+          {overview.goneQuiet.length > 0 && (
+            <Section title="Gone quiet" count={overview.goneQuiet.length} hint="No reply after the follow-up. Mark them lost when you are sure.">
+              <RowList>
+                {overview.goneQuiet.map((prospect) => (
+                  <LinkRow key={prospect.id} href={`/internal/prospects/${prospect.id}`} title={prospect.business_name} meta={meta(prospect)} detail={`Last contact ${formatDay(prospect.last_contact)}`} />
+                ))}
+              </RowList>
+            </Section>
+          )}
+
+          {empty.length > 0 && <p className="mt-6 text-[13px] text-os-muted">Also today: {empty.join(", ")}.</p>}
         </div>
-      )}
 
-      <div className="mt-7"><h2 className="font-sans text-lg font-bold">System status</h2><div className="mt-4 grid gap-3 sm:grid-cols-3"><div className="rounded-3xl bg-white p-4 dark:bg-neutral-900"><ShieldCheck className="h-5 w-5 text-emerald-600" /><strong className="mt-3 block font-sans text-sm">Raw capture</strong><span className="mt-1 block font-sans text-xs text-neutral-500">Saved before WhatsApp</span></div><div className="rounded-3xl bg-white p-4 dark:bg-neutral-900"><Sparkles className="h-5 w-5 text-emerald-600" /><strong className="mt-3 block font-sans text-sm">AI processing</strong><span className="mt-1 block font-sans text-xs text-neutral-500">{dashboard.needsReviewCount ? `${dashboard.needsReviewCount} need attention` : "No known failures"}</span></div><div className="rounded-3xl bg-white p-4 dark:bg-neutral-900"><MessageCircle className="h-5 w-5 text-emerald-600" /><strong className="mt-3 block font-sans text-sm">Follow-up</strong><span className="mt-1 block font-sans text-xs text-neutral-500">{dashboard.missedFollowUps ? `${dashboard.missedFollowUps} overdue` : "Nothing overdue"}</span></div></div></div>
+        <div>
+          <Section title="Audit next" count={overview.toAudit.length} hint="Priority A first, then the fewest Google reviews." href="/internal/prospects?view=to_audit" className="lg:mt-0">
+            {overview.toAudit.length === 0 ? (
+              <EmptyNote>Everyone is audited. Ask Claude to find more businesses in a new area.</EmptyNote>
+            ) : (
+              <>
+                <RowList>
+                  {overview.toAudit.slice(0, AUDIT_BATCH).map((prospect) => (
+                    <LinkRow
+                      key={prospect.id}
+                      href={`/internal/prospects/${prospect.id}`}
+                      title={prospect.business_name}
+                      meta={[prospect.category, `Priority ${prospect.priority}`, prospect.google_reviews != null ? plural(prospect.google_reviews, "review") : null, !prospect.whatsapp && "landline"].filter(Boolean).join(" · ")}
+                    />
+                  ))}
+                </RowList>
+                <div className="mt-2"><CommandCopy command={`/prospect-audit next ${AUDIT_BATCH}`} /></div>
+              </>
+            )}
+          </Section>
 
-      {dashboard.recent.length > 0 && <section className="mt-7 rounded-[2rem] bg-white p-5 dark:bg-neutral-900"><div className="flex items-center gap-2"><Clock3 className="h-5 w-5 text-[#e95f4d]" /><h2 className="font-sans text-lg font-bold">Coming up</h2></div><div className="mt-3 divide-y divide-neutral-100 dark:divide-neutral-800">{dashboard.recent.filter((lead) => lead.status === "new").slice(0, 3).map((lead) => <Link key={lead.id} href={`/internal/leads/${lead.id}`} className="flex items-center justify-between gap-4 py-4"><div><strong className="font-sans text-sm">Follow up with {lead.full_name}</strong><p className="mt-1 font-sans text-xs text-neutral-500">{lead.business_name || "Website enquiry"}</p></div><ArrowRight className="h-4 w-4" /></Link>)}</div></section>}
+          <Section title="Website enquiries" count={enquiries.new_enquiries} href="/internal/leads" linkLabel="All enquiries">
+            {enquiries.fresh.length === 0 ? (
+              <EmptyNote>No new enquiries.</EmptyNote>
+            ) : (
+              <>
+                <RowList>
+                  {enquiries.fresh.map((lead) => (
+                    <LinkRow
+                      key={lead.id}
+                      href={`/internal/leads/${lead.id}`}
+                      title={lead.business_name || lead.full_name}
+                      meta={formatMoment(lead.created_at)}
+                      aside={lead.ai_extraction ? undefined : <Tag tone="alert">Not summarised</Tag>}
+                    />
+                  ))}
+                </RowList>
+                {enquiries.not_summarised > 0 && (
+                  <p className="mt-2 text-[13px] text-os-muted">Ask Claude in the chat app: &ldquo;summarise the new enquiries&rdquo;.</p>
+                )}
+              </>
+            )}
+          </Section>
+
+          <Section title="Numbers" href="/internal/insights" linkLabel="Insights">
+            <div className="bg-os-paper p-4 text-sm">
+              <dl className="grid grid-cols-2 gap-y-3">
+                <div><dt className="text-xs text-os-muted">Prospects</dt><dd className="tabular text-lg">{overview.total}</dd></div>
+                <div><dt className="text-xs text-os-muted">Sent, last 7 days</dt><dd className="tabular text-lg">{overview.sentLast7Days}</dd></div>
+                <div><dt className="text-xs text-os-muted">Replied</dt><dd className="tabular text-lg">{overview.replyRate.replied} of {overview.replyRate.messaged}</dd></div>
+                <div><dt className="text-xs text-os-muted">Won</dt><dd className="tabular text-lg">{overview.counts.find((entry) => entry.status === "won")?.count ?? 0}</dd></div>
+              </dl>
+              <p className="mt-4 text-[13px] text-os-muted">
+                Reply rates mean little before 20 messages. <Link href="/internal/insights" className="text-os-accent underline-offset-4 hover:underline">See Insights</Link>
+              </p>
+            </div>
+          </Section>
+        </div>
+      </div>
     </>
   );
 }

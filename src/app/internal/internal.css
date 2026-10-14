@@ -1,0 +1,79 @@
+/* ---------------------------------------------------------------------------
+   The look of the founder dashboard (/internal), October 2026.
+   Same family as the public site (components/site/site.css): one ground, one
+   ink, one accent, square corners, no shadows, no gradients. Surfaces differ
+   by a step in tone. Red is kept for "act now" and "do not contact".
+
+   The Tailwind names (bg-os-paper, text-os-muted, ...) are mapped in
+   app/globals.css. Every text pair here passes 4.5:1 in both themes.
+   --------------------------------------------------------------------------- */
+
+.internal-os {
+  --os-ground: #eef0f3;
+  --os-paper: #ffffff;
+  --os-well: #e2e5ea;
+  --os-line: #dde1e7;
+  --os-ink: #0b0c0e;
+  --os-muted: #5d6470;
+  --os-accent: #1f2de6;
+  --os-accent-soft: #e4e6fd;
+  --os-on-accent: #ffffff;
+  --os-alert: #a3201a;
+  --os-alert-soft: #f8e4e2;
+
+  background: var(--os-ground);
+  color: var(--os-ink);
+  font-family: var(--font-general-sans), ui-sans-serif, system-ui, sans-serif;
+  font-size: 15px;
+  line-height: 1.5;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.dark .internal-os {
+  --os-ground: #0e0f11;
+  --os-paper: #17191c;
+  --os-well: #23262b;
+  --os-line: #2a2e34;
+  --os-ink: #f2f3f5;
+  --os-muted: #a2a9b4;
+  --os-accent: #8b93ff;
+  --os-accent-soft: #23264d;
+  --os-on-accent: #0b0c0e;
+  --os-alert: #ff9a90;
+  --os-alert-soft: #3a1714;
+}
+
+.internal-os ::selection {
+  background: var(--os-accent);
+  color: var(--os-on-accent);
+}
+
+.internal-os :focus-visible {
+  outline: 3px solid var(--os-accent);
+  outline-offset: 2px;
+}
+
+/* Numbers line up in lists and counters. */
+.internal-os .tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+/* <details> used as a plain disclosure: no browser triangle. */
+.internal-os summary {
+  list-style: none;
+  cursor: pointer;
+}
+
+.internal-os summary::-webkit-details-marker {
+  display: none;
+}
+
+.internal-os details[open] > summary .os-chevron {
+  transform: rotate(180deg);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .internal-os .os-chevron {
+    transition: transform 180ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+}

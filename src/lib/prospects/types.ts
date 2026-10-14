@@ -183,7 +183,7 @@ export const prospectEventLabels: Record<string, string> = {
   details_updated: "Details updated",
   preview_published: "Preview link created",
   preview_removed: "Preview link removed",
-  preview_viewed: "They opened the preview page",
+  preview_viewed: "Preview page opened",
 };
 
 export const closedProspectStatuses: ProspectStatus[] = ["won", "lost", "not_fit"];

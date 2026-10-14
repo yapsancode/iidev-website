@@ -1,75 +1,206 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { AlertTriangle, ArrowLeft, Check, Clock3, MessageCircle, Send, Sparkles, UserRound } from "lucide-react";
+import { ArrowLeft, MessageCircle, Send } from "lucide-react";
 import { PriorityBadge } from "@/components/internal/PriorityBadge";
+import { formatMoment } from "@/components/internal/ProspectBits";
+import { buttonClass, Facts, fieldClass, labelClass, Panel, Tag } from "@/components/internal/ui";
 import { requireInternalUser } from "@/lib/auth/internal-user";
 import { getLeadDetails } from "@/lib/leads/data";
-import { budgetLabels, leadStatuses, statusLabels, timelineLabels, type LeadRecord, type ScoreBreakdown } from "@/lib/leads/types";
+import { budgetLabels, leadStatuses, statusLabels, timelineLabels, type ScoreBreakdown } from "@/lib/leads/types";
+import { cn } from "@/lib/utils";
 import { addLeadNote, assignLeadOwner, resendLeadTelegram, updateLeadStatus } from "../../../actions";
 
+export const metadata: Metadata = { title: "Enquiry" };
+
 const nextActionLabels: Record<string, string> = {
-  schedule_discovery: "Schedule a discovery call",
-  ask_clarifying_questions: "Ask clarifying questions",
-  send_service_information: "Send relevant service information",
-  manual_review: "Review this enquiry manually",
-  not_a_fit: "Confirm whether this is a fit",
+  schedule_discovery: "Book a discovery call",
+  ask_clarifying_questions: "Ask what they need first",
+  send_service_information: "Send the details of the right service",
+  manual_review: "Read this one yourself",
+  not_a_fit: "Check whether this is a fit",
 };
 
 const eventLabels: Record<string, string> = {
-  lead_captured: "Lead captured",
-  ai_processing_started: "AI analysis started",
+  lead_captured: "Enquiry received",
+  ai_processing_started: "Summary started",
   ai_processing_completed: "Summary saved via Claude",
-  ai_processing_failed: "AI analysis failed",
+  ai_processing_failed: "Summary failed",
   telegram_sent: "Telegram alert sent",
   telegram_failed: "Telegram alert failed",
-  telegram_not_configured: "Telegram is not configured",
-  status_changed: "Lead status changed",
-  owner_changed: "Lead owner changed",
-  note_added: "Internal note added",
-  ai_retry_requested: "AI retry requested",
-  telegram_retry_requested: "Telegram retry requested",
+  telegram_not_configured: "Telegram is not set up",
+  status_changed: "Status changed",
+  owner_changed: "Owner changed",
+  note_added: "Note added",
+  ai_retry_requested: "Summary asked again",
+  telegram_retry_requested: "Alert sent again",
 };
 
 export default async function LeadDetailPage({ params }: { params: Promise<{ id: string }> }) {
   await requireInternalUser();
   const { id } = await params;
-  const { lead: rawLead, notes, events, users } = await getLeadDetails(id);
-  if (!rawLead) notFound();
-  const lead = rawLead as LeadRecord & { owner?: { id: string; full_name: string; email: string } | null };
+  const { lead, notes, events, users } = await getLeadDetails(id);
+  if (!lead) notFound();
   const score = lead.score_breakdown as ScoreBreakdown | null;
   const whatsappUrl = `https://wa.me/${lead.whatsapp.replace(/\D/g, "")}`;
-  const scoreItems = score ? [
-    ["Service fit", score.serviceFit, 30], ["Budget fit", score.budgetFit, 25],
-    ["Timeline", score.timeline, 20], ["Clarity", score.clarity, 15],
-    ["Completeness", score.completeness, 10],
-  ] as const : [];
+  const scoreItems = score
+    ? ([["Service fit", score.serviceFit, 30], ["Budget fit", score.budgetFit, 25], ["Timeline", score.timeline, 20], ["Clarity", score.clarity, 15], ["Complete", score.completeness, 10]] as const)
+    : [];
+  const name = lead.business_name || lead.full_name;
 
   return (
     <>
-      <Link href="/internal/leads" className="inline-flex items-center gap-2 font-sans text-xs font-bold text-neutral-500 hover:text-neutral-950 dark:hover:text-white"><ArrowLeft className="h-4 w-4" />All leads</Link>
-      <div className="mt-5 grid gap-5 xl:grid-cols-[minmax(0,1.45fr)_minmax(320px,.75fr)]">
-        <div className="space-y-5">
-          <section className="overflow-hidden rounded-[2rem] bg-white shadow-sm dark:bg-neutral-900">
-            <div className="h-1.5 bg-[#ef6552]" />
-            <div className="p-5 sm:p-7">
-              <div className="flex flex-wrap items-start justify-between gap-4"><div><PriorityBadge priority={lead.priority} score={lead.lead_score} /><h1 className="mt-4 font-sans text-3xl font-bold tracking-tight">{lead.business_name || lead.full_name}</h1><p className="mt-2 font-sans text-sm text-neutral-500 dark:text-neutral-400">{lead.full_name} · {lead.whatsapp}{lead.email ? ` · ${lead.email}` : ""}</p></div><a href={whatsappUrl} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 rounded-2xl bg-[#ef6552] px-4 py-3 font-sans text-xs font-bold text-white"><MessageCircle className="h-4 w-4" />Open WhatsApp</a></div>
-              <div className="mt-6 grid grid-cols-2 gap-4 border-t border-neutral-100 pt-5 dark:border-neutral-800 sm:grid-cols-4"><div><span className="font-sans text-[10px] text-neutral-400">Service</span><strong className="mt-1 block font-sans text-xs">{lead.ai_extraction?.requestedServices.join(", ").replaceAll("_", " ") || lead.service_context || "Unknown"}</strong></div><div><span className="font-sans text-[10px] text-neutral-400">Budget</span><strong className="mt-1 block font-sans text-xs">{lead.budget ? budgetLabels[lead.budget] : "Not provided"}</strong></div><div><span className="font-sans text-[10px] text-neutral-400">Timeline</span><strong className="mt-1 block font-sans text-xs">{lead.timeline ? timelineLabels[lead.timeline] : "Not provided"}</strong></div><div><span className="font-sans text-[10px] text-neutral-400">Owner</span><strong className="mt-1 block font-sans text-xs">{lead.owner?.full_name || "Unassigned"}</strong></div></div>
+      <Link href="/internal/leads" className="inline-flex min-h-10 items-center gap-2 text-[13px] text-os-muted hover:text-os-ink">
+        <ArrowLeft className="h-4 w-4" strokeWidth={1.75} aria-hidden />Enquiries
+      </Link>
+      <header className="mt-2">
+        <h1 className="text-balance font-os-display text-[2.5rem] leading-[0.95] tracking-[-0.02em] sm:text-5xl">{name}</h1>
+        <p className="mt-2 text-[15px] text-os-muted">{[lead.business_name ? lead.full_name : null, lead.whatsapp, lead.email].filter(Boolean).join(" · ")}</p>
+        <div className="mt-3 flex flex-wrap gap-1.5">
+          <Tag tone="outline">{statusLabels[lead.status]}</Tag>
+          {lead.ai_extraction ? <PriorityBadge priority={lead.priority} score={lead.lead_score} /> : <Tag tone="alert">Not summarised</Tag>}
+        </div>
+      </header>
+
+      <div className="mt-6 grid gap-x-10 gap-y-6 lg:grid-cols-[minmax(0,1.5fr)_minmax(0,1fr)]">
+        <div className="grid content-start gap-6">
+          <section aria-labelledby="now-title" className="border-t-4 border-os-accent bg-os-paper p-4 sm:p-5">
+            <p className="text-[13px] text-os-muted">Now</p>
+            <h2 id="now-title" className="mt-0.5 text-xl font-medium leading-snug">
+              {lead.status === "new" ? "Reply to them on WhatsApp" : lead.ai_extraction ? nextActionLabels[lead.ai_extraction.recommendedNextAction] : "Keep the conversation going"}
+            </h2>
+            <p className="mt-2 text-[15px] text-os-muted">
+              {lead.ai_extraction
+                ? `Suggested next step: ${nextActionLabels[lead.ai_extraction.recommendedNextAction].toLowerCase()}.`
+                : "Not summarised yet. Ask Claude in the chat app to summarise the new enquiries. The summary and the score appear here."}
+            </p>
+            <div className="mt-4 grid gap-2 sm:grid-cols-2">
+              <a href={whatsappUrl} target="_blank" rel="noreferrer" className={buttonClass("primary", { full: true })}>
+                <MessageCircle className="h-4 w-4" strokeWidth={1.75} aria-hidden />Open WhatsApp
+              </a>
+              {lead.status === "new" && (
+                <form action={updateLeadStatus}>
+                  <input type="hidden" name="leadId" value={lead.id} />
+                  <input type="hidden" name="status" value="contacted" />
+                  <button className={buttonClass("secondary", { full: true })}>Mark contacted</button>
+                </form>
+              )}
             </div>
           </section>
 
-          <section className="rounded-[2rem] bg-white p-5 shadow-sm dark:bg-neutral-900 sm:p-7"><div className="flex items-center gap-2"><Sparkles className="h-5 w-5 text-emerald-600" /><h2 className="font-sans text-lg font-bold">Summary</h2></div>{lead.ai_extraction ? <><p className="mt-4 font-sans text-sm leading-relaxed text-neutral-600 dark:text-neutral-300">{lead.ai_extraction.summary}</p><div className="mt-5 grid gap-3 sm:grid-cols-2"><div className="rounded-2xl bg-neutral-50 p-4 dark:bg-neutral-800"><span className="font-sans text-[10px] font-bold uppercase text-neutral-400">Business goals</span><ul className="mt-2 space-y-1 font-sans text-xs">{lead.ai_extraction.businessGoals.map((goal) => <li key={goal}>• {goal}</li>)}</ul></div><div className="rounded-2xl bg-neutral-50 p-4 dark:bg-neutral-800"><span className="font-sans text-[10px] font-bold uppercase text-neutral-400">Pain points</span><ul className="mt-2 space-y-1 font-sans text-xs">{lead.ai_extraction.painPoints.map((point) => <li key={point}>• {point}</li>)}</ul></div></div><div className="mt-4 rounded-2xl bg-amber-50 p-4 dark:bg-amber-950"><span className="font-sans text-[10px] font-bold uppercase text-amber-700 dark:text-amber-300">Suggested next action</span><strong className="mt-1 block font-sans text-sm">{nextActionLabels[lead.ai_extraction.recommendedNextAction]}</strong></div></> : <div className="mt-4 flex gap-3 rounded-2xl bg-amber-50 p-4 text-amber-800 dark:bg-amber-950 dark:text-amber-200"><AlertTriangle className="h-5 w-5 shrink-0" /><div><strong className="font-sans text-sm">Not summarised yet</strong><p className="mt-1 font-sans text-xs">Open Claude and ask it to summarise the new enquiries. The summary and the score will appear here.</p></div></div>}</section>
+          <Panel>
+            <Facts
+              items={[
+                { label: "Service", value: lead.ai_extraction?.requestedServices.join(", ").replaceAll("_", " ") || lead.service_context || "Not known" },
+                { label: "Budget", value: lead.budget ? budgetLabels[lead.budget] : "Not given" },
+                { label: "Timeline", value: lead.timeline ? timelineLabels[lead.timeline] : "Not given" },
+                { label: "Owner", value: lead.owner?.full_name || "Nobody yet" },
+              ]}
+            />
+          </Panel>
 
-          <section className="rounded-[2rem] bg-white p-5 shadow-sm dark:bg-neutral-900 sm:p-7"><div className="flex items-end justify-between"><h2 className="font-sans text-lg font-bold">Qualification score</h2><strong className="font-sans text-3xl">{lead.lead_score ?? "—"}</strong></div>{scoreItems.length ? <div className="mt-5 space-y-4">{scoreItems.map(([label, value, maximum]) => <div key={label} className="grid grid-cols-[90px_1fr_42px] items-center gap-3"><span className="font-sans text-[10px] text-neutral-500">{label}</span><div className="h-2 overflow-hidden rounded-full bg-neutral-100 dark:bg-neutral-800"><div className="h-full rounded-full bg-[#ef6552]" style={{ width: `${Math.round((value / maximum) * 100)}%` }} /></div><span className="text-right font-mono text-[10px]">{value}/{maximum}</span></div>)}</div> : <p className="mt-4 font-sans text-sm text-neutral-500">A score will appear after successful AI extraction.</p>}</section>
+          {lead.ai_extraction && (
+            <Panel>
+              <h2 className="text-base font-medium">Summary</h2>
+              <p className="mt-2 text-[15px] leading-relaxed">{lead.ai_extraction.summary}</p>
+              <div className="mt-4 grid gap-4 sm:grid-cols-2">
+                <div>
+                  <h3 className="text-xs text-os-muted">What they want</h3>
+                  <ul className="mt-1 grid gap-1 text-sm">{lead.ai_extraction.businessGoals.map((goal) => <li key={goal}>{goal}</li>)}</ul>
+                </div>
+                <div>
+                  <h3 className="text-xs text-os-muted">What is not working</h3>
+                  <ul className="mt-1 grid gap-1 text-sm">{lead.ai_extraction.painPoints.map((point) => <li key={point}>{point}</li>)}</ul>
+                </div>
+              </div>
+            </Panel>
+          )}
 
-          <section className="rounded-[2rem] bg-white p-5 shadow-sm dark:bg-neutral-900 sm:p-7"><h2 className="font-sans text-lg font-bold">Raw enquiry</h2><p className="mt-4 whitespace-pre-wrap font-sans text-sm leading-relaxed text-neutral-600 dark:text-neutral-300">{lead.raw_enquiry}</p><div className="mt-5 flex flex-wrap gap-2 font-sans text-[10px] text-neutral-400"><span>Source: {lead.source_page || "Unknown"}</span><span>·</span><span>Captured {new Intl.DateTimeFormat("en-MY", { dateStyle: "medium", timeStyle: "short" }).format(new Date(lead.created_at))}</span></div></section>
+          {scoreItems.length > 0 && (
+            <Panel>
+              <div className="flex items-baseline justify-between">
+                <h2 className="text-base font-medium">Score</h2>
+                <span className="tabular font-os-display text-3xl">{lead.lead_score ?? "—"}</span>
+              </div>
+              <p className="mt-1 text-[13px] text-os-muted">Worked out by the website from the summary. Each part has a maximum.</p>
+              <ul className="mt-4 grid gap-3">
+                {scoreItems.map(([label, points, maximum]) => (
+                  <li key={label} className="grid grid-cols-[96px_1fr_44px] items-center gap-3 text-[13px]">
+                    <span className="text-os-muted">{label}</span>
+                    <span className="h-2 bg-os-well"><span className="block h-2 bg-os-accent" style={{ width: `${Math.round((points / maximum) * 100)}%` }} /></span>
+                    <span className="tabular text-right">{points}/{maximum}</span>
+                  </li>
+                ))}
+              </ul>
+            </Panel>
+          )}
+
+          <Panel>
+            <h2 className="text-base font-medium">What they wrote</h2>
+            <p className="mt-2 whitespace-pre-wrap text-[15px] leading-relaxed">{lead.raw_enquiry}</p>
+            <p className="mt-4 text-xs text-os-muted">From {lead.source_page || "an unknown page"} · {formatMoment(lead.created_at)}</p>
+          </Panel>
         </div>
 
-        <aside className="space-y-5">
-          <section className="rounded-[2rem] bg-white p-5 shadow-sm dark:bg-neutral-900"><h2 className="font-sans text-sm font-bold">Founder controls</h2><form action={updateLeadStatus} className="mt-4"><input type="hidden" name="leadId" value={lead.id} /><label className="font-sans text-[10px] text-neutral-400">Status<select name="status" defaultValue={lead.status} className="mt-1.5 w-full rounded-xl bg-neutral-100 px-3 py-3 font-sans text-sm dark:bg-neutral-800">{leadStatuses.map((status) => <option key={status} value={status}>{statusLabels[status]}</option>)}</select></label><button className="mt-2 w-full rounded-xl bg-neutral-950 px-4 py-3 font-sans text-xs font-bold text-white dark:bg-white dark:text-neutral-950">Update status</button></form><form action={assignLeadOwner} className="mt-4"><input type="hidden" name="leadId" value={lead.id} /><label className="font-sans text-[10px] text-neutral-400">Owner<select name="ownerId" defaultValue={lead.owner_id || ""} className="mt-1.5 w-full rounded-xl bg-neutral-100 px-3 py-3 font-sans text-sm dark:bg-neutral-800"><option value="">Unassigned</option>{users.map((user) => <option key={user.id} value={user.id}>{user.full_name}</option>)}</select></label><button className="mt-2 w-full rounded-xl bg-neutral-100 px-4 py-3 font-sans text-xs font-bold dark:bg-neutral-800">Assign owner</button></form><div className="mt-4"><form action={resendLeadTelegram}><input type="hidden" name="leadId" value={lead.id} /><button className="flex w-full items-center justify-center gap-1.5 rounded-xl bg-blue-50 px-2 py-3 font-sans text-[10px] font-bold text-blue-800 dark:bg-blue-950 dark:text-blue-200"><Send className="h-3.5 w-3.5" />Resend alert</button></form></div></section>
+        <aside className="grid content-start gap-6">
+          <Panel>
+            <h2 className="text-base font-medium">Status and owner</h2>
+            <form action={updateLeadStatus} className="mt-3">
+              <input type="hidden" name="leadId" value={lead.id} />
+              <label className={labelClass}>Status
+                <select name="status" defaultValue={lead.status} className={fieldClass}>
+                  {leadStatuses.map((status) => <option key={status} value={status}>{statusLabels[status]}</option>)}
+                </select>
+              </label>
+              <button className={cn(buttonClass("secondary", { full: true }), "mt-2")}>Update status</button>
+            </form>
+            <form action={assignLeadOwner} className="mt-4 border-t border-os-line pt-4">
+              <input type="hidden" name="leadId" value={lead.id} />
+              <label className={labelClass}>Owner
+                <select name="ownerId" defaultValue={lead.owner_id || ""} className={fieldClass}>
+                  <option value="">Nobody yet</option>
+                  {users.map((user) => <option key={user.id} value={user.id}>{user.full_name}</option>)}
+                </select>
+              </label>
+              <button className={cn(buttonClass("secondary", { full: true }), "mt-2")}>Set owner</button>
+            </form>
+            <form action={resendLeadTelegram} className="mt-4 border-t border-os-line pt-4">
+              <input type="hidden" name="leadId" value={lead.id} />
+              <button className={buttonClass("quiet", { small: true })}><Send className="h-4 w-4" strokeWidth={1.75} aria-hidden />Send the Telegram alert again</button>
+            </form>
+          </Panel>
 
-          <section className="rounded-[2rem] bg-white p-5 shadow-sm dark:bg-neutral-900"><h2 className="font-sans text-sm font-bold">Internal notes</h2><form action={addLeadNote} className="mt-4"><input type="hidden" name="leadId" value={lead.id} /><textarea name="body" required maxLength={4000} rows={3} className="w-full resize-y rounded-xl bg-neutral-100 p-3 font-sans text-sm outline-none focus:ring-2 focus:ring-emerald-500 dark:bg-neutral-800" placeholder="Add context for the other founder…" /><button className="mt-2 w-full rounded-xl bg-emerald-600 px-4 py-3 font-sans text-xs font-bold text-white">Add note</button></form><div className="mt-5 space-y-4">{notes.length === 0 ? <p className="font-sans text-xs text-neutral-400">No notes yet.</p> : notes.map((note) => <div key={note.id} className="border-t border-neutral-100 pt-4 dark:border-neutral-800"><p className="whitespace-pre-wrap font-sans text-xs leading-relaxed">{note.body}</p><p className="mt-2 font-sans text-[9px] text-neutral-400">{note.author?.full_name || "Founder"} · {new Intl.DateTimeFormat("en-MY", { dateStyle: "medium", timeStyle: "short" }).format(new Date(note.created_at))}</p></div>)}</div></section>
+          <Panel>
+            <form action={addLeadNote}>
+              <input type="hidden" name="leadId" value={lead.id} />
+              <label className={labelClass}>Add a note for the other founder
+                <textarea name="body" required maxLength={4000} rows={3} className={fieldClass} placeholder="Called, will send the audit details tomorrow" />
+              </label>
+              <button className={cn(buttonClass("secondary", { full: true }), "mt-2")}>Add note</button>
+            </form>
+            {notes.length > 0 && (
+              <ul className="mt-4 grid gap-3 border-t border-os-line pt-4">
+                {notes.map((note) => (
+                  <li key={note.id}>
+                    <p className="whitespace-pre-wrap text-sm leading-relaxed">{note.body}</p>
+                    <p className="mt-1 text-xs text-os-muted">{note.author?.full_name || "Founder"} · {formatMoment(note.created_at)}</p>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </Panel>
 
-          <section className="rounded-[2rem] bg-white p-5 shadow-sm dark:bg-neutral-900"><h2 className="font-sans text-sm font-bold">Automation timeline</h2><div className="mt-4 space-y-4">{events.map((event) => <div key={event.id} className="grid grid-cols-[32px_1fr] gap-3"><span className={`grid h-8 w-8 place-items-center rounded-full ${event.event_type.includes("failed") ? "bg-red-100 text-red-700 dark:bg-red-950 dark:text-red-200" : "bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-200"}`}>{event.event_type.includes("failed") ? <AlertTriangle className="h-3.5 w-3.5" /> : event.event_type.includes("telegram") ? <Send className="h-3.5 w-3.5" /> : event.event_type.includes("status") ? <Check className="h-3.5 w-3.5" /> : event.event_type.includes("owner") ? <UserRound className="h-3.5 w-3.5" /> : event.event_type.includes("ai") ? <Sparkles className="h-3.5 w-3.5" /> : <Clock3 className="h-3.5 w-3.5" />}</span><div><strong className="block font-sans text-xs">{eventLabels[event.event_type] || event.event_type.replaceAll("_", " ")}</strong><time className="mt-1 block font-sans text-[9px] text-neutral-400">{new Intl.DateTimeFormat("en-MY", { dateStyle: "medium", timeStyle: "short" }).format(new Date(event.created_at))}</time></div></div>)}</div></section>
+          <Panel>
+            <h2 className="text-base font-medium">Timeline</h2>
+            <ol className="mt-3 grid gap-3">
+              {events.map((event) => (
+                <li key={event.id} className={cn("border-l-2 pl-3", event.event_type.includes("failed") ? "border-os-alert" : "border-os-line")}>
+                  <p className={cn("text-sm", event.event_type.includes("failed") && "text-os-alert")}>{eventLabels[event.event_type] || event.event_type.replaceAll("_", " ")}</p>
+                  <p className="mt-0.5 text-xs text-os-muted"><time dateTime={event.created_at}>{formatMoment(event.created_at)}</time></p>
+                </li>
+              ))}
+            </ol>
+          </Panel>
         </aside>
       </div>
     </>

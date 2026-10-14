@@ -4,9 +4,10 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 import { requireInternalUser } from "@/lib/auth/internal-user";
-import { createProspect, setPreviewPublished, updateProspect } from "@/lib/prospects/data";
+import { createProspect, getProspect, setPreviewPublished, updateProspect } from "@/lib/prospects/data";
+import { moveForStatus } from "@/lib/prospects/rules";
 import { prospectCreateSchema, prospectPatchSchema } from "@/lib/prospects/schema";
-import { lostReasons, objections, prospectActions, prospectStatuses } from "@/lib/prospects/types";
+import { lostReasons, objections, prospectActions, prospectStatuses, type LostReason, type ProspectStatus } from "@/lib/prospects/types";
 
 const idSchema = z.uuid();
 
@@ -74,20 +75,57 @@ export async function runProspectAction(formData: FormData) {
   refreshProspectPaths(parsed.prospectId);
 }
 
+/**
+ * Moves a prospect to another status the same way the buttons do (see `moveForStatus`),
+ * so a move to Messaged sets the follow-up date and counts as a send.
+ * Lost always needs a reason.
+ */
+async function applyStatusMove(prospectId: string, target: ProspectStatus, reason: LostReason | undefined, actor: string) {
+  const found = await getProspect(prospectId);
+  if (!found) return;
+  if (target === "lost") {
+    if (!reason) throw new Error("Pick a reason before marking a prospect lost.");
+    await updateProspect(prospectId, { status: "lost", lost_reason: reason, next_follow_up: null }, actor);
+    return;
+  }
+  const move = moveForStatus(found.prospect.status, target);
+  if (move) await updateProspect(prospectId, move, actor);
+}
+
 export async function setProspectStatus(formData: FormData) {
   const user = await requireInternalUser();
   const parsed = z
-    .object({ prospectId: idSchema, status: z.enum(prospectStatuses) })
+    .object({ prospectId: idSchema, status: z.enum(prospectStatuses).exclude(["lost"]) })
     .parse({ prospectId: formData.get("prospectId"), status: formData.get("status") });
-  await updateProspect(parsed.prospectId, { status: parsed.status }, user.id);
+  await applyStatusMove(parsed.prospectId, parsed.status, undefined, user.id);
   refreshProspectPaths(parsed.prospectId);
 }
 
 /** Called by the board when a card is dropped on a column or moved from its menu. */
-export async function moveProspect(prospectId: string, status: string) {
+export async function moveProspect(prospectId: string, status: string, reason?: string) {
   const user = await requireInternalUser();
-  const parsed = z.object({ prospectId: idSchema, status: z.enum(prospectStatuses) }).parse({ prospectId, status });
-  await updateProspect(parsed.prospectId, { status: parsed.status }, user.id);
+  const parsed = z
+    .object({ prospectId: idSchema, status: z.enum(prospectStatuses), reason: z.enum(lostReasons).optional() })
+    .parse({ prospectId, status, reason: reason || undefined });
+  await applyStatusMove(parsed.prospectId, parsed.status, parsed.reason, user.id);
+  refreshProspectPaths(parsed.prospectId);
+}
+
+/** "They replied", with what they said and what held them back, in one step. */
+export async function logProspectReply(formData: FormData) {
+  const user = await requireInternalUser();
+  const parsed = z
+    .object({
+      prospectId: idSchema,
+      note: z.string().trim().max(4000),
+      objection: z.enum(objections).or(z.literal("")),
+    })
+    .parse({ prospectId: formData.get("prospectId"), note: formData.get("note") ?? "", objection: formData.get("objection") ?? "" });
+  await updateProspect(
+    parsed.prospectId,
+    { action: "replied", ...(parsed.note ? { note: parsed.note } : {}), ...(parsed.objection ? { objection: parsed.objection } : {}) },
+    user.id,
+  );
   refreshProspectPaths(parsed.prospectId);
 }
 
@@ -106,7 +144,16 @@ export async function markProspectLost(formData: FormData) {
   const parsed = z
     .object({ prospectId: idSchema, reason: z.enum(lostReasons) })
     .parse({ prospectId: formData.get("prospectId"), reason: formData.get("reason") });
-  await updateProspect(parsed.prospectId, { status: "lost", lost_reason: parsed.reason, next_follow_up: null }, user.id);
+  await updateProspect(
+    parsed.prospectId,
+    {
+      status: "lost",
+      lost_reason: parsed.reason,
+      next_follow_up: null,
+      ...(parsed.reason === "asked_to_stop" ? { note: "Asked to stop. Do not contact again." } : {}),
+    },
+    user.id,
+  );
   refreshProspectPaths(parsed.prospectId);
 }
 
