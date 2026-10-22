@@ -697,6 +697,121 @@
   }
 }
 
+/* ------------------------------------------------------- Concepts: the list
+   Each concept is a phone screenshot on a flat stage, like the work on the
+   home page, with its kind of business said first. Two share a line. */
+
+.site .concepts {
+  display: grid;
+  gap: clamp(64px, 8vw, 120px) var(--gap);
+  padding-bottom: var(--section);
+}
+
+.site .concept-visual {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  aspect-ratio: 4 / 5;
+  background: var(--surface);
+}
+
+/* The screenshot stands on the stage and runs off its bottom edge. */
+.site .concept-shot {
+  position: absolute;
+  top: 9%;
+  left: 22%;
+  display: block;
+  width: 56%;
+}
+
+.site .concept-shot img {
+  width: 100%;
+  height: auto;
+}
+
+/* The recording lies exactly over its screenshot and fades in once it plays. */
+.site .concept-shot .shot-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 500ms ease;
+}
+
+.site .concept-shot .shot-video[data-on] {
+  opacity: 1;
+}
+
+.site .concept-text {
+  margin-top: 24px;
+}
+
+.site .concept-text p {
+  max-width: 44ch;
+}
+
+.site .concept-trade {
+  margin-bottom: 10px;
+  color: var(--muted);
+}
+
+.site .concept-name {
+  margin-bottom: 0.45em;
+  font-size: clamp(1.875rem, 1.2rem + 2.2vw, 3rem);
+}
+
+.site .concept-links {
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: 28px;
+  margin-top: 0.5em;
+}
+
+.site .concept-links .link {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  font-weight: 500;
+}
+
+@media (min-width: 900px) {
+  .site .concepts {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  /* On a wide screen a half-width stage would be taller than the screen. */
+  .site .concept-visual {
+    max-height: 82svh;
+  }
+}
+
+@media (max-width: 899px) {
+  /* On a phone the stages run edge to edge. */
+  .site .concept-visual {
+    aspect-ratio: 1;
+    margin-inline: calc(var(--m) * -1);
+  }
+
+  .site .concept-shot {
+    left: 27%;
+    width: 46%;
+  }
+}
+
+/* Pointing at a stage lifts the page inside it, so more of it shows. */
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .site .concept-shot {
+    transition: transform 700ms var(--ease-out);
+  }
+
+  .site .concept-visual:hover .concept-shot,
+  .site .concept-visual:focus-visible .concept-shot {
+    transform: translateY(-3%);
+  }
+}
+
 /* -------------------------------------------------------- Privacy and 404 */
 
 .site .legal {

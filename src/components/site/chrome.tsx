@@ -79,6 +79,7 @@ export function SiteFooter({ children }: { children?: ReactNode }) {
             LinkedIn
           </a>
           <Link href="/services">Services</Link>
+          <Link href="/concept">Concept sites</Link>
           <Link href="/about">About</Link>
           <Link href="/privacy">Privacy</Link>
         </div>
