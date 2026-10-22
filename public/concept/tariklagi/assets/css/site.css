@@ -1,0 +1,295 @@
+/* Tarik Lagi: the shared look.
+   Direction "One motif" from the design-taste-frontend skill (seed 1744813018; the sheet is in
+   .taste-skill/direction.json). The motif is the tea stream: one long band with round ends. It is the
+   hero shape, the button, the pull diagram and every part of the menu cups. Nothing else gets a shape of its own.
+   Colours are Isyraf's "Signboard red" look. Fonts: Big Shoulders (tall, from street signs) and Public Sans. */
+
+:root {
+  /* Colour: one ground, one ink, one accent, one field. */
+  --ground: #f1e4cc; /* condensed milk: the page and the foam */
+  --ink: #1e1a17;    /* kopi O: all text on the ground (13.8:1) */
+  --red: #b3141e;    /* kopitiam signboard: the order button and the wordmark, nothing else (5.5:1) */
+  --tea: #6b4226;    /* strong tea: the stream and the field behind the pull */
+  /* On the tea field, text is --ground (6.9:1), never --ink. Keep the tea dark: a light tan
+     falls in the range the gate fails as terracotta. */
+
+  /* Drawing tones: flat light and shade steps mixed from the four colours, for drawings only. */
+  --tea-lit: #7f5a3f;     /* tea with 15% condensed milk: the lit face */
+  --tea-shade: #583822;   /* tea with 25% kopi: the shaded face */
+  --foam: #f7f0e3;        /* condensed milk in the light */
+  --foam-shade: #e6d7bf;  /* condensed milk with 8% tea */
+  --glass: #ddccb3;       /* condensed milk with 15% tea */
+  --glass-shade: #d0bca3; /* condensed milk with 25% tea */
+  --steel-lit: #bcb29f;   /* condensed milk with 25% kopi */
+  --steel: #887f72;       /* half and half */
+  --steel-shade: #5d574d; /* condensed milk with 70% kopi */
+
+  /* Drink tones, for the menu cups only. Kopi is mixed from the tea and kopi, like the tones above.
+     Amber, rose, lime and ginger are those drinks' own colours: none is red, and each one stays out of
+     the gate's terracotta range (hue 30 or less at mid lightness) by its hue or by being dark. */
+  --kopi-lit: #583822;     /* tea with 25% kopi: coffee in the light */
+  --kopi: #48301f;         /* tea with 45% kopi: kopi tarik */
+  --kopi-shade: #39281c;   /* tea with 65% kopi */
+  --amber-lit: #c28a3c;    /* teh O in the light: clear tea with no milk */
+  --amber: #96591c;        /* teh O */
+  --amber-shade: #74431a;
+  --rose-lit: #f2b8c6;     /* sirap bandung in the light */
+  --rose: #e693a8;         /* sirap bandung: rose syrup and milk */
+  --rose-shade: #c9718a;
+  --lime: #6f9a2c;         /* lime rind */
+  --lime-lit: #c5d66a;     /* lime flesh */
+  --ginger: #c49a5c;       /* ginger skin */
+  --ginger-shade: #9a7444; /* the rings and the underside of the ginger */
+  --ginger-flesh: #ecd68f; /* the cut face of the ginger */
+
+  /* Type: five steps, no more. */
+  --font-display: "Big Shoulders", "Arial Narrow", sans-serif;
+  --font-text: "Public Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --step-display: clamp(3rem, 0.4rem + 8.6vw, 8.5rem);    /* the hero headline only; two lines in a half-width column */
+  --step-head: clamp(1.75rem, 0.8rem + 4.2vw, 4.75rem);   /* section headings and the pull lines; two lines on a phone */
+  --step-lead: clamp(1.25rem, 1.1rem + 0.7vw, 1.625rem);   /* supporting lines and prices */
+  --step-body: clamp(1.0625rem, 1rem + 0.25vw, 1.1875rem);
+  --step-small: clamp(0.8125rem, 0.79rem + 0.1vw, 0.875rem);
+
+  /* Space: one pair of page margins everywhere, and sections far apart. */
+  --margin: clamp(16px, 4vw, 32px);
+  --gutter: clamp(16px, 2vw, 24px);
+  --section-gap: clamp(96px, 12vw, 200px);
+
+  /* The stream's round end: every button and every picture mask. */
+  --round: 999px;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--ground);
+  color: var(--ink);
+  font-family: var(--font-text);
+  font-size: var(--step-body);
+  line-height: 1.5;
+}
+
+h1, h2, h3 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 800;
+  line-height: 0.9;
+  letter-spacing: -0.005em;
+  text-wrap: balance;
+}
+h1 { font-size: var(--step-display); }
+h2 { font-size: var(--step-head); }
+
+p { margin: 0; text-wrap: pretty; }
+ul, ol { margin: 0; padding: 0; list-style: none; }
+
+a { color: inherit; text-underline-offset: 0.2em; }
+a:focus-visible, .btn:focus-visible { outline: 3px solid var(--ink); outline-offset: 3px; }
+
+/* Parts used on every screen. */
+.skip {
+  position: absolute;
+  top: -80px;
+  left: var(--margin);
+  z-index: 10;
+  padding: 10px 16px;
+  background: var(--ink);
+  color: var(--ground);
+}
+.skip:focus { top: 8px; }
+
+.strip {
+  padding: 10px var(--margin);
+  background: var(--ink);
+  color: var(--ground);
+  font-size: var(--step-small);
+}
+
+.lead { font-size: var(--step-lead); line-height: 1.35; max-width: 32ch; }
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  min-height: 52px;
+  padding: 0 28px;
+  border-radius: var(--round);
+  background: var(--red);
+  color: var(--ground);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+/* The pull drawing: the vessels come from assets/img/drawings.svg; the stream and the foam are drawn in
+   the page so the motion layer can lengthen the pour and raise the foam (assets/js/pull.js). */
+.pull { display: block; width: 100%; height: auto; }
+.pull .stream, .pull .splash { fill: var(--tea); }
+.pull .stream-lit { fill: var(--tea-lit); }
+.pull .foam { fill: var(--foam); }
+.pull .foam-shade, .pull .bubbles { fill: var(--foam-shade); }
+
+/* Header: the wordmark on the left, plain links on the right. */
+.nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 16px var(--margin);
+}
+.wordmark {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 32px;
+  line-height: 1;
+  color: var(--red);
+  text-decoration: none;
+}
+.nav-links { display: flex; gap: 28px; font-weight: 600; }
+.nav-links a { text-decoration: none; }
+.nav-links a:hover { text-decoration: underline; }
+.nav-order { display: none; }
+
+/* Hero: the headline on the bare ground, and the whole pull drawn beside it. */
+.hero { display: grid; gap: 48px; padding: 6svh var(--margin) 72px; }
+.hero-text { display: grid; gap: 24px; justify-items: start; }
+.hero .pull { justify-self: center; width: min(56vw, 260px); }
+
+/* The pull, written: one stage per line, stepping across the tea field. */
+.steps-band {
+  --step-x: 4vw;
+  padding: var(--section-gap) var(--margin);
+  background: var(--tea);
+  color: var(--ground);
+}
+.step {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: var(--step-head);
+  line-height: 1.1; /* room for the descenders of two-line stages */
+  letter-spacing: -0.005em;
+  text-wrap: balance;
+}
+.steps { display: grid; gap: 40px; margin-top: 40px; }
+.steps li:nth-child(1) { margin-left: calc(1 * var(--step-x)); }
+.steps li:nth-child(2) { margin-left: calc(2 * var(--step-x)); }
+.steps li:nth-child(3) { margin-left: calc(3 * var(--step-x)); }
+.steps li:nth-child(4) { margin-left: calc(4 * var(--step-x)); }
+.steps li:nth-child(5) { margin-left: calc(5 * var(--step-x)); }
+
+/* Drinks: the menu in two columns, a drawn cup where a bullet would be. */
+.drinks { padding: var(--section-gap) var(--margin); }
+.drinks-head { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; }
+.count { flex: none; }
+.drinks-note { margin: 20px 0 48px; font-size: var(--step-lead); line-height: 1.35; max-width: 34ch; }
+.menu { display: grid; gap: 36px 64px; }
+.item { display: grid; grid-template-columns: 52px minmax(0, 1fr); gap: 20px; }
+.item .cup { width: 52px; align-self: start; }
+
+/* The menu cups are put together from assets/img/drawings.svg in one frame (viewBox -20 -64 200 240),
+   so all six stand on one line at one scale. A drink that is not tea recolours the tea. */
+.cup { display: block; height: auto; }
+.cup.kopi { --tea-lit: var(--kopi-lit); --tea: var(--kopi); --tea-shade: var(--kopi-shade); }
+.cup.teh-o { --tea-lit: var(--amber-lit); --tea: var(--amber); --tea-shade: var(--amber-shade); }
+.cup.bandung { --tea-lit: var(--rose-lit); --tea: var(--rose); --tea-shade: var(--rose-shade); }
+.item h3 {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  font-family: var(--font-text);
+  font-weight: 600;
+  font-size: var(--step-lead);
+  line-height: 1.25;
+  letter-spacing: 0;
+}
+.item > div { max-width: 26rem; } /* keeps each price near its name in the one-column menu */
+.item p { margin-top: 6px; max-width: 38ch; }
+.price { flex: none; font-variant-numeric: tabular-nums; }
+
+/* Order: the closing words, then the glass again, large and cropped by the section's edges.
+   The tea band under it is the counter the glass stands on, so the crop reads as intended. */
+.order {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 40px;
+  padding: var(--section-gap) var(--margin) 0;
+  border-bottom: 14px solid var(--tea);
+  overflow: clip;
+}
+.order-text { position: relative; z-index: 1; display: grid; gap: 20px; justify-items: start; }
+.order-text p { max-width: 40ch; }
+.fact { font-size: var(--step-lead); font-weight: 600; }
+.note { font-size: var(--step-small); }
+.order-object .pull { width: 130vw; max-width: none; margin-bottom: -38vw; }
+
+/* Footer: the name built as a signboard (each letter in a red band of its own height), then the plain links. */
+.foot { display: grid; gap: 48px; padding: var(--section-gap) var(--margin) 48px; }
+.mark-built { display: grid; gap: 4px; }
+.mark-built .word { display: flex; align-items: flex-end; gap: 4px; height: 16svh; min-height: 104px; }
+.mark-built .word span {
+  flex: 1;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  height: 100%;
+  padding-bottom: 0.16em;
+  border-radius: var(--round) var(--round) 0 0;
+  background: var(--red);
+  color: var(--ground);
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 15vw;
+  line-height: 0.9;
+}
+.mark-built .word:first-child span:nth-child(2) { height: 70%; }
+.mark-built .word:first-child span:nth-child(3) { height: 86%; }
+.mark-built .word:first-child span:nth-child(4) { height: 62%; }
+.mark-built .word:first-child span:nth-child(5) { height: 92%; }
+.mark-built .word:last-child span:nth-child(1) { height: 88%; }
+.mark-built .word:last-child span:nth-child(2) { height: 66%; }
+.mark-built .word:last-child span:nth-child(3) { height: 78%; }
+.mark-built .word:last-child span:nth-child(4) { height: 96%; }
+.foot-text { display: grid; gap: 20px; }
+.foot-text p { max-width: 60ch; }
+.foot-links { display: flex; flex-wrap: wrap; gap: 12px 32px; font-weight: 600; }
+
+/* From tablet width: twelve columns, and the hero and the order section split in two. */
+@media (min-width: 760px) {
+  .nav-order { display: block; }
+
+  .hero {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: var(--gutter);
+    align-items: center;
+    min-height: calc(100svh - 104px);
+    padding: 0 var(--margin);
+  }
+  .hero-text { grid-column: 1 / span 7; }
+  .hero .pull { grid-column: 9 / span 3; width: auto; height: min(84svh, 860px); }
+
+  .steps-band { --step-x: calc((100vw - 2 * var(--margin)) / 12); }
+  .steps { gap: 56px; margin-top: 56px; }
+
+  .order {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: var(--gutter);
+    align-items: center;
+    min-height: min(90svh, 75vw);
+    padding: 0 var(--margin);
+  }
+  .order-text { grid-column: 8 / span 5; grid-row: 1; }
+  .order-object { grid-column: 1 / span 7; grid-row: 1; align-self: end; }
+  .order-object .pull { width: 130%; margin-left: -22%; margin-bottom: -28%; }
+
+  .mark-built { grid-template-columns: 5fr 4fr; column-gap: 28px; }
+  .mark-built .word { height: min(34svh, 24vw); min-height: 160px; }
+  .mark-built .word span { font-size: 7.5vw; }
+}
+
+/* From laptop width: the menu in two columns, with room for a 64px picture beside each drink. */
+@media (min-width: 1100px) {
+  .menu { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .item { grid-template-columns: 64px minmax(0, 1fr); }
+  .item > div { max-width: none; }
+  .item .cup { width: 64px; }
+}

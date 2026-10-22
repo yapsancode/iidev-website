@@ -14,7 +14,7 @@ export async function serveConceptPage(request: Request, file: string): Promise<
   return new Response(found.body, {
     headers: {
       "Content-Type": "text/html; charset=utf-8",
-      // The clinic is invented, so it must never be listed in a search engine.
+      // The business is invented, so it must never be listed in a search engine.
       "X-Robots-Tag": "noindex, nofollow",
     },
   });
