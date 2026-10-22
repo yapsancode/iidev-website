@@ -1,11 +1,14 @@
 // Tarik Lagi: poses the pull drawing. setPull(svg, t) goes from t = 0 (a short pour, no foam yet)
 // to t = 1 (a long, high pour and thick foam). The markup in the page is already the t = 1 pose, so the
-// drawing is complete without JavaScript. The motion layer will call setPull while the visitor scrolls.
+// drawing is complete without JavaScript. The motion layer (motion.js) calls setPull while the visitor scrolls.
 const X = 180;           // where the stream falls, in drawing units
 const LIP = [560, 200];  // height of the steel mug's lip
-const WIDTH = [22, 14];  // the stream thins as it falls further
+const WIDTH = [16, 14];  // the stream thins as it falls further; at 16 it is no wider than the spout
 const FOAM = [766, 698]; // top of the foam; the glass rim is at 712
 const DRINK = 770;       // top of the tea in the glass
+
+// How far the steel mug climbs from t = 0 to t = 1, in drawing units.
+export const RISE = LIP[0] - LIP[1];
 
 const mix = ([a, b], t) => a + (b - a) * t;
 const set = (el, attrs) => {

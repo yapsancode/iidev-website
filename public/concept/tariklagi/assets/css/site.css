@@ -12,6 +12,7 @@
   --tea: #6b4226;    /* strong tea: the stream and the field behind the pull */
   /* On the tea field, text is --ground (6.9:1), never --ink. Keep the tea dark: a light tan
      falls in the range the gate fails as terracotta. */
+  --red-deep: #8e161c; /* signboard red with 25% kopi: the order button under the hand (7.3:1) */
 
   /* Drawing tones: flat light and shade steps mixed from the four colours, for drawings only. */
   --tea-lit: #7f5a3f;     /* tea with 15% condensed milk: the lit face */
@@ -58,6 +59,15 @@
 
   /* The stream's round end: every button and every picture mask. */
   --round: 999px;
+
+  /* Motion: one ease-out for everything that arrives, a softer one for the pour, and short times under the hand. */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-soft: cubic-bezier(0.33, 1, 0.68, 1);
+  --t-press: 140ms;
+  --t-hover: 180ms;
+  --t-pour: 320ms;
+  --t-reveal: 800ms;
+  --pull-run: 90svh; /* from 760px: how far the visitor scrolls while the hero holds still and the tea is pulled */
 }
 
 *, *::before, *::after { box-sizing: border-box; }
@@ -87,6 +97,36 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 
 a { color: inherit; text-underline-offset: 0.2em; }
 a:focus-visible, .btn:focus-visible { outline: 3px solid var(--ink); outline-offset: 3px; }
+.strip a:focus-visible { outline-color: var(--ground); outline-offset: 2px; } /* the strip is kopi black */
+.wordmark:focus-visible { outline-offset: 6px; } /* room for the g */
+
+/* Feedback under the hand: on hover with a mouse, and on press (touch too); keyboard focus has the ring.
+   Text links draw the stream as their underline, a band with round ends that pours in from the left.
+   In running text it rests thin, so the link still reads as a link. */
+.wordmark, .nav-links a, .foot-links a, .strip a, .foot-text p a {
+  position: relative;
+  display: inline-block;
+  text-decoration: none;
+}
+.wordmark::after, .nav-links a::after, .foot-links a::after, .strip a::after, .foot-text p a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -0.1em;
+  height: 0.14em;
+  border-radius: var(--round);
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: left center;
+}
+.strip a::after, .foot-text p a::after { transform: scaleY(0.43); }
+:is(.strip a, .foot-text p a):focus-visible::after { transform: scaleX(0); } /* the ring is enough; no second line inside it */
+.wordmark::after { bottom: -0.24em; } /* clear of the g */
+:is(.wordmark, .nav-links a, .foot-links a, .strip a, .foot-text p a):active::after { transform: none; }
+@media (hover: hover) and (pointer: fine) {
+  :is(.wordmark, .nav-links a, .foot-links a, .strip a, .foot-text p a):hover::after { transform: none; }
+}
 
 /* Parts used on every screen. */
 .skip {
@@ -100,16 +140,28 @@ a:focus-visible, .btn:focus-visible { outline: 3px solid var(--ink); outline-off
 }
 .skip:focus { top: 8px; }
 
+/* Above the hero drawing: the motion layer lifts it, and its empty top then lies under the header. */
+.top { position: relative; z-index: 2; }
+
 .strip {
   padding: 10px var(--margin);
   background: var(--ink);
   color: var(--ground);
   font-size: var(--step-small);
+  line-height: 1.4;
+}
+/* On narrow screens Public Sans wraps the strip to two lines but the fallback font may not,
+   so keep room for two lines from the start: the page does not jump when the font arrives. */
+@media (max-width: 539px) {
+  .strip { min-height: calc(2 * 1.4em + 20px); }
 }
 
 .lead { font-size: var(--step-lead); line-height: 1.35; max-width: 32ch; }
 
 .btn {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
   display: inline-flex;
   align-items: center;
   min-height: 52px;
@@ -119,6 +171,20 @@ a:focus-visible, .btn:focus-visible { outline: 3px solid var(--ink); outline-off
   color: var(--ground);
   font-weight: 600;
   text-decoration: none;
+}
+/* Under the hand a deeper red pours across the button from the left, round end first, like the stream. */
+.btn::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  background: var(--red-deep);
+  transform: translateX(-101%);
+}
+.btn:is(:focus-visible, :active)::before { transform: none; }
+@media (hover: hover) and (pointer: fine) {
+  .btn:hover::before { transform: none; }
 }
 
 /* The pull drawing: the vessels come from assets/img/drawings.svg; the stream and the foam are drawn in
@@ -146,13 +212,13 @@ a:focus-visible, .btn:focus-visible { outline: 3px solid var(--ink); outline-off
   text-decoration: none;
 }
 .nav-links { display: flex; gap: 28px; font-weight: 600; }
-.nav-links a { text-decoration: none; }
-.nav-links a:hover { text-decoration: underline; }
 .nav-order { display: none; }
 
-/* Hero: the headline on the bare ground, and the whole pull drawn beside it. */
+/* Hero: the headline on the bare ground, and the whole pull drawn beside it. The words sit above the
+   drawing: on a phone the motion layer lifts the drawing behind them (motion.js). */
 .hero { display: grid; gap: 48px; padding: 6svh var(--margin) 72px; }
-.hero-text { display: grid; gap: 24px; justify-items: start; }
+.hero-text { position: relative; z-index: 1; display: grid; gap: 24px; justify-items: start; }
+.hero h1 .line { display: block; }
 .hero .pull { justify-self: center; width: min(56vw, 260px); }
 
 /* The pull, written: one stage per line, stepping across the tea field. */
@@ -225,7 +291,7 @@ a:focus-visible, .btn:focus-visible { outline: 3px solid var(--ink); outline-off
 /* Footer: the name built as a signboard (each letter in a red band of its own height), then the plain links. */
 .foot { display: grid; gap: 48px; padding: var(--section-gap) var(--margin) 48px; }
 .mark-built { display: grid; gap: 4px; }
-.mark-built .word { display: flex; align-items: flex-end; gap: 4px; height: 16svh; min-height: 104px; }
+.mark-built .word { display: flex; align-items: flex-end; gap: 4px; height: 16svh; min-height: 104px; overflow: clip; } /* the letters rise from behind this line */
 .mark-built .word span {
   flex: 1;
   display: flex;
@@ -293,3 +359,42 @@ a:focus-visible, .btn:focus-visible { outline: 3px solid var(--ink); outline-off
   .item > div { max-width: none; }
   .item .cup { width: 64px; }
 }
+
+/* Motion (assets/js/motion.js). Nothing below runs with "reduce motion" on: the page is then the finished,
+   still page, and links and buttons still answer the hand, without travel.
+   The pull, from 760px: while html.pull-on is set, the hero holds still for var(--pull-run) of scrolling and
+   the tea is pulled. The ::after is that length. motion.js never sets the class with reduce motion on, and
+   takes it away itself when that setting is switched on, so it can keep the reader's place. On a phone
+   nothing holds (see pose() in motion.js). */
+@media (min-width: 760px) {
+  .pull-on .hero-run::after { content: ""; display: block; height: var(--pull-run); }
+  .pull-on .hero { position: sticky; top: 0; }
+}
+/* With room to spare, the held hero sits in the middle of the screen: half the header's 104px above it. */
+@media (min-width: 760px) and (min-height: 500px) {
+  .pull-on .hero { top: 52px; }
+}
+
+/* The hero arrives as the page opens: the two lines of the headline, the sentence and the button rise in
+   turn while the drawing fades in. Only under html.js (set in the head), and in CSS, so the words never wait
+   for a script. The sections below arrive as they come into view (motion.js). */
+@media (prefers-reduced-motion: no-preference) {
+  .js .hero h1 .line, .js .hero .lead, .js .hero-text > p:last-child { animation: rise var(--t-reveal) var(--ease-out) both; }
+  .js .hero h1 .line + .line { animation-delay: 90ms; }
+  .js .hero .lead { animation-delay: 180ms; }
+  .js .hero-text > p:last-child { animation-delay: 270ms; }
+  .js .hero .pull { animation: appear 1200ms var(--ease-out) 100ms both; }
+
+  .btn { transition: transform var(--t-press) var(--ease-out); }
+  .btn:active { transform: scale(0.97); }
+  /* The pour in is slow enough to see; letting go is quicker. */
+  .btn::before, :is(.wordmark, .nav-links a, .foot-links a, .strip a, .foot-text p a)::after { transition: transform var(--t-hover) var(--ease-out); }
+  .btn:is(:hover, :focus-visible, :active)::before, :is(.wordmark, .nav-links a, .foot-links a, .strip a, .foot-text p a):is(:hover, :active)::after { transition: transform var(--t-pour) var(--ease-soft); }
+  :is(.wordmark, .nav-links a, .foot-links a, .strip a, .foot-text p a):active { transform: translateY(1px); }
+}
+@keyframes rise { from { opacity: 0; transform: translateY(28px); } }
+@keyframes appear { from { opacity: 0; } }
+
+/* Lenis (assets/js/vendor/lenis.min.js) asks for this rule in its lenis.css; the rest of that file is for
+   options this page does not use. */
+html.lenis, html.lenis body { height: auto; }
