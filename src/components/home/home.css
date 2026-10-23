@@ -387,6 +387,130 @@
   }
 }
 
+/* ----------------------------------------------------------- Concept tile
+   The concepts take turns on the tall stage (ConceptTile.tsx). Every phone
+   stands in the same place; the ones waiting sit below the stage's bottom
+   edge. One thin line per concept at the top of the stage: the current one
+   fills while its turn runs, and when it is full the next phone rises. */
+
+.home .concept-slide {
+  display: block;
+}
+
+.home .concept-shot[data-turn="wait"] .concept-slide,
+.home .concept-shot[data-turn="out"] .concept-slide {
+  transform: translateY(115%);
+}
+
+/* The whole stage opens the concept on show. The lines sit above it. */
+.home .concept-hit {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
+.home .concept-lines {
+  position: absolute;
+  top: 6px;
+  right: 12px;
+  left: 12px;
+  z-index: 2;
+  display: flex;
+  gap: 6px;
+}
+
+.home .concept-line {
+  display: flex;
+  flex: 1;
+  height: 32px;
+  align-items: center;
+  cursor: pointer;
+}
+
+.home .concept-line span {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 2px;
+  overflow: hidden;
+  background: color-mix(in srgb, var(--ink) 16%, transparent);
+}
+
+.home .concept-line i {
+  position: absolute;
+  inset: 0;
+  background: var(--ink);
+  transform: scaleX(0);
+  transform-origin: left;
+}
+
+.home .concept-line[aria-pressed="true"] i,
+.home .concept-line[data-done] i {
+  transform: none;
+}
+
+.home .concept-line:hover span {
+  background: color-mix(in srgb, var(--ink) 32%, transparent);
+}
+
+/* The name and the line under it change with the phone. They share one
+   place, so the page never jumps. */
+.home .concept-swap {
+  display: grid;
+}
+
+.home .concept-swap > * {
+  grid-area: 1 / 1;
+}
+
+.home .concept-swap > :not([data-on]) {
+  visibility: hidden;
+  opacity: 0;
+  transform: translateY(0.6em);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .home .concept-shot[data-turn="out"] .concept-slide {
+    transition: transform 450ms cubic-bezier(0.55, 0, 0.75, 0.2);
+  }
+
+  .home .concept-shot[data-turn="on"] .concept-slide {
+    transition: transform 900ms var(--ease-out) 250ms;
+  }
+
+  .home .concept-swap > * {
+    transition:
+      opacity 400ms ease,
+      transform 800ms var(--ease-out),
+      visibility 0s linear 400ms;
+  }
+
+  .home .concept-swap > [data-on] {
+    transition-delay: 300ms, 300ms, 0s;
+  }
+
+  .home .is-turning .concept-line[aria-pressed="true"] i {
+    animation: home-concept-turn 5s linear both;
+  }
+
+  /* Paused while off screen, pointed at, or holding focus. */
+  .home .is-turning.is-away .concept-line i,
+  .home .is-turning:hover .concept-line i,
+  .home .is-turning:focus-within .concept-line i {
+    animation-play-state: paused;
+  }
+}
+
+@keyframes home-concept-turn {
+  from {
+    transform: scaleX(0);
+  }
+
+  to {
+    transform: none;
+  }
+}
+
 /* ----------------------------------------------------------------- Founders */
 
 .home .founders {
