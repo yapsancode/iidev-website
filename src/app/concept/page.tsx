@@ -5,6 +5,7 @@ import Link from "next/link";
 import { BookingButton } from "@/components/modal/BookingButton";
 import { StageVideo } from "@/components/home/StageVideo";
 import { SitePage, order } from "@/components/site/chrome";
+import { CONCEPTS } from "@/lib/concepts";
 import { ORGANIZATION_ID, SITE_URL, absoluteUrl } from "@/lib/site-config";
 
 export const metadata: Metadata = {
@@ -21,54 +22,6 @@ export const metadata: Metadata = {
     images: ["/opengraph-image"],
   },
 };
-
-interface ConceptLink {
-  href: string;
-  label: string;
-  lang?: string;
-}
-
-interface Concept {
-  name: string;
-  /** The kind of business, so a visitor can find their own. */
-  trade: string;
-  text: string;
-  /** The first link is also where the picture goes. */
-  links: [ConceptLink, ...ConceptLink[]];
-  /** A 500 × 1000 screenshot of the concept on a phone. */
-  shot: string;
-  alt: string;
-  /** A silent recording of the same page scrolling, played over the picture. */
-  video?: string;
-}
-
-/**
- * Every concept site served under /concept. To add one: sync its files into
- * public/concept/<slug>, add a route like concept/tariklagi/route.ts, then add
- * it here with a phone screenshot in public/images/work.
- */
-const CONCEPTS: Concept[] = [
-  {
-    name: "Senja Dental",
-    trade: "Dental clinic",
-    text: "An evening dentist in Kuala Lumpur. It is not a real clinic and not a client. The site puts opening hours, prices and WhatsApp booking first, in English and Bahasa Melayu.",
-    links: [
-      { href: "/concept/senjadental", label: "See the concept" },
-      { href: "/concept/senjadental/ms", label: "Bahasa Melayu", lang: "ms" },
-    ],
-    shot: "/images/work/senja-dental-phone.png",
-    alt: "The Senja Dental concept on a phone: Open till 10pm, with a note that it is a concept project and not a real clinic",
-    video: "/videos/work/senja-dental-phone.mp4",
-  },
-  {
-    name: "Tarik Lagi",
-    trade: "Food and drink",
-    text: "A teh tarik stall. It is not a real stall and not a client. One page shows six drinks with their prices, and the WhatsApp button writes the order for the customer.",
-    links: [{ href: "/concept/tariklagi", label: "See the concept" }],
-    shot: "/images/work/tarik-lagi-phone.png",
-    alt: "The Tarik Lagi concept on a phone: Teh tarik, pulled long, from RM 3.00, with an Order on WhatsApp button",
-  },
-];
 
 const jsonLd = {
   "@context": "https://schema.org",

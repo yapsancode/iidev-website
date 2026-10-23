@@ -1,10 +1,12 @@
-import type { CSSProperties } from "react";
+import { Fragment, type CSSProperties } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { BookingButton } from "@/components/modal/BookingButton";
 import { SiteBar, SiteFooter, SkipLink, order } from "@/components/site/chrome";
+import { CONCEPTS } from "@/lib/concepts";
 import { BRAND_NAME, WHATSAPP_DISPLAY, WHATSAPP_URL } from "@/lib/site-config";
 import { BlankSentence } from "./BlankSentence";
+import { ConceptTile } from "./ConceptTile";
 import { ProcessStack } from "./ProcessStack";
 import { SEARCH_FORM_ID, SearchSlot } from "./SearchSlot";
 import { StageVideo } from "./StageVideo";
@@ -75,8 +77,11 @@ interface ProjectLink {
 }
 
 interface Project {
-  /** How much room the project gets: one lead, a wide and a tall beside it, then a quiet row. */
-  layout: "lead" | "wide" | "tall" | "row";
+  /**
+   * How much room the project gets: one lead, a wide (the concept tile stands
+   * tall beside it), then a quiet row.
+   */
+  layout: "lead" | "wide" | "row";
   title: string;
   /** What kind of work it is, said first and in plain words. */
   kind?: string;
@@ -130,26 +135,6 @@ const PROJECTS: Project[] = [
     ],
   },
   {
-    layout: "tall",
-    title: "Senja Dental",
-    kind: "Concept project.",
-    text: "Senja Dental is not a real clinic and not a client. We designed it to show how a dental website can put opening hours, prices and WhatsApp booking first.",
-    links: [
-      { href: "/concept/senjadental", label: "See the concept" },
-      { href: "/concept/senjadental/ms", label: "Bahasa Melayu", lang: "ms" },
-    ],
-    shots: [
-      {
-        kind: "phone",
-        src: "/images/work/senja-dental-phone.png",
-        size: [500, 1000],
-        alt: "The Senja Dental concept on a phone: Open till 10pm, with a note that it is a concept project and not a real clinic",
-        sizes: "(max-width: 899px) 46vw, 22vw",
-        video: "/videos/work/senja-dental-phone.mp4",
-      },
-    ],
-  },
-  {
     layout: "row",
     title: "Locum Connect",
     kind: "Our own project.",
@@ -178,56 +163,59 @@ export function HomeWork() {
         const [main] = project.links;
         const outside = main.href.startsWith("http");
         return (
-          <article key={project.title} className={`project project-${project.layout}`}>
-            <Link
-              href={main.href}
-              {...linkProps(main.href)}
-              className="project-visual"
-              aria-label={
-                outside ? `${main.label} (opens in a new tab)` : `${main.label}: ${project.title}`
-              }
-              data-reveal
-            >
-              {project.shots.map((shot) => (
-                <span key={shot.src} className={`shot shot-${shot.kind}`}>
-                  <Image
-                    src={shot.src}
-                    width={shot.size[0]}
-                    height={shot.size[1]}
-                    sizes={shot.sizes}
-                    alt={shot.alt}
-                    priority={index === 0}
-                  />
-                  {shot.video && <StageVideo src={shot.video} />}
-                </span>
-              ))}
-            </Link>
+          <Fragment key={project.title}>
+            <article className={`project project-${project.layout}`}>
+              <Link
+                href={main.href}
+                {...linkProps(main.href)}
+                className="project-visual"
+                aria-label={
+                  outside ? `${main.label} (opens in a new tab)` : `${main.label}: ${project.title}`
+                }
+                data-reveal
+              >
+                {project.shots.map((shot) => (
+                  <span key={shot.src} className={`shot shot-${shot.kind}`}>
+                    <Image
+                      src={shot.src}
+                      width={shot.size[0]}
+                      height={shot.size[1]}
+                      sizes={shot.sizes}
+                      alt={shot.alt}
+                      priority={index === 0}
+                    />
+                    {shot.video && <StageVideo src={shot.video} />}
+                  </span>
+                ))}
+              </Link>
 
-            <div className="project-text">
-              <h2 className="display project-title" data-reveal style={order(1)}>
-                {project.title}
-              </h2>
-              <div className="project-body" data-reveal style={order(2)}>
-                <p>
-                  {project.kind && <strong>{project.kind} </strong>}
-                  {project.text}
-                </p>
-                <p className="project-links">
-                  {project.links.map((link) => (
-                    <Link
-                      key={link.href}
-                      href={link.href}
-                      {...linkProps(link.href)}
-                      hrefLang={link.lang}
-                      className="link"
-                    >
-                      {link.label}
-                    </Link>
-                  ))}
-                </p>
+              <div className="project-text">
+                <h2 className="display project-title" data-reveal style={order(1)}>
+                  {project.title}
+                </h2>
+                <div className="project-body" data-reveal style={order(2)}>
+                  <p>
+                    {project.kind && <strong>{project.kind} </strong>}
+                    {project.text}
+                  </p>
+                  <p className="project-links">
+                    {project.links.map((link) => (
+                      <Link
+                        key={link.href}
+                        href={link.href}
+                        {...linkProps(link.href)}
+                        hrefLang={link.lang}
+                        className="link"
+                      >
+                        {link.label}
+                      </Link>
+                    ))}
+                  </p>
+                </div>
               </div>
-            </div>
-          </article>
+            </article>
+            {project.layout === "wide" && <ConceptTile concepts={CONCEPTS} />}
+          </Fragment>
         );
       })}
     </section>
