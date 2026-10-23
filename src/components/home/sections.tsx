@@ -91,7 +91,7 @@ const PROJECTS: Project[] = [
     layout: "lead",
     title: "Klinik Mekar 24 Jam",
     kind: "Client website.",
-    text: "A 24-hour clinic in Serdang. We built seven pages, video testimonials, and a booking button that opens WhatsApp with the patient's first message already written. Live since October 2025.",
+    text: "A 24-hour clinic in Serdang. We built seven pages and a booking button that opens WhatsApp with the patient's first message already written. Live since October 2025.",
     links: [{ href: "https://klinikmekar.com", label: "Visit klinikmekar.com" }],
     shots: [
       {
