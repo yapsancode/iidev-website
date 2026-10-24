@@ -8,6 +8,7 @@ import { BRAND_NAME, WHATSAPP_DISPLAY, WHATSAPP_URL } from "@/lib/site-config";
 import { BlankSentence } from "./BlankSentence";
 import { ConceptTile } from "./ConceptTile";
 import { ProcessStack } from "./ProcessStack";
+import { ProjectReel } from "./ProjectReel";
 import { SEARCH_FORM_ID, SearchSlot } from "./SearchSlot";
 import { StageVideo } from "./StageVideo";
 
@@ -60,12 +61,13 @@ export function HomeHero() {
 
 /* --------------------------------------------------------------------- Work */
 
-interface Shot {
+export interface Shot {
   kind: "desk" | "phone";
   src: string;
   size: [number, number];
   alt: string;
-  sizes: string;
+  /** Only the stages use it. The list (ProjectReel) sizes its own pictures. */
+  sizes?: string;
   /** A silent recording of the same page scrolling, played over the picture. */
   video?: string;
 }
@@ -76,12 +78,7 @@ interface ProjectLink {
   lang?: string;
 }
 
-interface Project {
-  /**
-   * How much room the project gets: one lead, a wide (the concept tile stands
-   * tall beside it), then a quiet row.
-   */
-  layout: "lead" | "wide" | "row";
+export interface Project {
   title: string;
   /** What kind of work it is, said first and in plain words. */
   kind?: string;
@@ -91,34 +88,9 @@ interface Project {
   shots: Shot[];
 }
 
-const PROJECTS: Project[] = [
+/** Big stages, with the concept tile standing tall beside them. */
+const STAGED: Project[] = [
   {
-    layout: "lead",
-    title: "Klinik Mekar 24 Jam",
-    kind: "Client website.",
-    text: "A 24-hour clinic in Serdang. We built seven pages and a booking button that opens WhatsApp with the patient's first message already written. Live since October 2025.",
-    links: [{ href: "https://klinikmekar.com", label: "Visit klinikmekar.com" }],
-    shots: [
-      {
-        kind: "desk",
-        src: "/images/work/klinik-mekar-desktop.png",
-        size: [1180, 1000],
-        alt: "Home page of the Klinik Mekar website, with buttons to book an appointment, find doctors and call for an emergency",
-        sizes: "(max-width: 899px) 62vw, 60vw",
-        video: "/videos/work/klinik-mekar-desktop.mp4",
-      },
-      {
-        kind: "phone",
-        src: "/images/work/klinik-mekar-phone.png",
-        size: [500, 1000],
-        alt: "The Klinik Mekar website on a phone",
-        sizes: "(max-width: 899px) 26vw, 17vw",
-        video: "/videos/work/klinik-mekar-phone.mp4",
-      },
-    ],
-  },
-  {
-    layout: "wide",
     title: "KerjaKit",
     kind: "Our own product.",
     text: "It helps job seekers decide where to apply and prepare a truthful resume. More than 40 people have registered, and its open-source tool has more than 31 stars on GitHub.",
@@ -134,8 +106,31 @@ const PROJECTS: Project[] = [
       },
     ],
   },
+];
+
+/** A list under the stages, all rows the same size (ProjectReel). */
+const LISTED: Project[] = [
   {
-    layout: "row",
+    title: "Klinik Mekar 24 Jam",
+    kind: "Client website.",
+    text: "A 24-hour clinic in Serdang. We built seven pages and a booking button that opens WhatsApp with the patient's first message already written. Live since October 2025.",
+    links: [{ href: "https://klinikmekar.com", label: "Visit klinikmekar.com" }],
+    shots: [
+      {
+        kind: "desk",
+        src: "/images/work/klinik-mekar-desktop.png",
+        size: [1180, 1000],
+        alt: "Home page of the Klinik Mekar website, with buttons to book an appointment, find doctors and call for an emergency",
+      },
+      {
+        kind: "phone",
+        src: "/images/work/klinik-mekar-phone.png",
+        size: [500, 1000],
+        alt: "The Klinik Mekar website on a phone",
+      },
+    ],
+  },
+  {
     title: "Locum Connect",
     kind: "Our own project.",
     text: "A platform where Malaysian doctors find locum shifts, gathered into one list they can filter and search.",
@@ -146,7 +141,6 @@ const PROJECTS: Project[] = [
         src: "/images/locum-connect.png",
         size: [1908, 875],
         alt: "Home page of Locum Connect, the locum platform for Malaysian doctors",
-        sizes: "(max-width: 899px) 100vw, 25vw",
       },
     ],
   },
@@ -159,12 +153,12 @@ const linkProps = (href: string) =>
 export function HomeWork() {
   return (
     <section id="work" aria-label="Work" className="wrap work">
-      {PROJECTS.map((project, index) => {
+      {STAGED.map((project) => {
         const [main] = project.links;
         const outside = main.href.startsWith("http");
         return (
           <Fragment key={project.title}>
-            <article className={`project project-${project.layout}`}>
+            <article className="project project-wide">
               <Link
                 href={main.href}
                 {...linkProps(main.href)}
@@ -182,7 +176,6 @@ export function HomeWork() {
                       height={shot.size[1]}
                       sizes={shot.sizes}
                       alt={shot.alt}
-                      priority={index === 0}
                     />
                     {shot.video && <StageVideo src={shot.video} />}
                   </span>
@@ -214,10 +207,11 @@ export function HomeWork() {
                 </div>
               </div>
             </article>
-            {project.layout === "wide" && <ConceptTile concepts={CONCEPTS} />}
+            <ConceptTile concepts={CONCEPTS} />
           </Fragment>
         );
       })}
+      <ProjectReel projects={LISTED} />
     </section>
   );
 }
