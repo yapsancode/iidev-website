@@ -11,7 +11,7 @@ import { ORGANIZATION_ID, SITE_URL, absoluteUrl } from "@/lib/site-config";
 export const metadata: Metadata = {
   title: "Concept Sites — Websites for Businesses We Made Up",
   description:
-    "Concept websites by IIDev Studio for invented Malaysian businesses: an evening dental clinic and a teh tarik stall. None of them is a client.",
+    "Concept websites by IIDev Studio for invented Malaysian businesses: an evening dental clinic, a teh tarik stall and a kitchen knife brand. None of them is a client.",
   alternates: { canonical: "/concept" },
   openGraph: {
     title: "Concept sites by IIDev Studio",

@@ -1,0 +1,327 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- The brand is invented, so it must never be listed in a search engine. -->
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Halus: a knife concept by IIDev Studio</title>
+    <meta name="description" content="Halus is an invented brand of thin Japanese-style kitchen knives for Malaysian kitchens. A concept project by IIDev Studio." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preconnect" href="https://api.fontshare.com" />
+    <link rel="preconnect" href="https://cdn.fontshare.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500&display=swap" rel="stylesheet" />
+    <link href="https://api.fontshare.com/v2/css?f[]=zodiak@100,300&display=swap" rel="stylesheet" />
+    <script type="module" crossorigin src="/concept/halus/assets/index-CKY0mVH0.js"></script>
+    <link rel="stylesheet" crossorigin href="/concept/halus/assets/index-Dm8pgaQc.css">
+  </head>
+  <body>
+    <a class="skip" href="#main">Skip to content</a>
+    <p class="concept-strip">Concept project by IIDev Studio. Halus is not a real brand.</p>
+    <header class="top">
+      <a class="top-name" href="#top">Halus</a>
+      <a class="top-link" href="#kitchens">Kitchen orders</a>
+    </header>
+
+    <main id="main">
+      <!-- Hero: the knife bigger than the screen, the name as a wide wordmark, the order. -->
+      <section class="hero" id="top" aria-labelledby="hero-name">
+        <!-- src/main.js picks the pose (lying or standing), the camera and the slow sway. -->
+        <model-viewer
+          id="knife"
+          class="viewer"
+          loading="eager"
+          src="/concept/halus/models/gyuto-side.glb"
+          alt="The Halus gyuto 210 mm: a thin satin steel blade with a hazy band along the edge and an eight-sided wooden handle"
+          environment-image="/concept/halus/hdri/studio.hdr"
+          tone-mapping="neutral"
+          exposure="1"
+          shadow-intensity="0"
+          camera-controls
+          disable-pan
+          touch-action="pan-y"
+          interaction-prompt="none"
+          field-of-view="18deg"
+          min-field-of-view="8deg"
+          max-field-of-view="18deg"
+          min-camera-orbit="auto auto 0.12m"
+          max-camera-orbit="auto auto 1.4m"
+        >
+          <!-- The viewer's own first frame (tools/poster-capture.js): it shows until the model is ready. -->
+          <picture slot="poster" class="poster">
+            <source media="(orientation: portrait)" srcset="/concept/halus/posters/gyuto-upright.webp" width="1200" height="960" />
+            <img src="/concept/halus/posters/gyuto-side.webp" width="2400" height="613" alt="The Halus gyuto 210 mm" />
+          </picture>
+          <div slot="progress-bar"></div>
+        </model-viewer>
+
+        <h1 class="hero-name" id="hero-name">
+          <span class="sr-only">Halus</span>
+          <span class="wide" aria-hidden="true"><span>H</span><span>A</span><span>L</span><span>U</span><span>S</span></span>
+        </h1>
+        <p class="hero-line">Knives for everything you <span lang="ms">hiris halus</span></p>
+
+        <div class="hero-row">
+          <div class="choice" role="group" aria-label="Choose a knife">
+            <button type="button" data-knife="gyuto" aria-pressed="true">Gyuto 210</button>
+            <button type="button" data-knife="santoku" aria-pressed="false">Santoku 180</button>
+            <button type="button" data-knife="petty" aria-pressed="false">Petty 150</button>
+          </div>
+          <a class="order" data-order target="_blank" rel="noopener" href="https://wa.me/?text=Hi%20Halus%2C%20I%20would%20like%20to%20order%201%20Gyuto%20210%20mm%20(RM%20680).">
+            <span class="order-price" data-fact="price">RM 680</span> Order on WhatsApp
+          </a>
+          <p class="hero-spec">VG10 steel, 61 HRC</p>
+        </div>
+        <p class="order-note">WhatsApp opens with your order written. Halus is a concept, so no shop will reply.</p>
+      </section>
+
+      <!-- What each knife cuts: Malaysian recipe lines, each with its knife. The picture follows the open
+           row: a photo of that cut (found, credited in the footer) or, where no honest photo was found,
+           our render (tools/cut-photos.json). None shows a knife; none was cut with a Halus knife. -->
+      <section class="cuts" id="cuts" aria-labelledby="cuts-title">
+        <!-- The heading comes first: on a phone it scrolls away before the picture band pins. -->
+        <h2 class="head cuts-title" id="cuts-title" data-reveal>What each knife cuts</h2>
+        <div class="cuts-picture">
+          <img class="is-shown" data-cut="serai" src="/concept/halus/images/cuts/serai.webp" width="1200" height="1500"
+               alt="A heap of lemongrass sliced into thin rings, pale cream at the heart and green at the edge" />
+          <img data-cut="bawang-merah" src="/concept/halus/images/cuts/bawang-merah.webp" width="1200" height="1500" loading="lazy"
+               alt="A heaped steel tray of thinly sliced shallots, pale pink rings and half-rings" />
+          <img data-cut="kubis" src="/concept/halus/images/cuts/kubis.webp" width="1200" height="1500" loading="lazy"
+               alt="A heap of finely shredded green cabbage on a white plate" />
+          <img data-cut="bawang-putih" src="/concept/halus/images/cuts/bawang-putih.webp" width="1200" height="1500" loading="lazy"
+               alt="A pile of chopped garlic on a dark chopping mat" />
+          <img data-cut="daun-limau-purut" src="/concept/halus/images/cuts/daun-limau-purut.webp" width="1200" height="1500" loading="lazy"
+               alt="A heap of kaffir lime leaves cut into fine dark green threads" />
+          <img data-cut="ikan" src="/concept/halus/images/cuts/ikan.webp" width="1200" height="1500" loading="lazy"
+               alt="Thin slices of raw white fish with red-speckled skin, laid in a row" />
+          <img data-cut="daging" src="/concept/halus/images/cuts/daging.webp" width="1200" height="1500" loading="lazy"
+               alt="Thin shavings of raw beef piled on a dark plate" />
+        </div>
+        <ul class="cut-rows">
+            <li class="cut" data-reveal data-cut="serai">
+              <button type="button" class="cut-head" aria-expanded="true" aria-controls="cut-serai">
+                <span class="cut-name" lang="ms">Serai, hiris halus</span>
+                <span class="cut-knife">Gyuto 210</span>
+              </button>
+              <p class="cut-text" id="cut-serai">Lemongrass, sliced fine for rendang and tom yam. The long edge takes a whole bundle of stalks in one stroke.</p>
+            </li>
+            <li class="cut" data-reveal data-cut="bawang-merah">
+              <button type="button" class="cut-head" aria-expanded="true" aria-controls="cut-bawang-merah">
+                <span class="cut-name" lang="ms">Bawang merah, hiris nipis</span>
+                <span class="cut-knife">Petty 150</span>
+              </button>
+              <p class="cut-text" id="cut-bawang-merah">Shallots, sliced thin for sambal and bawang goreng. The narrow tip works close to your fingers without crushing the layers.</p>
+            </li>
+            <li class="cut" data-reveal data-cut="kubis">
+              <button type="button" class="cut-head" aria-expanded="true" aria-controls="cut-kubis">
+                <span class="cut-name" lang="ms">Kubis, hiris halus</span>
+                <span class="cut-knife">Santoku 180</span>
+              </button>
+              <p class="cut-text" id="cut-kubis">Cabbage, shredded fine for kerabu and acar. The flat edge meets the board along its whole length, so every strand comes free.</p>
+            </li>
+            <li class="cut" data-reveal data-cut="bawang-putih">
+              <button type="button" class="cut-head" aria-expanded="true" aria-controls="cut-bawang-putih">
+                <span class="cut-name" lang="ms">Bawang putih, cincang halus</span>
+                <span class="cut-knife">Santoku 180</span>
+              </button>
+              <p class="cut-text" id="cut-bawang-putih">Garlic, minced fine for every tumis. The tall blade scoops the pile off the board and into the wok.</p>
+            </li>
+            <li class="cut" data-reveal data-cut="daun-limau-purut">
+              <button type="button" class="cut-head" aria-expanded="true" aria-controls="cut-limau">
+                <span class="cut-name" lang="ms">Daun limau purut, racik halus</span>
+                <span class="cut-knife">Petty 150</span>
+              </button>
+              <p class="cut-text" id="cut-limau">Lime leaves, cut into threads for rendang and kerabu. Roll the leaves tight and let the tip do the work.</p>
+            </li>
+            <li class="cut" data-reveal data-cut="ikan">
+              <button type="button" class="cut-head" aria-expanded="true" aria-controls="cut-ikan">
+                <span class="cut-name" lang="ms">Ikan, hiris nipis</span>
+                <span class="cut-knife">Gyuto 210</span>
+              </button>
+              <p class="cut-text" id="cut-ikan">Fish fillet, sliced thin for bubur ikan. One long pull and no sawing, so the flesh stays whole.</p>
+            </li>
+            <li class="cut" data-reveal data-cut="daging">
+              <button type="button" class="cut-head" aria-expanded="true" aria-controls="cut-daging">
+                <span class="cut-name" lang="ms">Daging, hiris nipis</span>
+                <span class="cut-knife">Gyuto 210</span>
+              </button>
+              <p class="cut-text" id="cut-daging">Beef, sliced thin across the grain for daging masak kicap. Long, even strokes from heel to tip.</p>
+            </li>
+        </ul>
+      </section>
+
+      <!-- Thin where it cuts: the knife seen from above its spine, so the blade is as wide as it is thick,
+           a hairline beside the handle; its tip points at the figure. Then the chosen knife's facts. -->
+      <section class="thin" id="specs" aria-labelledby="thin-title">
+        <div class="thin-frame" data-reveal="settle">
+          <picture>
+            <source media="(max-aspect-ratio: 3/4)" srcset="/concept/halus/images/blade-edge-tall.webp" width="1080" height="1800" />
+            <img class="thin-picture" src="/concept/halus/images/blade-edge.webp" width="2400" height="1350" loading="lazy"
+                 alt="The gyuto seen from above its spine: the blade a bright hairline that narrows to the tip, beside the much wider eight-sided handle" />
+          </picture>
+          <h2 class="thin-title" id="thin-title" data-reveal>Thin where it cuts</h2>
+          <div class="thin-mark">
+            <p class="thin-figure" data-reveal data-count-from="2.4">0.6<span class="unit">&nbsp;mm</span></p>
+            <p class="thin-note" data-reveal>1&nbsp;cm from the tip</p>
+          </div>
+        </div>
+        <!-- On a laptop these two lie on the picture's lower edge, at the right (style.css). -->
+        <div class="thin-more">
+          <p data-reveal><span class="figure">61&nbsp;HRC</span> VG10 stainless steel, hard enough to hold a fine edge</p>
+          <p data-reveal><span class="figure">15°</span> Each side of the edge, finished on whetstones</p>
+        </div>
+
+        <div class="specs">
+          <div class="specs-buy">
+            <h3 class="head specs-name" data-fact="name" data-reveal>Gyuto 210 mm</h3>
+            <!-- Here, where the visitor decides, the choice is the three knives side by side. One camera
+                 rendered all three (blender/render_pictures.py) and the pictures share one height, so
+                 each knife shows its true size beside the others. The words come first for a screen
+                 reader; style.css sets each picture above them. -->
+            <div class="choice lineup" role="group" aria-label="Choose a knife">
+              <button type="button" data-knife="gyuto" aria-pressed="true">
+                <span class="lineup-name">Gyuto 210</span>
+                <span class="choice-price">RM 680</span>
+                <img src="/concept/halus/images/lineup-gyuto.webp" width="300" height="1800" loading="lazy" alt="the longest of the three" />
+              </button>
+              <button type="button" data-knife="santoku" aria-pressed="false">
+                <span class="lineup-name">Santoku 180</span>
+                <span class="choice-price">RM 590</span>
+                <img src="/concept/halus/images/lineup-santoku.webp" width="300" height="1800" loading="lazy" alt="a little shorter, with a tall blade" />
+              </button>
+              <button type="button" data-knife="petty" aria-pressed="false">
+                <span class="lineup-name">Petty 150</span>
+                <span class="choice-price">RM 420</span>
+                <img src="/concept/halus/images/lineup-petty.webp" width="300" height="1800" loading="lazy" alt="the smallest of the three" />
+              </button>
+            </div>
+            <a class="order" data-order target="_blank" rel="noopener" href="https://wa.me/?text=Hi%20Halus%2C%20I%20would%20like%20to%20order%201%20Gyuto%20210%20mm%20(RM%20680).">
+              <span class="order-price" data-fact="price">RM 680</span> Order on WhatsApp
+            </a>
+          </div>
+          <dl class="facts">
+            <div data-reveal><dt>Blade</dt><dd data-fact="blade">210 mm, 47 mm tall at the heel</dd></div>
+            <div data-reveal><dt>Steel</dt><dd data-fact="steel">VG10 stainless, 61 HRC</dd></div>
+            <div data-reveal><dt>Handle</dt><dd data-fact="handle">Ho wood, eight-sided, buffalo horn ferrule</dd></div>
+            <div data-reveal><dt>Weight</dt><dd data-fact="weight">145 g</dd></div>
+            <div data-reveal><dt>Edge</dt><dd data-fact="edge">15° each side</dd></div>
+            <div data-reveal><dt>Price</dt><dd data-fact="price">RM 680</dd></div>
+          </dl>
+        </div>
+      </section>
+
+      <!-- Kitchen orders: the live thing. A name typed on the card is etched on the 3D blade. -->
+      <section class="kitchens" id="kitchens" aria-labelledby="kitchens-title">
+        <model-viewer
+          id="engrave"
+          class="viewer"
+          loading="lazy"
+          src="/concept/halus/models/gyuto-side.glb"
+          alt="Close-up of the gyuto's blade by the handle, where the name on the blade is etched"
+          environment-image="/concept/halus/hdri/studio.hdr"
+          tone-mapping="neutral"
+          exposure="1"
+          shadow-intensity="0"
+          camera-controls
+          disable-pan
+          disable-zoom
+          touch-action="pan-y"
+          interaction-prompt="none"
+          field-of-view="18deg"
+          min-camera-orbit="auto auto 0.12m"
+        >
+          <!-- The close-up's own first frame with the sample name (tools/poster-capture.js): it shows
+               while the model loads, and stays without the script or 3D. -->
+          <picture slot="poster" class="poster">
+            <source media="(max-aspect-ratio: 1/2)" srcset="/concept/halus/posters/engrave-upright.webp" width="780" height="844" />
+            <img src="/concept/halus/posters/engrave-side.webp" width="1680" height="702" alt="The gyuto's blade by the handle, with a sample kitchen name etched on it" />
+          </picture>
+          <div slot="progress-bar"></div>
+        </model-viewer>
+
+        <div class="kitchen-card" data-reveal="side">
+          <h2 class="kitchen-title" id="kitchens-title">Kitchen orders</h2>
+          <ul class="kitchen-lines">
+            <li>From 10 knives, for hotels and restaurants.</li>
+            <li>Your kitchen's name etched free on every blade.</li>
+            <li>A written quote within two working days.</li>
+          </ul>
+          <label class="field-label" for="engraving">Name on the blade</label>
+          <input class="field" id="engraving" name="engraving" type="text" maxlength="18" autocomplete="organization"
+                 placeholder="Your kitchen's name" aria-describedby="engraving-note" />
+          <p class="field-note" id="engraving-note">Dapur Halus is a sample. Type your kitchen's name to see it on the blade. Up to 18 letters.</p>
+          <!-- src/main.js opens the quote form; without the script the link writes the request in WhatsApp. -->
+          <a class="order order-wide" data-open-quote target="_blank" rel="noopener" href="https://wa.me/?text=Hi%20Halus%2C%20I%20would%20like%20a%20quote%20for%2010%20or%20more%20knives%20for%20our%20kitchen%2C%20with%20our%20name%20etched%20on%20the%20blades.">Request a quote</a>
+          <p class="field-note">One knife? Engraving is RM&nbsp;25 on any order.</p>
+        </div>
+
+        <dialog class="quote" id="quote" aria-labelledby="quote-title">
+          <form class="quote-form" novalidate>
+            <h2 class="kitchen-title" id="quote-title">Request a quote</h2>
+            <label class="field-label" for="quote-name">Your name</label>
+            <input class="field" id="quote-name" name="name" type="text" autocomplete="name" required />
+            <label class="field-label" for="quote-business">Business</label>
+            <input class="field" id="quote-business" name="business" type="text" autocomplete="organization" required />
+            <label class="field-label" for="quote-quantity">Number of knives (from 10)</label>
+            <input class="field" id="quote-quantity" name="quantity" type="number" inputmode="numeric" min="10" value="10" required />
+            <label class="field-label" for="quote-engraving">Name on the blade</label>
+            <input class="field" id="quote-engraving" name="engraving" type="text" maxlength="18" />
+            <label class="field-label" for="quote-message">Message (optional)</label>
+            <textarea class="field" id="quote-message" name="message" rows="3"></textarea>
+            <p class="form-message" role="status" aria-live="polite"></p>
+            <div class="quote-buttons">
+              <button type="submit" class="order">Send request</button>
+              <button type="button" class="text-button" data-close-quote>Close</button>
+            </div>
+          </form>
+        </dialog>
+      </section>
+
+      <!-- The chef: an inset panel, the picture in the handle's eight-sided shape. -->
+      <section class="chef" id="chef" aria-labelledby="chef-title">
+        <div class="chef-panel">
+          <h2 class="head chef-title" id="chef-title" data-reveal>Chosen by a cook, not a buyer</h2>
+          <div class="chef-picture" data-reveal="open">
+            <img src="/concept/halus/images/knife-on-stone.webp" width="1400" height="1400" loading="lazy"
+                 alt="The gyuto's edge resting on a wet terracotta whetstone, grey slurry along it" />
+          </div>
+          <div class="chef-text">
+            <div data-reveal>
+              <h3 class="chef-sub">The chef</h3>
+              <p>Halus is run by a chef who has cooked in Malaysian kitchens for fourteen years, from hotel banquets to a hawker's wok. Every knife here is one the chef wanted on the line: thin, hard and quick to bring back on the stone.</p>
+            </div>
+            <div data-reveal>
+              <h3 class="chef-sub">Looking after it</h3>
+              <p>Wash it by hand and dry it at once. Keep it away from bones and frozen food. Once a month, a few strokes on a 1000 grit stone bring the edge back.</p>
+            </div>
+            <a class="order" data-order target="_blank" rel="noopener" href="https://wa.me/?text=Hi%20Halus%2C%20I%20would%20like%20to%20order%201%20Gyuto%20210%20mm%20(RM%20680).">Order on WhatsApp</a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Footer: the name across the last picture, then the photo credits. -->
+    <footer class="site-footer">
+      <div class="footer-stage">
+        <img class="footer-picture" src="/concept/halus/images/footer-knife.webp" width="2400" height="1350" loading="lazy"
+             alt="The gyuto's eight-sided ho-wood handle and horn ferrule, close up" />
+        <nav class="footer-links" aria-label="On this page">
+          <a href="#cuts">Cuts</a>
+          <a href="#specs">Specs</a>
+          <a href="#kitchens">Kitchen orders</a>
+          <a href="#chef">Chef</a>
+        </nav>
+        <div class="footer-contact">
+          <a data-order target="_blank" rel="noopener" href="https://wa.me/?text=Hi%20Halus%2C%20I%20would%20like%20to%20order%201%20Gyuto%20210%20mm%20(RM%20680).">Order on WhatsApp</a>
+          <p>Concept project by IIDev Studio</p>
+        </div>
+        <p class="footer-name" aria-hidden="true" data-reveal="letters"><span>H</span><span>A</span><span>L</span><span>U</span><span>S</span></p>
+        <p class="legal">Halus is a concept by IIDev Studio. The brand, the chef, the prices and the specs are invented. Built by <a href="https://www.iidevstudio.com">IIDEV Studio</a>.</p>
+      </div>
+      <!-- The found photos of the cuts (tools/cut-photos.json): stock photos of food, cropped and toned
+           here, never Halus's product and never cut with a Halus knife. -->
+      <p class="credits">Photos of the cuts are stock photos, not Halus: shallots, <a href="https://unsplash.com/photos/cooked-food-9oHkHkxBG5s">“Onion”</a> by Shameer PK (<a href="https://unsplash.com/license">Unsplash License</a>); cabbage, <a href="https://www.flickr.com/photos/36521954194@N01/3026708033">“sliced cabbage”</a> by [cipher] and garlic, <a href="https://www.flickr.com/photos/82439748@N00/558729473">“chopped garlic”</a> by Beatrice Murch (<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC BY-SA 2.0</a>, cropped and toned, shared alike); fish, <a href="https://www.pexels.com/photo/fresh-slices-of-fish-in-daylight-7451922/">“Fresh slices of fish in daylight”</a> by Nothing Ahead and beef, <a href="https://www.pexels.com/photo/raw-meat-on-black-plate-13729827/">“Raw Meat on Black Plate”</a> by chickenbunny (<a href="https://www.pexels.com/license/">Pexels License</a>). The lemongrass and the lime leaves are our renders.</p>
+    </footer>
+  </body>
+</html>
