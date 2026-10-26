@@ -49,4 +49,12 @@ export const CONCEPTS: Concept[] = [
     shot: "/images/work/tarik-lagi-phone.png",
     alt: "The Tarik Lagi concept on a phone: Teh tarik, pulled long, from RM 3.00, with an Order on WhatsApp button",
   },
+  {
+    name: "Halus",
+    trade: "Product brand",
+    text: "A Japanese-style kitchen knife brand. It is not a real brand and not a client. The knife turns in 3D, a kitchen can type its name and see it etched on the blade, and the WhatsApp button writes the order.",
+    links: [{ href: "/concept/halus", label: "See the concept" }],
+    shot: "/images/work/halus-phone.png",
+    alt: "The Halus concept on a phone: a close view of a steel knife blade, the name Halus, and an Order on WhatsApp button",
+  },
 ];
